@@ -1,0 +1,597 @@
+@import "tailwindcss";
+
+/* ============================================================
+   TOKENS
+   Two groups, deliberately separate — see CLAUDE.md "Colour
+   architecture". Never hard-code a text colour on a band; both
+   groups are wired below as Tailwind theme colors so this stays
+   true in generated utility classes too.
+
+   1. Page tokens  - the cream page. Light only. There is no dark theme.
+   2. Band tokens  - a dark surface with light text. Nothing on a
+                     band is ever hardcoded.
+   ============================================================ */
+:root {
+  /* page */
+  --bg: #f2eee5;
+  --bg-2: #e9e2d1;
+  --surface: #ffffff;
+  --ink: #0f1d33;
+  --muted: #5c6675;
+  --line: #dcd5c4;
+  --line-2: #c2b79c;
+
+  /* band (constant across themes) */
+  --band: #0f1d33;
+  --band-2: #1b2c47;
+  --band-ink: #f1ece1;
+  --band-muted: #afbcce;
+  --band-line: #2a3b57;
+
+  /* accent */
+  --gold: #b39952;
+  --gold-text: #75601f;
+  --gold-on-band: #cfb874;
+
+  /* Same face as the hero. Outfit is the stand-in for that light geometric
+     sans. The wordmark is the exception and uses --font-playfair directly. */
+  --font-display: var(--font-outfit), Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --font-body: var(--font-outfit), Arial, "Helvetica Neue", Helvetica, sans-serif;
+
+  /* Radii. Generous, borderless cards floating on the cream ground do
+     the work that hairline boxes were doing before. */
+  --r-sm: 10px;
+  --r: 16px;
+  --r-lg: 24px;
+  --r-pill: 999px;
+
+  /* Soft elevation. Tinted with the navy so it reads warm on cream
+     rather than as grey haze. Named differently from the Tailwind
+     --shadow-* theme keys below, which would otherwise self-reference. */
+  --card-shadow: 0 1px 2px rgb(15 29 51 / 0.04), 0 8px 24px -12px rgb(15 29 51 / 0.1);
+  --card-shadow-hover: 0 2px 4px rgb(15 29 51 / 0.05), 0 18px 40px -16px rgb(15 29 51 / 0.18);
+
+  color-scheme: light;
+}
+
+@theme inline {
+  /* page tokens */
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+
+  /* band tokens */
+  --color-band: var(--band);
+  --color-band-2: var(--band-2);
+  --color-band-ink: var(--band-ink);
+  --color-band-muted: var(--band-muted);
+  --color-band-line: var(--band-line);
+
+  /* accent */
+  --color-gold: var(--gold);
+  --color-gold-text: var(--gold-text);
+  --color-gold-on-band: var(--gold-on-band);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
+  --radius-sm: var(--r-sm);
+  --radius-DEFAULT: var(--r);
+  --radius-lg: var(--r-lg);
+  --radius-pill: var(--r-pill);
+
+  --shadow-card: var(--card-shadow);
+  --shadow-card-hover: var(--card-shadow-hover);
+
+  --container-wrap: 1180px;
+}
+
+/* Tailwind v4 puts unlayered CSS ahead of its own utility layers in the
+   cascade, so element defaults MUST live in @layer base — otherwise rules
+   like `a { color: inherit }` beat every `.text-*` utility outright and
+   text on a band goes invisible. This is the exact bug CLAUDE.md warns
+   about, just from a different source than a hard-coded colour. */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    background: var(--bg);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Match the hero: light geometric sans, tight tracking. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+    margin: 0;
+    color: inherit;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    /* A reveal must never be the reason content is invisible. If animation
+       is off, the element is simply shown. */
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--band);
+  color: var(--band-ink);
+  padding: 12px 18px;
+  border-radius: 0 0 4px 0;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+/* ============================================================
+   MOTION
+   CSS only, no animation library. Two separate mechanisms:
+
+   1. Entrance (above the fold) — plain CSS, runs at first paint.
+      Needs no JS, so it cannot delay or hide the hero. The h1 is
+      deliberately NOT animated: it is the LCP element.
+
+   2. Reveal (below the fold) — [data-reveal] + one shared
+      IntersectionObserver. The hiding rule is gated behind
+      .js-reveal, which RevealMotion adds only after the observer
+      is installed. If the bundle never loads, or the viewer asks
+      for reduced motion, nothing is ever hidden.
+
+   Every animation here is decoration. Drop them all and the page
+   still reads, which CLAUDE.md requires.
+   ============================================================ */
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--fade-in-up-distance, 40px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes small-bounce {
+  0%,
+  100% {
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    transform: translateY(-25%);
+  }
+  50% {
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    transform: none;
+  }
+}
+
+@keyframes menu-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes report-word {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rev-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes tally-1 {
+  0%,
+  38% {
+    opacity: 0;
+  }
+  42%,
+  52% {
+    opacity: 1;
+  }
+  58%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes tally-2 {
+  0%,
+  54% {
+    opacity: 0;
+  }
+  58%,
+  68% {
+    opacity: 1;
+  }
+  74%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes tally-3 {
+  0%,
+  70% {
+    opacity: 0;
+  }
+  78%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes float-card {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@layer utilities {
+  .font-outfit {
+    font-family: var(--font-outfit), Arial, "Helvetica Neue", Helvetica, sans-serif;
+  }
+
+  .font-wordmark {
+    font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
+  }
+}
+
+@layer components {
+  .enter {
+    animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  .js-reveal [data-reveal] {
+    opacity: 0;
+  }
+
+  .js-reveal [data-reveal].is-visible {
+    animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+
+  /* Already on screen when the observer installed. The viewer has
+     seen it, so animating now would read as a flicker. */
+  .js-reveal [data-reveal].reveal-done {
+    opacity: 1;
+    animation: none;
+  }
+
+  .bounce-hint {
+    animation: small-bounce 1.8s infinite;
+  }
+
+  /* Hero collage only. The cards still read if this never runs. */
+  .float-card {
+    animation: float-card 7s ease-in-out infinite;
+  }
+
+  .float-card-late {
+    animation-delay: -2.6s;
+  }
+
+  .float-card-later {
+    animation-delay: -4.4s;
+  }
+
+  /* Opacity only. The mega menu is centred with -translate-x-1/2, and
+     animating transform here would overwrite that and shift it. */
+  .menu-in {
+    animation: menu-fade 0.18s ease-out both;
+  }
+
+  /* The hero widget scans the aims, then the report replaces it, then
+     it loops. Reduced motion skips the scan and leaves the finished report. */
+  .hero-swap {
+    display: grid;
+  }
+
+  .hero-paper,
+  .hero-report {
+    grid-area: 1 / 1;
+    transition: opacity 0.9s ease;
+  }
+
+  .hero-report {
+    opacity: 0;
+  }
+
+  .hero-swap[data-phase="report"] .hero-paper {
+    opacity: 0;
+  }
+
+  .hero-swap[data-phase="report"] .hero-report {
+    opacity: 1;
+  }
+
+  .scan-word {
+    border-radius: 2px;
+  }
+
+  .scan-bar {
+    position: absolute;
+    height: 2px;
+    background: var(--gold);
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-paper,
+    .hero-report {
+      transition: none;
+    }
+
+    .hero-paper {
+      display: none;
+    }
+
+    .hero-report {
+      opacity: 1;
+    }
+  }
+
+  /* The report is visible immediately. Words, faces, and the count
+     are decoration on top of that. Reduced motion skips the build-up
+     and leaves the finished report, because animation: none drops the
+     keyframes and the resting styles stay. */
+  .tally-1,
+  .tally-2 {
+    position: absolute;
+    inset: 0 auto auto 0;
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .report-word {
+      animation: report-word 0.28s ease both;
+      animation-delay: calc(0.35s + var(--w) * 80ms);
+    }
+
+    .rev-face {
+      animation: rev-pop 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: calc(2.15s + var(--i) * 0.42s);
+    }
+
+    .tally-1 {
+      animation: tally-1 4.6s linear both;
+    }
+
+    .tally-2 {
+      animation: tally-2 4.6s linear both;
+    }
+
+    .tally-3 {
+      animation: tally-3 4.6s linear both;
+    }
+  }
+
+  /* A card is a borderless white surface on the cream ground. No
+     hairline box: the tonal step plus a soft shadow separates it. */
+  .timeline-card {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: var(--card-shadow);
+    transition:
+      background-color 0.55s ease,
+      color 0.55s ease,
+      box-shadow 0.55s ease;
+  }
+
+  .tl-rail {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--card-shadow);
+    transition:
+      background-color 0.55s ease,
+      border-color 0.55s ease,
+      box-shadow 0.55s ease;
+  }
+
+  .tl-rail .tl-num {
+    color: var(--gold-text);
+    transition: color 0.55s ease;
+  }
+
+  .tl-rail .tl-dot {
+    border-color: var(--ink);
+    background: var(--surface);
+  }
+
+  .tl-rail .tl-dot-fill {
+    background: var(--ink);
+  }
+
+  .tl-rail.is-current {
+    background: var(--band);
+    border-color: var(--band);
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  .tl-rail.is-current .tl-num {
+    color: var(--gold-on-band);
+  }
+
+  .tl-rail.is-current .tl-dot {
+    border-color: var(--band-ink);
+    background: transparent;
+  }
+
+  .tl-rail.is-current .tl-dot-fill {
+    background: var(--band-ink);
+  }
+
+  .timeline-card .tl-muted {
+    color: var(--muted);
+    transition: color 0.55s ease;
+  }
+
+  .timeline-card.is-current {
+    background: var(--band);
+    color: var(--band-ink);
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  .timeline-card.is-current .tl-muted {
+    color: var(--band-muted);
+  }
+
+  .card {
+    background: var(--surface);
+    border-radius: var(--r);
+    box-shadow: var(--card-shadow);
+    padding: clamp(24px, 3vw, 40px);
+  }
+
+  /* Lift on hover, but only for devices that actually hover. */
+  @media (hover: hover) {
+    .lift {
+      transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+    }
+    .lift:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--card-shadow-hover);
+    }
+  }
+
+  .marquee {
+    overflow: hidden;
+    /* Background-agnostic edge fade, so this keeps working if the
+       band token changes. */
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 6%,
+      #000 94%,
+      transparent
+    );
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll var(--marquee-duration, 64s) linear infinite;
+  }
+
+  .marquee-track[data-direction="reverse"] {
+    animation-direction: reverse;
+  }
+
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Dropped animation must not cost meaning: the duplicate track is
+     removed and the real one wraps as an ordinary list. */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      mask-image: none;
+    }
+    .marquee-track {
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .marquee-track > [aria-hidden="true"] {
+      display: none;
+    }
+  }
+}

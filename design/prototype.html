@@ -1,0 +1,1130 @@
+<title>EQUITAS Journey Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap">
+<style>
+/* ============================================================
+   TOKENS
+   Two groups, deliberately separate:
+   1. Page tokens  - flip with the viewer's theme
+   2. Band tokens  - a dark surface with light text, in BOTH
+                     themes. Nothing on a band is ever hardcoded.
+   ============================================================ */
+:root{
+  /* page */
+  --bg:#F2EEE5;
+  --bg-2:#E9E2D1;
+  --surface:#FFFFFF;
+  --ink:#0F1D33;
+  --muted:#5C6675;
+  --line:#DCD5C4;
+  --line-2:#C2B79C;
+
+  /* band (constant across themes) */
+  --band:#0F1D33;
+  --band-2:#1B2C47;
+  --band-ink:#F1ECE1;
+  --band-muted:#AFBCCE;
+  --band-line:#2A3B57;
+
+  /* accent */
+  --gold:#B39952;
+  --gold-text:#75601F;
+  --gold-on-band:#CFB874;
+
+  --display:"Playfair Display",Georgia,"Times New Roman",serif;
+  --sans:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --wrap:1120px;
+  --r:4px;
+  --r-lg:8px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1220;
+    --bg-2:#111C2E;
+    --surface:#121D30;
+    --ink:#EDE7DB;
+    --muted:#9EAABC;
+    --line:#22314B;
+    --line-2:#33455F;
+
+    --band:#060C17;
+    --band-2:#111C2E;
+    --band-ink:#F1ECE1;
+    --band-muted:#AFBCCE;
+    --band-line:#22314B;
+
+    --gold:#C9AE68;
+    --gold-text:#D6C289;
+    --gold-on-band:#CFB874;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1220; --bg-2:#111C2E; --surface:#121D30;
+  --ink:#EDE7DB; --muted:#9EAABC; --line:#22314B; --line-2:#33455F;
+  --band:#060C17; --band-2:#111C2E; --band-ink:#F1ECE1;
+  --band-muted:#AFBCCE; --band-line:#22314B;
+  --gold:#C9AE68; --gold-text:#D6C289; --gold-on-band:#CFB874;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.15;text-wrap:balance;margin:0;color:inherit}
+p{margin:0}
+a{color:inherit}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:100;
+  background:var(--band);color:var(--band-ink);padding:12px 18px;border-radius:0 0 var(--r) 0;
+}
+.skip:focus{left:0}
+
+/* ---------- prototype chrome ---------- */
+.proto{position:sticky;top:env(safe-area-inset-top,0px);z-index:60;background:#060C17;border-bottom:1px solid #2A3B57}
+.proto-in{max-width:var(--wrap);margin:0 auto;padding-block:8px;padding-left:16px;padding-right:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.proto-tag{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#CFB874;font-weight:700;white-space:nowrap}
+.proto-tabs{display:flex;gap:2px;flex-wrap:wrap;margin-left:auto}
+.proto-tab{background:none;border:1px solid transparent;color:#B6C2D2;padding:5px 11px;border-radius:999px;font-size:12.5px;line-height:1.2;transition:background .15s,color .15s,border-color .15s}
+.proto-tab:hover{color:#fff;border-color:#3A4E6E}
+.proto-tab[aria-selected="true"]{background:#CFB874;color:#0B1220;font-weight:700;border-color:#CFB874}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:16px;padding-right:16px}
+.band{padding-block:clamp(46px,6.5vw,84px)}
+.band--tight{padding-block:clamp(30px,4vw,52px)}
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--gold-text);margin-bottom:18px}
+.lede{font-size:clamp(16.5px,1.5vw,18.5px);color:var(--muted);max-width:62ch;line-height:1.6}
+.rule{height:1px;background:var(--line);border:0;margin:0}
+.dark{background:var(--band);color:var(--band-ink)}
+.dark h1,.dark h2,.dark h3{color:var(--band-ink)}
+.dark .eyebrow{color:var(--gold-on-band)}
+.dark p{color:var(--band-muted)}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 24px;border-radius:var(--r);border:1px solid transparent;
+  font-size:15px;font-weight:700;text-decoration:none;white-space:nowrap;
+  transition:background .16s,border-color .16s,color .16s,opacity .16s;
+}
+.btn--primary{background:var(--band);color:var(--band-ink);border-color:var(--band)}
+.btn--primary:hover{background:var(--band-2);border-color:var(--band-2)}
+.btn--ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn--ghost:hover{border-color:var(--ink);background:var(--bg-2)}
+.btn--gold{background:var(--gold);color:#12202F;border-color:var(--gold)}
+.btn--gold:hover{opacity:.88}
+.btn--onband{background:var(--gold);color:#12202F;border-color:var(--gold)}
+.btn--onband:hover{opacity:.88}
+.btn--onband-ghost{background:transparent;color:var(--band-ink);border-color:#4A5D7A}
+.btn--onband-ghost:hover{border-color:var(--band-ink)}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+
+/* ---------- site header ---------- */
+.site{background:var(--bg);border-bottom:1px solid var(--line)}
+.site-in{max-width:var(--wrap);margin:0 auto;padding-block:16px;padding-left:16px;padding-right:16px;display:flex;align-items:center;gap:26px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;color:var(--ink)}
+.mark{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gold);display:flex;flex-direction:column;justify-content:center;gap:3px;padding:8px 6px;flex-shrink:0}
+.mark i{display:block;height:3px;width:100%;background:var(--gold);border-radius:1px}
+.brand-name{display:block;font-family:var(--display);font-size:18px;letter-spacing:.11em;font-weight:600;line-height:1.1}
+.brand-sub{display:block;font-size:8px;letter-spacing:.28em;color:var(--gold-text);font-weight:700;margin-top:2px}
+.site-nav{display:flex;gap:22px;align-items:center;font-size:14.5px}
+.site-nav a{text-decoration:none;padding-block:4px;border-bottom:1.5px solid transparent;white-space:nowrap}
+.site-nav a:hover,.site-nav a.on{border-bottom-color:var(--gold)}
+.site-right{margin-left:auto;display:flex;align-items:center;gap:18px;font-size:14.5px;flex-shrink:0}
+.site-right a{text-decoration:none;white-space:nowrap}
+.menu-btn{display:none;background:none;border:1px solid var(--line-2);border-radius:var(--r);padding:9px 12px;font-size:13px}
+.mnav{display:none;border-bottom:1px solid var(--line);background:var(--bg-2)}
+.mnav.open{display:block}
+.mnav a{display:block;padding:15px 16px;text-decoration:none;border-bottom:1px solid var(--line);font-size:16px}
+.mnav a:last-child{border-bottom:0}
+@media (max-width:1040px){
+  .site-nav{display:none}
+  .menu-btn{display:inline-flex}
+  .site-right .hide-sm{display:none}
+}
+
+/* ---------- hero ---------- */
+.hero{padding-block:clamp(48px,6.5vw,88px) clamp(36px,4.5vw,60px)}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(30px,5vw,68px);align-items:center}
+.hero h1{font-size:clamp(32px,4.3vw,51px);letter-spacing:-.015em;max-width:21ch}
+.hero h1 .second{display:block;color:var(--gold-text)}
+.hero-sub{margin-top:22px;font-size:clamp(16.5px,1.6vw,19px);color:var(--muted);max-width:50ch;line-height:1.55}
+.hero-cta{margin-top:32px}
+.hero-note{margin-top:15px;font-size:13.5px;color:var(--muted)}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr;gap:34px}}
+
+.score{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px}
+.score-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:13px;border-bottom:1px solid var(--line)}
+.score-title{font-size:13px;font-weight:700;letter-spacing:.03em}
+.score-tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-text);font-weight:700}
+.crit{display:flex;align-items:center;gap:14px;padding-block:11px;border-bottom:1px solid var(--line)}
+.crit:last-of-type{border-bottom:0}
+.crit-name{font-size:13.5px;width:104px;flex-shrink:0}
+.meter{flex:1;height:6px;background:var(--bg-2);border-radius:3px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--gold);border-radius:3px}
+.crit-val{font-size:13px;font-weight:700;width:20px;text-align:right;font-variant-numeric:tabular-nums}
+.score-foot{margin-top:13px;padding-top:13px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);line-height:1.55}
+.score-foot b{color:var(--ink)}
+
+/* ---------- credibility ---------- */
+.cred-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.cred-item{display:flex;gap:12px;align-items:flex-start}
+.cred-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-on-band);margin-top:9px;flex-shrink:0}
+.cred-item p{font-size:15px;line-height:1.5;color:var(--band-ink)}
+@media (max-width:760px){.cred-grid{grid-template-columns:1fr;gap:15px}}
+
+/* ---------- journey rail ---------- */
+.rail{position:relative;margin-top:42px}
+.rail-line{position:absolute;top:7px;left:7%;right:7%;height:1px;background:var(--line-2)}
+.rail-items{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;position:relative}
+.stage{
+  background:none;border:0;padding:0;text-align:left;color:var(--ink);
+  display:flex;flex-direction:column;align-items:flex-start;
+  justify-content:flex-start;border-radius:var(--r);width:100%;
+}
+.stage-dot{
+  display:block;width:15px;height:15px;border-radius:50%;
+  background:var(--bg);border:1.5px solid var(--line-2);
+  position:relative;z-index:2;margin-bottom:15px;
+  transition:border-color .16s;
+}
+.stage[data-s="available"] .stage-dot{background:var(--gold);border-color:var(--gold)}
+.stage[data-s="partial"] .stage-dot{background:linear-gradient(90deg,var(--gold) 50%,var(--bg) 50%);border-color:var(--gold)}
+.stage-name{display:block;font-family:var(--display);font-size:19px;font-weight:600;margin-bottom:6px}
+.stage-line{display:block;font-size:13.5px;color:var(--muted);line-height:1.45;margin-bottom:9px}
+.stage-status{display:block;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:var(--gold-text)}
+.stage-mods{display:block;margin-top:11px;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);line-height:1.5}
+.stage:hover .stage-name{color:var(--gold-text)}
+.stage:hover .stage-dot{border-color:var(--ink)}
+@media (max-width:1000px){
+  .rail-items{grid-template-columns:repeat(2,1fr);gap:28px}
+  .rail-line{display:none}
+}
+@media (max-width:560px){.rail-items{grid-template-columns:1fr;gap:24px}}
+
+/* ---------- search ---------- */
+.search-box{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r);padding:5px 5px 5px 16px;max-width:660px;flex-wrap:wrap}
+.search-box input{flex:1;border:0;background:none;font-size:15.5px;padding-block:13px;min-width:140px}
+.search-box input::placeholder{color:var(--muted)}
+.search-box input:focus{outline:0}
+.filt{font-size:12.5px;color:var(--muted);border:1px solid var(--line);background:var(--bg);padding:7px 11px;border-radius:var(--r);white-space:nowrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 15px;font-size:13.5px;transition:border-color .15s,background .15s}
+.chip:hover{border-color:var(--gold);background:var(--bg-2)}
+.privacy{margin-top:15px;font-size:13px;color:var(--muted);max-width:62ch}
+.privacy a{color:var(--gold-text)}
+
+/* ---------- steps ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,38px);margin-top:42px}
+.step-n{font-family:var(--display);font-size:14px;font-weight:600;color:var(--gold-text);padding-bottom:11px;border-bottom:1px solid var(--line-2);margin-bottom:17px}
+.step h3{font-size:21px;margin-bottom:9px}
+.step p{font-size:14.5px;color:var(--muted);line-height:1.6}
+.step-vis{margin-top:17px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;font-size:12.5px;color:var(--muted);line-height:1.6}
+.step-vis b{color:var(--ink);font-size:13px;display:block;margin-bottom:4px}
+@media (max-width:820px){.steps{grid-template-columns:1fr;gap:30px}}
+
+/* ---------- cards ---------- */
+.ways{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px}
+.way{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(22px,3vw,32px);display:flex;flex-direction:column;gap:11px;transition:border-color .16s}
+.way:hover{border-color:var(--line-2)}
+.way h3{font-size:24px}
+.way p{font-size:14.5px;color:var(--muted)}
+.way-link{margin-top:auto;padding-top:13px;font-size:14px;font-weight:700;color:var(--gold-text);text-decoration:none}
+.way-link:hover{text-decoration:underline}
+@media (max-width:760px){.ways{grid-template-columns:1fr}}
+
+.rev{display:grid;grid-template-columns:190px 1fr;gap:clamp(22px,4vw,48px);align-items:start}
+.rev-photo{aspect-ratio:1;max-width:100%;border-radius:50%;background:var(--bg-2);border:1px solid var(--line-2);display:grid;place-items:center;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center;padding:16px}
+.rev blockquote{margin:0;font-family:var(--display);font-size:clamp(19px,2.3vw,26px);line-height:1.4;font-style:italic}
+.rev-attr{margin-top:19px;font-size:14px;color:var(--muted);line-height:1.6}
+.rev-attr b{color:var(--ink)}
+@media (max-width:700px){.rev{grid-template-columns:1fr}.rev-photo{max-width:140px}}
+
+.mission h2{font-size:clamp(27px,3.8vw,44px);max-width:20ch}
+.mission p{margin-top:20px;font-size:17px;color:var(--muted);max-width:58ch;line-height:1.65}
+
+/* ---------- faq ---------- */
+.faq{border-top:1px solid var(--line)}
+.q{border-bottom:1px solid var(--line)}
+.q-btn{width:100%;background:none;border:0;padding:21px 0;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:17px;font-weight:700}
+.q-mark{color:var(--gold-text);font-size:20px;flex-shrink:0;line-height:1}
+.q-body{padding-bottom:21px;font-size:15px;color:var(--muted);max-width:66ch;line-height:1.65}
+
+/* ---------- footer ---------- */
+.foot{background:var(--band);color:var(--band-muted);padding-block:50px 30px}
+.foot-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:26px}
+.foot h4{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-on-band);margin-bottom:13px}
+.foot ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.foot a{color:var(--band-muted);text-decoration:none;font-size:13.5px}
+.foot a:hover{color:var(--band-ink)}
+.foot-btm{margin-top:38px;padding-top:21px;border-top:1px solid var(--band-line);font-size:12.5px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:820px){.foot-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- stage page ---------- */
+.crumb-rail{background:var(--bg-2);border-bottom:1px solid var(--line);padding-block:14px}
+.crumb-items{display:flex;gap:3px;align-items:center;flex-wrap:wrap;font-size:13px}
+.crumb{padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--muted);border:1px solid transparent;white-space:nowrap}
+.crumb:hover{border-color:var(--line-2);color:var(--ink)}
+.crumb[aria-current="step"]{background:var(--band);color:var(--band-ink);font-weight:700}
+.crumb-sep{color:var(--line-2);font-size:11px}
+.here{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 var(--r-lg) var(--r-lg) 0;padding:22px 24px;margin-top:34px}
+.here h3{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-text);margin-bottom:13px;font-weight:700}
+.here ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px}
+.here li{font-size:15.5px;line-height:1.5}
+.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:26px}
+.tool{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;display:flex;flex-direction:column;gap:8px;text-align:left;width:100%;transition:border-color .16s}
+.tool:hover{border-color:var(--gold)}
+.tool h4{font-size:19px}
+.tool p{font-size:14.5px;color:var(--muted);line-height:1.55}
+.tool-meta{margin-top:auto;padding-top:13px;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--gold-text);font-weight:700}
+@media (max-width:760px){.tools{grid-template-columns:1fr}}
+.coming{background:var(--bg-2);border:1px dashed var(--line-2);border-radius:var(--r-lg);padding:24px;margin-top:26px}
+.notify{display:flex;gap:10px;margin-top:16px;max-width:440px;flex-wrap:wrap}
+.notify input{flex:1;min-width:190px;padding:12px 15px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);font-size:14.5px}
+.nextprev{display:flex;justify-content:space-between;gap:16px;margin-top:42px;padding-top:24px;border-top:1px solid var(--line);flex-wrap:wrap}
+.nextprev a{text-decoration:none;font-size:14.5px}
+.nextprev b{display:block;font-family:var(--display);font-size:20px;font-weight:600;margin-top:3px}
+.np-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-text);font-weight:700}
+
+/* ---------- onboarding ---------- */
+.onb{display:grid;place-items:center;padding-block:clamp(36px,5vw,72px)}
+.onb-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(24px,4vw,44px);max-width:640px;width:100%}
+.onb-prog{display:flex;gap:6px;margin-bottom:26px}
+.onb-prog i{flex:1;height:3px;background:var(--line);border-radius:2px}
+.onb-prog i.on{background:var(--gold)}
+.onb-step{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-text);font-weight:700;margin-bottom:13px}
+.onb-card h2{font-size:clamp(23px,3vw,31px);margin-bottom:9px}
+.onb-intro{font-size:15px;color:var(--muted);margin-bottom:24px}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:15px 18px;font-size:15.5px;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--gold);background:var(--bg-2)}
+.opt.sel{border-color:var(--ink);background:var(--bg-2);font-weight:700}
+.onb-foot{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:16px;flex-wrap:wrap}
+.linkbtn{background:none;border:0;color:var(--muted);font-size:14px;text-decoration:underline;padding:0}
+.result{background:var(--bg-2);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:22px}
+.result h3{font-size:22px;margin-bottom:6px}
+.result>p{font-size:14.5px;color:var(--muted);margin-bottom:16px}
+.rec{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:10px}
+.rec h4{font-size:17px;margin-bottom:5px}
+.rec p{font-size:13.5px;color:var(--muted)}
+.rec-small{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rec-small div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px;font-size:13.5px;font-weight:700}
+@media (max-width:560px){.rec-small{grid-template-columns:1fr}}
+
+/* ---------- app ---------- */
+.app-bar{background:var(--band);color:var(--band-ink);padding-block:13px}
+.app-bar .brand{color:var(--band-ink)}
+.app-bar .brand-sub{color:var(--gold-on-band)}
+.app-in{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.app-nav{display:flex;gap:20px;font-size:14.5px}
+.app-nav a{text-decoration:none;color:var(--band-muted);white-space:nowrap}
+.app-nav a:hover{color:var(--band-ink)}
+.app-nav a[aria-current]{color:var(--band-ink);font-weight:700}
+.app-right{margin-left:auto;display:flex;align-items:center;gap:13px}
+.pill-ctl{background:var(--band-2);border:1px solid var(--band-line);color:var(--band-ink);padding:7px 13px;border-radius:999px;font-size:12.5px;white-space:nowrap}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);color:#12202F;display:grid;place-items:center;font-weight:700;font-size:13.5px;flex-shrink:0}
+@media (max-width:700px){.app-nav{display:none}}
+
+.resume{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 var(--r-lg) var(--r-lg) 0;padding:24px;display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap}
+.resume h2{font-size:23px;margin-bottom:5px}
+.resume p{font-size:14.5px;color:var(--muted)}
+.mini-rail{display:flex;gap:6px;margin-top:28px;flex-wrap:wrap}
+.mini{flex:1;min-width:120px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);font-size:13.5px;text-align:left}
+.mini.on{background:var(--band);color:var(--band-ink);border-color:var(--band);font-weight:700}
+.mini em{display:block;font-style:normal;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-text);margin-top:3px}
+.mini.on em{color:var(--gold-on-band)}
+.group{border-top:1px solid var(--line)}
+.group-btn{width:100%;background:none;border:0;padding:17px 0;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:16px}
+.group-btn .g-c{color:var(--muted);font-size:13.5px}
+.group-body{padding-bottom:17px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mod{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:15px;text-align:left}
+.mod b{display:block;font-size:14.5px;margin-bottom:4px}
+.mod span{font-size:12.5px;color:var(--muted);line-height:1.5;display:block}
+@media (max-width:820px){.group-body{grid-template-columns:1fr}}
+
+/* ---------- tool screen ---------- */
+.tool-head{background:var(--bg-2);border-bottom:1px solid var(--line);padding-block:26px}
+.tool-head h1{font-size:clamp(25px,3.2vw,34px);margin-bottom:8px}
+.tool-head p{font-size:15.5px;color:var(--muted);max-width:60ch}
+.tool-path{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:14px;flex-wrap:wrap}
+.tool-path a{text-decoration:none;color:var(--gold-text)}
+.editor{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;margin-top:30px;align-items:start}
+@media (max-width:900px){.editor{grid-template-columns:1fr}}
+.pane{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px}
+.pane h3{font-size:17px;margin-bottom:12px}
+.ta{width:100%;min-height:210px;resize:vertical;padding:15px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--bg);font-size:14.5px;line-height:1.6}
+.ta::placeholder{color:var(--muted)}
+.hintbox{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.hintbox b{color:var(--ink)}
+.side-note{font-size:13.5px;color:var(--muted);line-height:1.6}
+.side-note+.side-note{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.err{color:#A3341F;font-size:13.5px;margin-top:10px;font-weight:700}
+:root[data-theme="dark"] .err,:root:not([data-theme="light"]) .err{color:#F09A86}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .err{color:#A3341F}}
+.overall{display:flex;align-items:baseline;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:6px;flex-wrap:wrap}
+.overall b{font-family:var(--display);font-size:40px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.overall span{font-size:13.5px;color:var(--muted);max-width:34ch;line-height:1.45}
+.cmt{background:var(--bg-2);border-left:3px solid var(--gold);padding:14px 16px;border-radius:0 var(--r) var(--r) 0;margin-top:12px}
+.cmt p{font-size:14px;line-height:1.6;font-style:italic}
+.cmt cite{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:7px;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.fixes{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.fixes li{display:flex;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;align-items:flex-start}
+.fix-w{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-text);white-space:nowrap;padding-top:2px;width:76px;flex-shrink:0}
+.fixes p{font-size:14px;line-height:1.55}
+@media (max-width:560px){.fixes li{flex-direction:column;gap:6px}.fix-w{width:auto}}
+
+/* ---------- institutions ---------- */
+.inst-hero{padding-block:clamp(48px,6.5vw,86px)}
+.inst-hero h1{font-size:clamp(30px,4.2vw,48px);max-width:19ch}
+.inst-hero p{margin-top:20px;font-size:17.5px;max-width:54ch;line-height:1.6}
+.vals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:38px}
+.val{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px}
+.val h4{font-size:18px;margin-bottom:7px}
+.val p{font-size:14px;color:var(--muted);line-height:1.55}
+@media (max-width:860px){.vals{grid-template-columns:1fr}}
+.roadmap{background:var(--bg-2);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:clamp(24px,3.5vw,38px);margin-top:42px}
+.roadmap-flag{display:inline-block;background:var(--band);color:var(--gold-on-band);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:6px 13px;border-radius:999px;margin-bottom:16px}
+.roadmap h3{font-size:clamp(21px,2.6vw,29px);max-width:22ch;margin-bottom:13px}
+.roadmap p{font-size:15.5px;color:var(--muted);max-width:60ch;line-height:1.6;margin-bottom:11px}
+.roadmap .warn{color:var(--ink);font-weight:700}
+.demo{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:24px;max-width:620px}
+.demo label{display:flex;flex-direction:column;gap:6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.demo input,.demo select{padding:12px 14px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);font-size:15px}
+.demo .full{grid-column:1/-1}
+@media (max-width:620px){.demo{grid-template-columns:1fr}}
+
+.note{background:var(--bg-2);border-left:3px solid var(--gold);padding:15px 19px;font-size:13.5px;color:var(--muted);line-height:1.6;margin-top:26px;max-width:70ch}
+.note b{color:var(--ink)}
+.screen[hidden]{display:none!important}
+</style>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="proto" aria-label="Prototype screens">
+  <div class="proto-in">
+    <span class="proto-tag">EQUITAS prototype</span>
+    <div class="proto-tabs" role="tablist">
+      <button class="proto-tab" role="tab" aria-selected="true" data-go="home">Homepage</button>
+      <button class="proto-tab" role="tab" aria-selected="false" data-go="journey">Journey</button>
+      <button class="proto-tab" role="tab" aria-selected="false" data-go="stage">Stage</button>
+      <button class="proto-tab" role="tab" aria-selected="false" data-go="onboard">Onboarding</button>
+      <button class="proto-tab" role="tab" aria-selected="false" data-go="app">Signed in</button>
+      <button class="proto-tab" role="tab" aria-selected="false" data-go="tool">Inside a tool</button>
+      <button class="proto-tab" role="tab" aria-selected="false" data-go="inst">Institutions</button>
+    </div>
+  </div>
+</nav>
+
+<div id="main"></div>
+
+<!-- ================= HOME ================= -->
+<main class="screen" id="home">
+  <header class="site">
+    <div class="site-in">
+      <a class="brand" href="#" data-go="home">
+        <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><span class="brand-name">EQUITAS</span><span class="brand-sub">INTELLIGENCE</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="#" data-go="journey">The research journey</a>
+        <a href="#" data-go="stage">For researchers</a>
+        <a href="#" data-go="inst">For institutions</a>
+        <a href="#" data-go="home">Pricing</a>
+        <a href="#" data-go="home">Resources</a>
+      </nav>
+      <div class="site-right">
+        <a class="hide-sm" href="#" data-go="app">Sign in</a>
+        <a class="btn btn--primary" href="#" data-go="onboard">Create free account</a>
+        <button class="menu-btn" data-menu aria-expanded="false" aria-controls="mnav">Menu</button>
+      </div>
+    </div>
+    <nav class="mnav" id="mnav" aria-label="Mobile">
+      <a href="#" data-go="journey">The research journey</a>
+      <a href="#" data-go="stage">For researchers</a>
+      <a href="#" data-go="inst">For institutions</a>
+      <a href="#" data-go="home">Pricing</a>
+      <a href="#" data-go="home">Resources</a>
+      <a href="#" data-go="app">Sign in</a>
+    </nav>
+  </header>
+
+  <section class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Grant review, explained</p>
+        <h1>Most researchers were never shown how grant review works.<span class="second">EQUITAS shows you.</span></h1>
+        <p class="hero-sub">See your application the way reviewers will, and strengthen it before you submit.</p>
+        <div class="btns hero-cta">
+          <a class="btn btn--primary" href="#" data-go="onboard">Create a free account</a>
+          <a class="btn btn--ghost" href="#" data-go="tool">See how it works</a>
+        </div>
+        <p class="hero-note">Free to start. No credit card. Ten languages.</p>
+      </div>
+      <div class="score">
+        <div class="score-head"><span class="score-title">Study section simulation</span><span class="score-tag">Sample</span></div>
+        <div class="crit"><span class="crit-name">Significance</span><span class="meter"><i style="width:78%"></i></span><span class="crit-val">3</span></div>
+        <div class="crit"><span class="crit-name">Investigator</span><span class="meter"><i style="width:88%"></i></span><span class="crit-val">2</span></div>
+        <div class="crit"><span class="crit-name">Innovation</span><span class="meter"><i style="width:52%"></i></span><span class="crit-val">5</span></div>
+        <div class="crit"><span class="crit-name">Approach</span><span class="meter"><i style="width:42%"></i></span><span class="crit-val">6</span></div>
+        <div class="crit"><span class="crit-name">Environment</span><span class="meter"><i style="width:84%"></i></span><span class="crit-val">2</span></div>
+        <p class="score-foot"><b>Approach is carrying your score.</b> Two reviewers would raise the same concern about statistical power in Aim 2. Fixing that one section moves the overall impact score more than anything else here.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark band--tight">
+    <div class="wrap cred-grid">
+      <div class="cred-item"><span class="cred-dot"></span><p>Calibrated by an active NIH study section reviewer</p></div>
+      <div class="cred-item"><span class="cred-dot"></span><p>Built for NIH, NSF, ERC, Wellcome and LMIC funders</p></div>
+      <div class="cred-item"><span class="cred-dot"></span><p>Available in ten languages</p></div>
+    </div>
+  </section>
+
+  <section class="wrap band">
+    <p class="eyebrow">Find your place</p>
+    <h2 style="font-size:clamp(27px,3.5vw,40px);max-width:16ch">Where are you in your research?</h2>
+    <p class="lede" style="margin-top:16px">Pick your stage. We will show you what helps now, and say plainly what is still being built.</p>
+    <div class="rail"><div class="rail-line" aria-hidden="true"></div><div class="rail-items" id="railHome"></div></div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="wrap band">
+    <p class="eyebrow">Or start from your question</p>
+    <h2 style="font-size:clamp(23px,2.7vw,31px);max-width:24ch;margin-bottom:20px">Not sure where you are? Tell us what you need.</h2>
+    <div class="search-box">
+      <span aria-hidden="true" style="color:var(--muted)">&#9906;</span>
+      <input id="q" type="text" placeholder="For example: my K award was not funded" aria-label="Describe what you need">
+      <span class="filt">NIH &middot; English</span>
+      <button class="btn btn--primary" style="padding:11px 20px" data-go="tool">Search</button>
+    </div>
+    <div class="chips">
+      <button class="chip" data-go="tool">Review my specific aims</button>
+      <button class="chip" data-go="tool">Respond to reviewer critiques</button>
+      <button class="chip" data-go="stage">Plan my K award</button>
+      <button class="chip" data-go="journey">Find funding that fits</button>
+    </div>
+    <p class="privacy">Please do not paste grant text or patient data here. <a href="#" data-go="home">How we handle your work</a>.</p>
+  </section>
+
+  <hr class="rule">
+
+  <section class="wrap band">
+    <p class="eyebrow">What it does</p>
+    <h2 style="font-size:clamp(27px,3.5vw,40px);max-width:18ch">See your application through a reviewer's eyes</h2>
+    <div class="steps">
+      <div class="step"><p class="step-n">First</p><h3>Share your aims</h3>
+        <p>Paste a draft section or upload your specific aims page. Start with the sample if you would rather not use your own work yet.</p>
+        <div class="step-vis"><b>Aim 2</b>We will test whether the intervention reduces readmission at 90 days in a cohort of 240 patients&hellip;</div></div>
+      <div class="step"><p class="step-n">Then</p><h3>See the scoring</h3>
+        <p>Get the score each review criterion would receive, and the discussion a study section would actually have about it.</p>
+        <div class="step-vis"><b>Approach &mdash; 6</b>&ldquo;The power calculation assumes an effect size larger than the pilot supports. I would want that addressed.&rdquo;</div></div>
+      <div class="step"><p class="step-n">Before you submit</p><h3>Fix what matters</h3>
+        <p>Changes are ranked by how much they move your score, so limited time goes to the section actually holding you back.</p>
+        <div class="step-vis"><b>Highest impact</b>Re-state the power calculation in Aim 2 using the pilot effect size, and name the assumption.</div></div>
+    </div>
+    <div class="btns" style="margin-top:30px"><a class="btn btn--ghost" href="#" data-go="tool">Try it with the sample</a></div>
+  </section>
+
+  <section class="wrap band--tight">
+    <div class="ways">
+      <div class="way"><h3>Trainees</h3>
+        <p>Your first fellowship or K award, without a grants office behind you. F31, F32, T32 and K awards, explained for someone doing this for the first time.</p>
+        <a class="way-link" href="#" data-go="stage">Start at Compete &rarr;</a></div>
+      <div class="way"><h3>Investigators</h3>
+        <p>Your R-series application or resubmission, seen the way reviewers will see it. Including why the last one was not funded.</p>
+        <a class="way-link" href="#" data-go="tool">Start at Review &rarr;</a></div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="wrap band">
+    <div class="rev">
+      <div class="rev-photo">Founder photograph</div>
+      <div>
+        <p class="eyebrow">The reviewer behind EQUITAS</p>
+        <blockquote>&ldquo;I have sat in the room where these decisions get made. Most of what determines a score is knowable in advance. Almost nobody is told it.&rdquo;</blockquote>
+        <p class="rev-attr"><b>Name to confirm</b> &mdash; active NIH study section reviewer, health and biomedical sciences.<br>Every scoring model in EQUITAS is calibrated against how review is actually conducted, not against public guidance alone.</p>
+      </div>
+    </div>
+    <p class="note"><b>Design note.</b> This section does not exist on the current site. Naming the reviewer is the largest trust gain available and costs only a photograph and a paragraph.</p>
+  </section>
+
+  <section class="band mission" style="background:var(--bg-2)">
+    <div class="wrap">
+      <p class="eyebrow">Why we exist</p>
+      <h2>Every Researcher Deserves the Infrastructure</h2>
+      <p>Researchers at well-funded institutions have mentors who have sat on review panels. Most researchers do not. EQUITAS gives every researcher that same understanding, at every institution.</p>
+    </div>
+  </section>
+
+  <section class="dark band">
+    <div class="wrap">
+      <p class="eyebrow">For institutions</p>
+      <h2 style="font-size:clamp(25px,3.3vw,38px);max-width:22ch">Give every faculty member the grant support your strongest researchers already have.</h2>
+      <p style="margin-top:17px;font-size:16.5px;max-width:56ch">Stronger applications across your faculty, development you cannot staff one to one, and visibility into your funding pipeline.</p>
+      <div class="btns" style="margin-top:26px"><a class="btn btn--onband" href="#" data-go="inst">Explore EQUITAS for institutions</a></div>
+    </div>
+  </section>
+
+  <section class="wrap band">
+    <p class="eyebrow">Before you start</p>
+    <h2 style="font-size:clamp(25px,3vw,35px);margin-bottom:32px">Questions researchers ask</h2>
+    <div class="faq" id="faq"></div>
+  </section>
+
+  <section class="wrap band--tight" style="text-align:center;padding-bottom:60px">
+    <h2 style="font-size:clamp(27px,3.5vw,38px);margin-bottom:22px">Start your research journey.</h2>
+    <div class="btns" style="justify-content:center">
+      <a class="btn btn--primary" href="#" data-go="onboard">Create a free account</a>
+      <a class="btn btn--ghost" href="#" data-go="tool">See how it works</a>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div><h4>Journey</h4><ul>
+          <li><a href="#" data-go="journey">Imagine</a></li><li><a href="#" data-go="journey">Design</a></li>
+          <li><a href="#" data-go="stage">Compete</a></li><li><a href="#" data-go="journey">Review</a></li>
+          <li><a href="#" data-go="journey">Manage</a></li><li><a href="#" data-go="journey">Transform</a></li></ul></div>
+        <div><h4>Researchers</h4><ul>
+          <li><a href="#" data-go="stage">Trainees</a></li><li><a href="#" data-go="stage">Investigators</a></li>
+          <li><a href="#" data-go="home">Pricing</a></li></ul></div>
+        <div><h4>Institutions</h4><ul>
+          <li><a href="#" data-go="inst">Overview</a></li><li><a href="#" data-go="inst">For grants offices</a></li>
+          <li><a href="#" data-go="inst">Request a demo</a></li></ul></div>
+        <div><h4>Resources</h4><ul>
+          <li><a href="#" data-go="home">How grant review works</a></li><li><a href="#" data-go="home">Glossary</a></li>
+          <li><a href="#" data-go="home">FAQ</a></li></ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="#" data-go="home">About</a></li><li><a href="#" data-go="home">Accessibility</a></li>
+          <li><a href="#" data-go="home">Data and security</a></li><li><a href="#" data-go="home">Privacy</a></li></ul></div>
+      </div>
+      <div class="foot-btm"><span>&copy; 2026 Equitas Intelligence. Legal entity name to be confirmed.</span><span>English</span></div>
+    </div>
+  </footer>
+</main>
+
+<!-- ================= JOURNEY ================= -->
+<main class="screen" id="journey" hidden>
+  <header class="site"><div class="site-in">
+    <a class="brand" href="#" data-go="home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><span class="brand-name">EQUITAS</span><span class="brand-sub">INTELLIGENCE</span></span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a class="on" href="#" data-go="journey">The research journey</a><a href="#" data-go="stage">For researchers</a>
+      <a href="#" data-go="inst">For institutions</a><a href="#" data-go="home">Pricing</a><a href="#" data-go="home">Resources</a></nav>
+    <div class="site-right"><a class="hide-sm" href="#" data-go="app">Sign in</a>
+      <a class="btn btn--primary" href="#" data-go="onboard">Create free account</a></div>
+  </div></header>
+
+  <section class="wrap band">
+    <p class="eyebrow">The research journey</p>
+    <h1 style="font-size:clamp(29px,4vw,48px);max-width:16ch">Research is a journey. We support every step.</h1>
+    <p class="lede" style="margin-top:20px">We are strongest today at Compete, Review and Manage. Imagine is partly built, and Transform is still ahead of us. Every stage is labelled so you always know what you are getting.</p>
+    <div class="rail" style="margin-top:48px"><div class="rail-line" aria-hidden="true"></div><div class="rail-items" id="railJourney"></div></div>
+    <p class="note"><b>Design note.</b> The honesty line sits at the top of the page rather than in a footnote. A sophisticated reader works out what is thin anyway, so saying it first turns a weakness into evidence of the transparency the brand claims.</p>
+    <div class="nextprev"><span></span><a href="#" data-go="stage" style="text-align:right"><span class="np-label">Most people start here</span><b>Compete &rarr;</b></a></div>
+  </section>
+</main>
+
+<!-- ================= STAGE ================= -->
+<main class="screen" id="stage" hidden>
+  <header class="site"><div class="site-in">
+    <a class="brand" href="#" data-go="home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><span class="brand-name">EQUITAS</span><span class="brand-sub">INTELLIGENCE</span></span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a class="on" href="#" data-go="journey">The research journey</a><a href="#" data-go="stage">For researchers</a>
+      <a href="#" data-go="inst">For institutions</a><a href="#" data-go="home">Pricing</a><a href="#" data-go="home">Resources</a></nav>
+    <div class="site-right"><a class="hide-sm" href="#" data-go="app">Sign in</a>
+      <a class="btn btn--primary" href="#" data-go="onboard">Create free account</a></div>
+  </div></header>
+
+  <div class="crumb-rail"><div class="wrap"><div class="crumb-items" id="crumbs"></div></div></div>
+
+  <section class="wrap band">
+    <p class="eyebrow">Stage three &middot; Available</p>
+    <h1 style="font-size:clamp(30px,4.2vw,50px)">Compete</h1>
+    <p class="lede" style="margin-top:14px">Develop an application that can be funded.</p>
+
+    <div class="here"><h3>You are here if</h3><ul>
+      <li>You have a submission deadline coming up.</li>
+      <li>This may be the first grant you have written on your own.</li>
+      <li>You are not sure what reviewers expect a strong application to contain.</li>
+    </ul></div>
+
+    <h2 style="font-size:25px;margin-top:44px">Tools in this stage</h2>
+    <div class="tools">
+      <button class="tool" data-go="tool"><h4>Pre-Award Review</h4><p>Read your draft the way a reviewer will, section by section, before you submit it.</p><span class="tool-meta">Available</span></button>
+      <button class="tool" data-go="tool"><h4>K Award Suite</h4><p>Plan the career development sections that decide K awards, including the mentor plan and training goals.</p><span class="tool-meta">Available</span></button>
+      <button class="tool" data-go="tool"><h4>Trainee &amp; GRA Tools</h4><p>Everything an F31, F32 or T32 application needs, written for a first-time applicant.</p><span class="tool-meta">Available</span></button>
+      <button class="tool" data-go="tool"><h4>International Research</h4><p>Apply to ERC, Wellcome and other non-US funders, with each one's conventions explained.</p><span class="tool-meta">Available</span></button>
+    </div>
+
+    <p class="note"><b>Design note.</b> These descriptions replace the keyword lists on the current site. &ldquo;grant, application, specific aims&rdquo; is search metadata, not an explanation, and rewriting all twelve is the cheapest large win in the project.</p>
+
+    <div class="nextprev">
+      <a href="#" data-go="journey"><span class="np-label">Previous</span><b>&larr; Design</b></a>
+      <a href="#" data-go="tool" style="text-align:right"><span class="np-label">Next</span><b>Review &rarr;</b></a>
+    </div>
+
+    <div style="margin-top:40px;padding:26px;background:var(--bg-2);border-radius:var(--r-lg);text-align:center">
+      <h3 style="font-size:23px;margin-bottom:14px">Ready to start?</h3>
+      <a class="btn btn--primary" href="#" data-go="onboard">Create a free account</a>
+    </div>
+  </section>
+</main>
+
+<!-- ================= ONBOARDING ================= -->
+<main class="screen" id="onboard" hidden>
+  <header class="site"><div class="site-in">
+    <a class="brand" href="#" data-go="home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><span class="brand-name">EQUITAS</span><span class="brand-sub">INTELLIGENCE</span></span></a>
+    <div class="site-right"><span style="font-size:14px;color:var(--muted)">Step <b id="stepNo">1</b> of 3</span></div>
+  </div></header>
+  <section class="wrap onb">
+    <div class="onb-card">
+      <div class="onb-prog" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+      <div id="onbBody"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= APP HOME ================= -->
+<main class="screen" id="app" hidden>
+  <div class="app-bar"><div class="wrap app-in">
+    <a class="brand" href="#" data-go="home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><span class="brand-name">EQUITAS</span><span class="brand-sub">INTELLIGENCE</span></span></a>
+    <nav class="app-nav" aria-label="App">
+      <a href="#" aria-current="page" data-go="app">Home</a><a href="#" data-go="journey">My journey</a>
+      <a href="#" data-go="tool">Tools</a><a href="#" data-go="home">Help</a></nav>
+    <div class="app-right"><span class="pill-ctl">NIH &middot; English</span><span class="avatar" aria-hidden="true">A</span></div>
+  </div></div>
+
+  <section class="wrap band--tight">
+    <div class="resume">
+      <div><h2>Welcome back, Aqsa.</h2>
+        <p>You were reviewing the specific aims for your K23 application. Two sections are still unscored.</p></div>
+      <a class="btn btn--primary" href="#" data-go="tool">Continue</a>
+    </div>
+
+    <div class="mini-rail" id="miniRail"></div>
+
+    <div style="margin-top:36px">
+      <div class="search-box" style="max-width:100%">
+        <span aria-hidden="true" style="color:var(--muted)">&#9906;</span>
+        <input id="q2" type="text" placeholder="What do you need help with?" aria-label="Search tools">
+        <span class="filt">NIH &middot; English</span>
+      </div>
+      <div class="chips">
+        <button class="chip" data-go="tool">Score my aims</button>
+        <button class="chip" data-go="stage">K23 mentor plan</button>
+        <button class="chip" data-go="tool">My deadline is in three weeks</button>
+      </div>
+    </div>
+
+    <h3 style="font-size:21px;margin-top:44px;margin-bottom:16px">Tools for your stage</h3>
+    <div class="tools">
+      <button class="tool" data-go="tool"><h4>Study Section Simulator</h4><p>See the score your application would get and the discussion behind it.</p><span class="tool-meta">In progress</span></button>
+      <button class="tool" data-go="tool"><h4>Pre-Award Review</h4><p>Read your draft the way a reviewer will, section by section.</p><span class="tool-meta">Available</span></button>
+    </div>
+
+    <h3 style="font-size:21px;margin-top:44px;margin-bottom:4px">All tools</h3>
+    <div id="groups"></div>
+
+    <p class="note" style="margin-bottom:60px"><b>Design note.</b> The current signed-in page presents about forty choices at equal weight and opens with a marketing hero aimed at someone who has already signed up. This version opens with one action and groups the rest by stage.</p>
+  </section>
+</main>
+
+<!-- ================= INSIDE A TOOL ================= -->
+<main class="screen" id="tool" hidden>
+  <div class="app-bar"><div class="wrap app-in">
+    <a class="brand" href="#" data-go="home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><span class="brand-name">EQUITAS</span><span class="brand-sub">INTELLIGENCE</span></span></a>
+    <nav class="app-nav" aria-label="App">
+      <a href="#" data-go="app">Home</a><a href="#" data-go="journey">My journey</a>
+      <a href="#" aria-current="page" data-go="tool">Tools</a><a href="#" data-go="home">Help</a></nav>
+    <div class="app-right"><span class="pill-ctl">NIH &middot; English</span><span class="avatar" aria-hidden="true">A</span></div>
+  </div></div>
+
+  <div class="tool-head"><div class="wrap">
+    <div class="tool-path">
+      <a href="#" data-go="app">Home</a><span aria-hidden="true">/</span>
+      <a href="#" data-go="journey">Review</a><span aria-hidden="true">/</span>
+      <span>Study Section Simulator</span>
+    </div>
+    <h1>Study Section Simulator</h1>
+    <p>See the score your application would get, and the discussion a study section would actually have about it.</p>
+  </div></div>
+
+  <section class="wrap band--tight" style="padding-bottom:60px">
+    <div class="editor">
+      <div class="pane">
+        <h3 id="toolPaneTitle">Your specific aims</h3>
+        <div id="toolBody"></div>
+      </div>
+      <div>
+        <div class="pane">
+          <h3>Before you paste</h3>
+          <p class="side-note"><b style="color:var(--ink)">Your work stays yours.</b> Drafts are not used to train models and are not shared with other users or your institution.</p>
+          <p class="side-note">Do not include patient data or anything identifiable. You only need the aims themselves.</p>
+          <p class="side-note">Not ready to use your own work? Load the sample and see a full result first.</p>
+        </div>
+        <div class="pane" style="margin-top:16px">
+          <h3>Scored against</h3>
+          <p class="side-note">NIH review criteria: Significance, Investigator, Innovation, Approach, Environment. Each scored 1 to 9, where 1 is strongest.</p>
+        </div>
+      </div>
+    </div>
+    <p class="note"><b>Design note.</b> This screen did not exist in the last version. It is where a new user either gets value or leaves, so the empty state carries an example, a sample option, and the privacy answer in the place the worry actually occurs.</p>
+  </section>
+</main>
+
+<!-- ================= INSTITUTIONS ================= -->
+<main class="screen" id="inst" hidden>
+  <header class="site"><div class="site-in">
+    <a class="brand" href="#" data-go="home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><span class="brand-name">EQUITAS</span><span class="brand-sub">INTELLIGENCE</span></span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="#" data-go="journey">The research journey</a><a href="#" data-go="stage">For researchers</a>
+      <a class="on" href="#" data-go="inst">For institutions</a><a href="#" data-go="home">Pricing</a><a href="#" data-go="home">Resources</a></nav>
+    <div class="site-right"><a class="hide-sm" href="#" data-go="app">Sign in</a>
+      <a class="btn btn--primary" href="#" data-go="inst">Request a demo</a></div>
+  </div></header>
+
+  <section class="dark inst-hero">
+    <div class="wrap">
+      <p class="eyebrow">For institutions</p>
+      <h1>Give every faculty member the grant support your strongest researchers already have.</h1>
+      <p>Federal funding is harder to win, and your office cannot mentor every early-career investigator one to one.</p>
+      <div class="btns" style="margin-top:30px">
+        <a class="btn btn--onband" href="#" data-go="inst">Request a demo</a>
+        <a class="btn btn--onband-ghost" href="#" data-go="inst">Talk to us about your institution</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap band">
+    <p class="eyebrow">What it changes</p>
+    <h2 style="font-size:clamp(25px,3vw,35px);max-width:20ch">Outcomes across a faculty, not one application at a time</h2>
+    <div class="vals">
+      <div class="val"><h4>More competitive applications</h4><p>Every investigator sees how their work will be read before it reaches a study section.</p></div>
+      <div class="val"><h4>Development you cannot staff</h4><p>The mentorship your most senior faculty provide, available to everyone who needs it.</p></div>
+      <div class="val"><h4>Pipeline visibility</h4><p>See who is applying, where the gaps are, and which submissions need support.</p></div>
+      <div class="val"><h4>A retention tool</h4><p>Early-career faculty stay where they are given the infrastructure to succeed.</p></div>
+      <div class="val"><h4>Equity at scale</h4><p>Support reaches the faculty who most need it, consistently rather than informally.</p></div>
+      <div class="val"><h4>A return you can defend</h4><p>Activity, submissions and outcomes tracked in one place for renewal conversations.</p></div>
+    </div>
+
+    <div class="roadmap">
+      <span class="roadmap-flag">On our roadmap &middot; not built yet</span>
+      <h3>Seeing the pipeline before the awards land</h3>
+      <p>Because the platform estimates how competitive an application is, those estimates aggregated across a department become a forward-looking picture of likely research funding.</p>
+      <p class="warn">This is a direction we are building toward. It is not something the platform does today.</p>
+      <div class="btns" style="margin-top:18px"><a class="btn btn--ghost" href="#" data-go="inst">Talk to us about being an early partner</a></div>
+    </div>
+
+    <p class="note"><b>Design note.</b> Forecasting gets its own flagged block rather than sitting among live features. Deans and research finance leaders will check, and losing their trust once is permanent.</p>
+  </section>
+
+  <section class="wrap band" style="padding-top:0">
+    <p class="eyebrow">Next step</p>
+    <h2 style="font-size:clamp(23px,2.7vw,31px);margin-bottom:8px">Request a demo</h2>
+    <p class="lede">Five fields. We will come back with a named contact and a time, not a marketing sequence.</p>
+    <form class="demo" id="demoForm">
+      <label for="d1">Name<input id="d1" type="text" placeholder="Dr Maria Okonkwo"></label>
+      <label for="d2">Role<input id="d2" type="text" placeholder="Associate Dean for Research"></label>
+      <label for="d3">Institution<input id="d3" type="text" placeholder="University of &hellip;"></label>
+      <label for="d4">Email<input id="d4" type="email" placeholder="name@institution.edu"></label>
+      <label class="full" for="d5">Approximate faculty size
+        <select id="d5"><option>Under 50</option><option>50 to 200</option><option>200 to 500</option><option>More than 500</option></select></label>
+      <div class="full"><button class="btn btn--primary" type="submit">Request a demo</button>
+        <p id="demoMsg" class="err" hidden>Please add your name and email so we know who to contact.</p></div>
+    </form>
+  </section>
+
+  <footer class="foot"><div class="wrap"><div class="foot-btm" style="margin-top:0;border-top:0;padding-top:0">
+    <span>&copy; 2026 Equitas Intelligence. Legal entity name to be confirmed.</span><span>English</span>
+  </div></div></footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var esc = function(s){ return String(s); };
+
+  var STAGES=[
+    {k:"imagine",n:"Imagine",line:"Shape your question and find funding that fits.",st:"Partly available",s:"partial",mods:"Funding Discovery",go:"journey"},
+    {k:"design",n:"Design",line:"Build a study reviewers will trust.",st:"Partly available",s:"partial",mods:"Regulatory Compliance",go:"journey"},
+    {k:"compete",n:"Compete",line:"Develop an application that can be funded.",st:"Available",s:"available",mods:"Pre-Award Review, K Award Suite, Trainee &amp; GRA Tools, International Research",go:"stage"},
+    {k:"review",n:"Review",line:"See your application the way reviewers will.",st:"Available",s:"available",mods:"Study Section Simulator, Resubmission Strategy",go:"tool"},
+    {k:"manage",n:"Manage",line:"Steward your award and its money.",st:"Available",s:"available",mods:"Post-Award, Subaward &amp; Invoicing, Budget &amp; Finance",go:"journey"},
+    {k:"transform",n:"Transform",line:"Turn your research into impact.",st:"Coming",s:"coming",mods:"Nothing built yet",go:"journey"}
+  ];
+
+  function rail(){
+    return STAGES.map(function(s){
+      return '<button class="stage" data-s="'+s.s+'" data-go="'+s.go+'">'+
+        '<span class="stage-dot" aria-hidden="true"></span>'+
+        '<span class="stage-name">'+s.n+'</span>'+
+        '<span class="stage-line">'+s.line+'</span>'+
+        '<span class="stage-status">'+s.st+'</span>'+
+        '<span class="stage-mods">'+s.mods+'</span></button>';
+    }).join("");
+  }
+  ["railHome","railJourney"].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.innerHTML=rail();
+  });
+
+  var cr=document.getElementById("crumbs");
+  if(cr){
+    cr.innerHTML=STAGES.map(function(s,i){
+      var cur=s.k==="compete"?' aria-current="step"':'';
+      return (i?'<span class="crumb-sep" aria-hidden="true">&mdash;</span>':'')+
+        '<a class="crumb" href="#" data-go="'+s.go+'"'+cur+'>'+s.n+'</a>';
+    }).join("");
+  }
+
+  var mr=document.getElementById("miniRail");
+  if(mr){
+    mr.innerHTML=STAGES.map(function(s){
+      return '<button class="mini'+(s.k==="compete"?" on":"")+'" data-go="'+s.go+'">'+s.n+'<em>'+s.st+'</em></button>';
+    }).join("");
+  }
+
+  var FAQ=[
+    ["Does EQUITAS write my grant?","No. It helps you understand how your own work will be read and scored. We do not draft applications, and for NIH submissions that distinction matters."],
+    ["Is it really free?","Yes, to start. You can create an account and use the core tools without a card. Paid plans add more reviews and higher limits."],
+    ["Who sees my work?","Only you. Your drafts are not used to train models and are not shared with other users or institutions."],
+    ["Which funders does it cover?","NIH first, plus NSF, ERC, Wellcome and LMIC funders. Each has its own review conventions built in."],
+    ["My application was not funded. Can this help?","Yes. Resubmission Strategy is built for exactly that, and works from your summary statement."]
+  ];
+  var fq=document.getElementById("faq");
+  if(fq){
+    fq.innerHTML=FAQ.map(function(f,i){
+      return '<div class="q"><button class="q-btn" aria-expanded="'+(i===0)+'" data-q="'+i+'">'+
+        '<span>'+f[0]+'</span><span class="q-mark" aria-hidden="true">'+(i===0?"&minus;":"+")+'</span></button>'+
+        '<div class="q-body" id="qb'+i+'"'+(i===0?'':' hidden')+'>'+f[1]+'</div></div>';
+    }).join("");
+    fq.addEventListener("click",function(e){
+      var b=e.target.closest(".q-btn"); if(!b) return;
+      var body=document.getElementById("qb"+b.getAttribute("data-q"));
+      var open=b.getAttribute("aria-expanded")==="true";
+      b.setAttribute("aria-expanded",String(!open));
+      body.hidden=open;
+      b.querySelector(".q-mark").innerHTML=open?"+":"&minus;";
+    });
+  }
+
+  var GROUPS=[
+    {n:"Compete",c:"Your stage",open:true,mods:[
+      ["Pre-Award Review","Read your draft the way a reviewer will, section by section."],
+      ["K Award Suite","Plan the career development sections that decide K awards."],
+      ["Trainee &amp; GRA Tools","Everything an F31, F32 or T32 application needs."]]},
+    {n:"Review",c:"2 tools",open:false,mods:[
+      ["Study Section Simulator","See the score your application would get and the discussion behind it."],
+      ["Resubmission Strategy","Work out why it was not funded and what to change before the A1."]]},
+    {n:"Imagine",c:"1 tool",open:false,mods:[
+      ["Funding Discovery","Find what has already been funded in your area, and who funded it."]]},
+    {n:"Manage",c:"3 tools &middot; usually grants office",open:false,mods:[
+      ["Post-Award Management","Keep RPPR reports, no-cost extensions and progress reporting on schedule."],
+      ["Subaward &amp; Invoicing","Track subawards, subcontracts and invoices across collaborating sites."],
+      ["Budget &amp; Finance","Build and monitor a grant budget that survives review and audit."]]}
+  ];
+  var gr=document.getElementById("groups");
+  if(gr){
+    gr.innerHTML=GROUPS.map(function(g,i){
+      var body=g.mods.map(function(m){
+        return '<button class="mod" data-go="tool"><b>'+m[0]+'</b><span>'+m[1]+'</span></button>';
+      }).join("");
+      return '<div class="group"><button class="group-btn" aria-expanded="'+g.open+'" data-g="'+i+'">'+
+        '<b>'+g.n+'</b><span class="g-c">'+g.c+'</span></button>'+
+        '<div class="group-body" id="gb'+i+'"'+(g.open?'':' hidden')+'>'+body+'</div></div>';
+    }).join("");
+    gr.addEventListener("click",function(e){
+      var b=e.target.closest(".group-btn"); if(!b) return;
+      var body=document.getElementById("gb"+b.getAttribute("data-g"));
+      var open=b.getAttribute("aria-expanded")==="true";
+      b.setAttribute("aria-expanded",String(!open));
+      body.hidden=open;
+    });
+  }
+
+  /* ---------- onboarding ---------- */
+  var Q=[
+    {label:"Step one of three",q:"Which best describes you?",sub:"This decides which tools you see. You can change it later.",
+     opts:["Trainee or postdoc","Early-stage investigator","Established investigator","Research administrator or grants office","Not sure yet"]},
+    {label:"Step two of three",q:"Which funder are you working with?",sub:"We will set everything to that funder's review conventions.",
+     opts:["NIH","NSF","ERC","Wellcome","LMIC or other","Not sure yet"]},
+    {label:"Step three of three",q:"What do you need help with right now?",sub:"This picks where on the journey you start.",
+     opts:["Finding funding","Planning my study","Writing my application","Understanding how it will be scored","My application was not funded","Managing an award I have won"]}
+  ];
+  var step=0, picks=[null,null,null];
+  var onb=document.getElementById("onbBody");
+
+  function paintOnb(){
+    if(!onb) return;
+    var prog=document.querySelectorAll(".onb-prog i"), sn=document.getElementById("stepNo");
+    if(step<3){
+      if(sn) sn.textContent=String(step+1);
+      for(var i=0;i<prog.length;i++) prog[i].className=i<=step?"on":"";
+      var c=Q[step];
+      onb.innerHTML='<p class="onb-step">'+c.label+'</p><h2>'+c.q+'</h2><p class="onb-intro">'+c.sub+'</p>'+
+        '<div class="opts">'+c.opts.map(function(o,i){
+          return '<button class="opt'+(picks[step]===i?" sel":"")+'" data-o="'+i+'">'+o+'</button>';}).join("")+'</div>'+
+        '<div class="onb-foot"><button class="linkbtn" data-skip="1">Skip this question</button>'+
+        (step>0?'<button class="btn btn--ghost" data-back="1">Back</button>':'<span></span>')+'</div>';
+    }else{
+      for(var j=0;j<prog.length;j++) prog[j].className="on";
+      if(sn) sn.textContent="3";
+      var who=picks[0]!==null?Q[0].opts[picks[0]]:"researcher";
+      var need=picks[2]!==null?Q[2].opts[picks[2]]:"your application";
+      onb.innerHTML='<p class="onb-step">You are set up</p><h2>Here is where to start.</h2>'+
+        '<p class="onb-intro">Based on what you told us: '+who.toLowerCase()+', working on '+need.toLowerCase()+'.</p>'+
+        '<div class="result"><h3>Review</h3><p>See your application the way reviewers will.</p>'+
+        '<div class="rec"><h4>Study Section Simulator</h4><p>See the score your application would get, and the discussion a study section would actually have about it.</p>'+
+        '<div class="btns" style="margin-top:14px"><button class="btn btn--primary" data-go="tool">Start</button></div></div>'+
+        '<div class="rec-small"><div>Pre-Award Review</div><div>Resubmission Strategy</div></div></div>'+
+        '<div class="onb-foot"><button class="linkbtn" data-restart="1">Run through it again</button>'+
+        '<button class="btn btn--ghost" data-go="app">See every tool</button></div>';
+    }
+  }
+  if(onb){
+    paintOnb();
+    onb.addEventListener("click",function(e){
+      if(e.target.closest("[data-go]")) return;
+      var o=e.target.closest("[data-o]");
+      if(o){picks[step]=Number(o.getAttribute("data-o"));step++;paintOnb();return;}
+      if(e.target.closest("[data-skip]")){step++;paintOnb();return;}
+      if(e.target.closest("[data-back]")){step=Math.max(0,step-1);paintOnb();return;}
+      if(e.target.closest("[data-restart]")){step=0;picks=[null,null,null];paintOnb();return;}
+    });
+  }
+
+  /* ---------- tool: empty state -> result ---------- */
+  var SAMPLE="Aim 1. Determine whether a nurse-led transitional care programme reduces 90-day readmission among adults discharged after heart failure.\n\nAim 2. Test whether the effect is modified by neighbourhood deprivation, in a cohort of 240 patients across four safety-net hospitals.\n\nAim 3. Identify the implementation factors that predict programme fidelity across sites.";
+  var toolBody=document.getElementById("toolBody");
+  var toolTitle=document.getElementById("toolPaneTitle");
+
+  function emptyState(prefill){
+    if(toolTitle) toolTitle.textContent="Your specific aims";
+    toolBody.innerHTML=
+      '<div class="hintbox"><b>Paste your aims, or load the sample.</b> One page is enough. You will get a score for each review criterion and the comments behind it.</div>'+
+      '<label for="aims" style="position:absolute;left:-9999px">Your specific aims</label>'+
+      '<textarea class="ta" id="aims" placeholder="Aim 1. Determine whether&hellip;">'+(prefill||"")+'</textarea>'+
+      '<p class="err" id="aimsErr" hidden>Add your aims first, or load the sample.</p>'+
+      '<div class="btns" style="margin-top:14px">'+
+        '<button class="btn btn--primary" id="runBtn">Run the simulation</button>'+
+        '<button class="btn btn--ghost" id="sampleBtn">Load the sample</button></div>';
+  }
+
+  var CRIT=[["Significance",3,78],["Investigator",2,88],["Innovation",5,52],["Approach",6,42],["Environment",2,84]];
+  function resultState(){
+    if(toolTitle) toolTitle.textContent="What a study section would say";
+    toolBody.innerHTML=
+      '<div class="overall"><b>4.2</b><span>Estimated overall impact score. Lower is stronger. Applications in this range are usually discussed but rarely funded on the first submission.</span></div>'+
+      CRIT.map(function(c){
+        return '<div class="crit"><span class="crit-name">'+c[0]+'</span><span class="meter"><i style="width:'+c[2]+'%"></i></span><span class="crit-val">'+c[1]+'</span></div>';
+      }).join("")+
+      '<div class="cmt"><p>&ldquo;The power calculation in Aim 2 assumes an effect size larger than the pilot supports. Without that, the subgroup analysis is underpowered and I would not be confident in the finding.&rdquo;</p><cite>Reviewer 2 &middot; Approach</cite></div>'+
+      '<div class="cmt"><p>&ldquo;Strong team and an ideal setting for this question. The safety-net sites are a genuine strength, not a limitation.&rdquo;</p><cite>Reviewer 1 &middot; Environment</cite></div>'+
+      '<h3 style="margin-top:26px;font-size:17px">What to fix first</h3>'+
+      '<ul class="fixes">'+
+        '<li><span class="fix-w">Biggest gain</span><p>Re-state the power calculation in Aim 2 using the pilot effect size, and name the assumption openly rather than leaving reviewers to find it.</p></li>'+
+        '<li><span class="fix-w">Worth doing</span><p>Add one sentence to Aim 3 saying how fidelity is measured. Two reviewers would otherwise ask the same question.</p></li>'+
+        '<li><span class="fix-w">Minor</span><p>Move the innovation claim out of the first paragraph. It reads as overstated before the evidence arrives.</p></li>'+
+      '</ul>'+
+      '<div class="btns" style="margin-top:22px">'+
+        '<button class="btn btn--primary" data-go="app">Save and go to my work</button>'+
+        '<button class="btn btn--ghost" id="againBtn">Try another version</button></div>';
+  }
+
+  if(toolBody){
+    emptyState("");
+    toolBody.addEventListener("click",function(e){
+      if(e.target.closest("[data-go]")) return;
+      if(e.target.closest("#sampleBtn")){
+        var t=document.getElementById("aims"); if(t){t.value=SAMPLE;t.focus();}
+        var er=document.getElementById("aimsErr"); if(er) er.hidden=true;
+        return;
+      }
+      if(e.target.closest("#runBtn")){
+        var ta=document.getElementById("aims");
+        var err=document.getElementById("aimsErr");
+        if(!ta || ta.value.trim().length<20){ if(err) err.hidden=false; if(ta) ta.focus(); return; }
+        resultState();
+        return;
+      }
+      if(e.target.closest("#againBtn")){ emptyState(SAMPLE); return; }
+    });
+    toolBody.addEventListener("input",function(e){
+      if(e.target.id==="aims"){
+        var er=document.getElementById("aimsErr");
+        if(er && !er.hidden && e.target.value.trim().length>=20) er.hidden=true;
+      }
+    });
+  }
+
+  /* ---------- demo form ---------- */
+  var df=document.getElementById("demoForm");
+  if(df){
+    df.addEventListener("submit",function(e){
+      e.preventDefault();
+      var n=document.getElementById("d1").value.trim();
+      var m=document.getElementById("d4").value.trim();
+      var msg=document.getElementById("demoMsg");
+      if(!n || !m){ msg.hidden=false; document.getElementById(n?"d4":"d1").focus(); return; }
+      msg.hidden=true;
+      df.innerHTML='<div class="result" style="grid-column:1/-1"><h3>Thank you.</h3>'+
+        '<p style="margin-bottom:0">Priya Raman, who leads institutional partnerships, will email you within two working days with times. You can also pick a slot yourself from the link in that email.</p></div>';
+    });
+  }
+
+  /* ---------- mobile menu ---------- */
+  document.addEventListener("click",function(e){
+    var mb=e.target.closest("[data-menu]");
+    if(!mb) return;
+    e.preventDefault();
+    var nav=mb.closest("header").querySelector(".mnav");
+    if(!nav) return;
+    var open=nav.classList.toggle("open");
+    mb.setAttribute("aria-expanded",String(open));
+  });
+
+  /* ---------- screen routing ---------- */
+  var SCREENS=["home","journey","stage","onboard","app","tool","inst"];
+  function go(id){
+    if(SCREENS.indexOf(id)<0) return;
+    SCREENS.forEach(function(s){
+      var el=document.getElementById(s);
+      if(el) el.hidden=(s!==id);
+    });
+    document.querySelectorAll(".proto-tab").forEach(function(t){
+      t.setAttribute("aria-selected",String(t.getAttribute("data-go")===id));
+    });
+    document.querySelectorAll(".mnav.open").forEach(function(n){
+      n.classList.remove("open");
+      var b=n.closest("header").querySelector("[data-menu]");
+      if(b) b.setAttribute("aria-expanded","false");
+    });
+    if(id==="onboard"){ step=0; picks=[null,null,null]; paintOnb(); }
+    if(id==="tool" && toolBody){ emptyState(""); }
+    window.scrollTo(0,0);
+  }
+  document.addEventListener("click",function(e){
+    var t=e.target.closest("[data-go]");
+    if(!t) return;
+    e.preventDefault();
+    go(t.getAttribute("data-go"));
+  });
+})();
+</script>
