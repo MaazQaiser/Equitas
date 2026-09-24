@@ -8,6 +8,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { RevealMotion } from "@/components/RevealMotion";
 import { CapabilityRows } from "@/components/Marquee";
 import { HeroBento } from "@/components/HeroBento";
+import { StatusBadge } from "@/components/StatusBadge";
 
 const delay = (ms: number) => ({ "--reveal-delay": `${ms}ms` }) as CSSProperties;
 const enterDelay = (ms: number) => ({ "--enter-delay": `${ms}ms` }) as CSSProperties;
@@ -61,11 +62,24 @@ export default function Home() {
               <span className="block">Most researchers were never shown how grant review works.</span>
               <span className="mt-3 block">EQUITAS shows you.</span>
             </h1>
+            <p className="enter mt-6 max-w-[42ch] text-[16px] leading-[1.5] tracking-[-0.015em] text-muted" style={enterDelay(80)}>
+              EQUITAS is a research mentor across the whole arc. It starts at the research
+              question.
+            </p>
+            <p className="enter mt-3 max-w-[42ch] text-[16px] leading-[1.5] tracking-[-0.015em] text-muted" style={enterDelay(120)}>
+              Grant tools coach the writing, from a draft, a section, or an RFP. EQUITAS
+              coaches the research question itself, before any writing, calibrated by a real
+              reviewer.
+            </p>
             <div className="enter mt-8 flex flex-wrap items-center gap-3" style={enterDelay(160)}>
               <Button href="/onboarding" variant="primary" className="font-outfit">
                 Create a free account
               </Button>
             </div>
+            <p className="enter mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] tracking-[-0.01em] text-ink" style={enterDelay(190)}>
+              Start with a research question
+              <StatusBadge status="Coming" />
+            </p>
             <p className="enter mt-4 text-[14px] tracking-[-0.01em] text-muted" style={enterDelay(220)}>
               Free to start. No credit card. Ten languages.
             </p>
