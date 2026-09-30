@@ -323,13 +323,13 @@ export default function Home() {
               {
                 h: "Trainees",
                 p: "Your first fellowship or K award, without a grants office behind you. F31, F32, T32 and K awards, explained for someone doing this for the first time.",
-                href: "/researchers/trainees",
+                href: "/researchers#trainees",
                 cta: "Start at Compete",
               },
               {
                 h: "Investigators",
                 p: "Your R-series application or resubmission, seen the way reviewers will see it. Including why the last one was not funded.",
-                href: "/researchers/investigators",
+                href: "/researchers#investigators",
                 cta: "Start at Review",
               },
             ].map((w, i) => (

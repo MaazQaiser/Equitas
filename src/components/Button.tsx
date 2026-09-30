@@ -34,6 +34,13 @@ export function Button({
   const classes = `inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap px-5 text-[16px] font-normal tracking-[-0.01em] no-underline transition-colors duration-200 ${VARIANTS[variant]} ${className}`;
 
   if (href) {
+    if (href.startsWith("#")) {
+      return (
+        <a href={href} className={classes}>
+          {children}
+        </a>
+      );
+    }
     return (
       <Link href={href} className={classes}>
         {children}

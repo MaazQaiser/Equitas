@@ -25,7 +25,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "EQUITAS Intelligence — Every Researcher Deserves the Infrastructure",
+  title: "EQUITAS Intelligence | Every Researcher Deserves the Infrastructure",
   description:
     "EQUITAS teaches researchers how their grant applications will actually be reviewed and scored, so they can strengthen them before submitting. Calibrated by an active NIH study section reviewer.",
 };

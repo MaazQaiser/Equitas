@@ -18,13 +18,17 @@ const LANGUAGES = [
 const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] = [
   {
     heading: "Journey",
-    links: STAGES.map((s) => ({ label: s.name, href: `/journey/${s.slug}` })),
+    links: [
+      { label: "Overview", href: "/journey" },
+      ...STAGES.map((s) => ({ label: s.name, href: `/journey/${s.slug}` })),
+    ],
   },
   {
     heading: "Researchers",
     links: [
-      { label: "Trainees", href: "/researchers/trainees" },
-      { label: "Investigators", href: "/researchers/investigators" },
+      { label: "Overview", href: "/researchers" },
+      { label: "Trainees", href: "/researchers#trainees" },
+      { label: "Investigators", href: "/researchers#investigators" },
       { label: "Pricing", href: "/pricing" },
     ],
   },
@@ -32,16 +36,16 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
     heading: "Institutions",
     links: [
       { label: "Overview", href: "/institutions" },
-      { label: "For grants offices", href: "/institutions/grants-offices" },
-      { label: "What leaders see", href: "/institutions/what-leaders-see" },
-      { label: "Request a demo", href: "/institutions/demo" },
+      { label: "For grants offices", href: "/institutions#grants-offices" },
+      { label: "What leaders see", href: "/institutions#what-leaders-see" },
+      { label: "Request a demo", href: "/institutions#demo" },
     ],
   },
   {
     heading: "Learn",
     links: [
       { label: "How grant review works", href: "/resources/how-grant-review-works" },
-      { label: "Glossary", href: "/resources/glossary" },
+      { label: "Glossary", href: "/resources/how-grant-review-works#glossary" },
       { label: "Guides", href: "/resources/guides" },
       { label: "FAQ", href: "/resources/faq" },
     ],
@@ -50,8 +54,8 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
     heading: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "The reviewer behind EQUITAS", href: "/about/reviewer" },
-      { label: "Contact", href: "/contact" },
+      { label: "The reviewer behind EQUITAS", href: "/about#credibility" },
+      { label: "Contact", href: "/about#contact" },
     ],
   },
 ];
@@ -93,7 +97,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col gap-5 border-t border-band-line pt-6 text-[13px] sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 [Legal entity name]. All rights reserved.</p>
+          <p>© 2026 EQUITAS Intelligence Inc. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
             <label htmlFor="footer-lang" className="sr-only">
               Language

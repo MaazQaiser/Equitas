@@ -25,6 +25,10 @@ const REVIEWERS = ["/hero/reviewer-1.jpg", "/hero/reviewer-2.jpg", "/hero/review
 
 const WORDS = PARAS.flatMap((para, pi) => para.split(" ").map((word, wi) => ({ word, key: `${pi}-${wi}` })));
 
+const PARA_START = PARAS.map((_, pi) =>
+  PARAS.slice(0, pi).reduce((sum, para) => sum + para.split(" ").length, 0),
+);
+
 const WORD_MS = 190;
 const HOLD_PAPER_MS = 700;
 const HOLD_REPORT_MS = 4600;
@@ -38,10 +42,8 @@ export function HeroBento() {
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) {
-      setPhase("report");
-      return;
-    }
+    // Reduced motion: CSS hides the paper and shows the finished report.
+    if (mq.matches) return;
 
     let cancelled = false;
     let timer = 0;
@@ -101,8 +103,6 @@ export function HeroBento() {
     });
   }, [lit]);
 
-  let seen = 0;
-
   return (
     <article className="font-outfit mt-10 w-full rounded-2xl bg-surface p-5 shadow-card sm:p-6 lg:mt-0 lg:w-[min(48%,440px)] lg:shrink-0">
       <div className="hero-swap" data-phase={phase}>
@@ -112,8 +112,7 @@ export function HeroBento() {
           <div ref={textRef} className="relative mt-4">
             {PARAS.map((para, pi) => {
               const parts = para.split(" ");
-              const start = seen;
-              seen += parts.length;
+              const start = PARA_START[pi];
               return (
                 <p key={para} className="mt-3 text-[14.5px] leading-[1.65] tracking-[-0.01em] first:mt-0">
                   {parts.map((word, wi) => {
