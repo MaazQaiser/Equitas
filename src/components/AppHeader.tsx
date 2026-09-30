@@ -30,7 +30,7 @@ export function AppHeader({ current = "home" }: { current?: "home" | "journey" |
                 key={item.label}
                 href={item.href}
                 aria-current={on ? "page" : undefined}
-                className={`rounded-sm border-b-[1.5px] py-1 no-underline ${
+                className={`border-b py-1 no-underline ${
                   on ? "border-gold" : "border-transparent hover:border-gold"
                 }`}
               >

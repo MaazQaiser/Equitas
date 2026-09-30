@@ -29,7 +29,7 @@ const LEARN = [
 ];
 
 const NAV_LINK =
-  "rounded-sm border-b-[1.5px] border-transparent py-1 no-underline hover:border-gold";
+  "border-b border-transparent py-1 no-underline hover:border-gold";
 
 type MenuId = "journey" | "learn";
 
@@ -177,23 +177,24 @@ export function SiteHeader({
                 className="menu-in absolute top-full z-50 hidden border-t border-line bg-surface shadow-card lg:block"
                 style={{ left: "50%", width: "100vw", marginLeft: "-50vw" }}
               >
-                <ul className="mx-auto m-0 grid max-w-[1180px] list-none grid-cols-6 gap-x-6 gap-y-8 px-6 py-8 md:px-10">
+                <ul className="mx-auto m-0 grid max-w-[1180px] list-none grid-cols-6 items-stretch gap-3 px-6 py-8 md:px-10">
                   {STAGES.map((stage, i) => (
-                    <li key={stage.slug}>
+                    <li key={stage.slug} className="min-w-0">
                       <Link
                         ref={(node) => {
                           stageLinkRefs.current[i] = node;
                         }}
                         href={`/journey/${stage.slug}`}
                         onClick={() => setOpen(null)}
-                        className="flex flex-col gap-2 no-underline"
+                        className="flex h-full flex-col rounded-xl border border-line bg-white p-4 no-underline shadow-card transition-[border-color,box-shadow] duration-200 hover:border-gold/35 hover:shadow-card-hover"
                       >
-                        <span className="font-display text-[22px] leading-[1.1] tracking-[-0.03em]">{stage.name}</span>
-                        <span className="text-[13.5px] leading-snug text-muted">{stage.promise}</span>
-                        <StatusBadge status={stage.status} />
-                        {stage.modules.length > 0 && (
-                          <span className="text-[12px] leading-snug text-muted">{stage.modules.join(" · ")}</span>
-                        )}
+                        <span className="font-display text-[19px] leading-[1.12] tracking-[-0.03em] text-ink">
+                          {stage.name}
+                        </span>
+                        <span className="mt-2 text-[13px] leading-snug text-muted">{stage.promise}</span>
+                        <span className="mt-3">
+                          <StatusBadge status={stage.status} compact />
+                        </span>
                       </Link>
                     </li>
                   ))}
@@ -356,10 +357,7 @@ export function SiteHeader({
                     >
                       <span className="text-[15px] font-semibold">{stage.name}</span>
                       <span className="text-[13px] leading-snug text-muted">{stage.promise}</span>
-                      <StatusBadge status={stage.status} />
-                      {stage.modules.length > 0 && (
-                        <span className="text-[12px] text-muted">{stage.modules.join(" · ")}</span>
-                      )}
+                      <StatusBadge status={stage.status} compact />
                     </Link>
                   ))}
                 </div>

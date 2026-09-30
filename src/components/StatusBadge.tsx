@@ -9,10 +9,19 @@ const DOT: Record<StageStatus, string> = {
 // CLAUDE.md: "Always show the word. Never encode status with colour alone."
 // The word itself is the signal; the dot is a redundant visual cue, not the
 // only one.
-export function StatusBadge({ status }: { status: StageStatus }) {
+export function StatusBadge({ status, compact }: { status: StageStatus; compact?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.11em] text-gold-text">
-      <span aria-hidden="true" className={`block h-[9px] w-[9px] rounded-full ${DOT[status]}`} />
+    <span
+      className={`inline-flex w-fit items-center uppercase text-gold-text ${
+        compact
+          ? "gap-1 text-[8.5px] font-semibold tracking-[0.1em]"
+          : "gap-2 text-[10.5px] font-bold tracking-[0.11em]"
+      }`}
+    >
+      <span
+        aria-hidden="true"
+        className={`block shrink-0 rounded-full ${DOT[status]} ${compact ? "h-[6px] w-[6px]" : "h-[9px] w-[9px]"}`}
+      />
       {status}
     </span>
   );

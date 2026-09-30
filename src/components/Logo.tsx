@@ -12,9 +12,9 @@ export function Logo({ dark = false, href = "/" }: { dark?: boolean; href?: stri
         aria-hidden="true"
         className="flex h-[34px] w-[34px] flex-shrink-0 flex-col justify-center gap-[3px] rounded-full border-[1.5px] border-gold px-[6px] py-2"
       >
-        <i className="block h-[3px] w-full rounded-sm bg-gold" />
-        <i className="block h-[3px] w-full rounded-sm bg-gold" />
-        <i className="block h-[3px] w-full rounded-sm bg-gold" />
+        <i className="block h-[3px] w-full bg-gold" />
+        <i className="block h-[3px] w-full bg-gold" />
+        <i className="block h-[3px] w-full bg-gold" />
       </span>
       <span>
         <span className="font-wordmark block text-[18px] font-semibold leading-[1.1] tracking-[0.11em]">
