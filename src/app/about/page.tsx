@@ -8,14 +8,8 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { PageHero, SectionHead } from "@/components/PageHero";
 import { AccessGap } from "@/components/Previews";
 import { CtaBand } from "@/components/CtaBand";
+import { FunderList } from "@/components/FunderList";
 import { EYEBROW, EYEBROW_BAND, SECTION, WRAP } from "@/lib/ui";
-
-const FUNDERS: { group: string; names: string }[] = [
-  { group: "U.S. federal", names: "NIH, NSF, AHRQ, PCORI" },
-  { group: "U.S. foundations", names: "RWJF, American Heart Association, American Cancer Society" },
-  { group: "International", names: "ERC, Wellcome, CIHR, NHMRC" },
-  { group: "Global health", names: "LMIC funders" },
-];
 
 const PRINCIPLES = [
   {
@@ -69,8 +63,8 @@ export default function AboutPage() {
           }
           actions={
             <>
-              <Button href="#honesty" variant="primary">
-                How we work
+              <Button href="/about/mission" variant="primary">
+                Read the mission
               </Button>
               <Button href="#contact" variant="ghost">
                 Contact
@@ -79,6 +73,25 @@ export default function AboutPage() {
           }
           visual={<AccessGap />}
         />
+
+        <section id="mission" className={`scroll-mt-24 ${WRAP} ${SECTION} grid items-start gap-12 lg:grid-cols-2 lg:gap-16`}>
+          <SectionHead
+            eyebrow="The tagline"
+            title="Every Researcher Deserves the Infrastructure."
+            lede="Researchers at well-funded institutions have mentors who have sat on review panels. Most researchers do not. That story has its own page."
+          />
+          <div className="lg:pt-10">
+            <p className="max-w-[46ch] text-[16px] leading-[1.6] text-muted">
+              EQUITAS gives every researcher that same understanding, at every institution. The
+              software is how one reviewer&rsquo;s expertise reaches many people.
+            </p>
+            <p className="mt-8">
+              <Link href="/about/mission" className="text-[16px] text-gold-text no-underline hover:underline">
+                Read the mission →
+              </Link>
+            </p>
+          </div>
+        </section>
 
         <section className="bg-bg-2">
           <div className={`${WRAP} ${SECTION} grid items-start gap-12 lg:grid-cols-2 lg:gap-16`}>
@@ -120,26 +133,17 @@ export default function AboutPage() {
           <div className={`${WRAP} ${SECTION} grid items-start gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-20`}>
             <div>
               <p className={`mb-6 ${EYEBROW_BAND}`}>The reviewer behind EQUITAS</p>
-              <blockquote className="font-wordmark m-0 max-w-[22ch] text-[clamp(30px,3.4vw,46px)] leading-[1.2] tracking-[-0.02em]">
-                &ldquo;I have sat in the room where these decisions get made. Most of what determines a
-                score is knowable in advance. Almost nobody is told it.&rdquo;
-              </blockquote>
+              <h2 className="max-w-[16ch] text-[clamp(30px,3.4vw,46px)] font-light leading-[1.12] tracking-[-0.03em]">
+                Calibrated by someone who does the reviewing.
+              </h2>
               <p className="mt-8 max-w-[48ch] text-[16px] leading-[1.6] text-band-muted">
-                <span className="text-band-ink">Name to confirm.</span> Active NIH study section
-                reviewer, health and biomedical sciences. The scoring follows how review is actually
-                conducted, not published guidance alone.
+                An active NIH study section reviewer in the health and biomedical sciences calibrates
+                EQUITAS. A study section is the NIH panel that scores an application. The scoring
+                follows how review is actually conducted, not published guidance alone.
               </p>
             </div>
             <div>
-              <p className="mb-4 text-[14px] text-band-muted">Funders covered. NIH is our deepest calibration.</p>
-              <dl className="m-0 grid gap-3">
-                {FUNDERS.map((f) => (
-                  <div key={f.group} className="rounded-2xl bg-band-2 px-6 py-5">
-                    <dt className="text-[12px] uppercase tracking-[0.14em] text-gold-on-band">{f.group}</dt>
-                    <dd className="m-0 mt-2 text-[16px] leading-[1.5]">{f.names}</dd>
-                  </div>
-                ))}
-              </dl>
+              <FunderList band />
             </div>
           </div>
         </section>

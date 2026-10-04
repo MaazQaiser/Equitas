@@ -68,7 +68,35 @@ export function ReviewReport({ className = "" }: { className?: string }) {
         <span className="font-medium">Fix first:</span> state the assumption next to the effect size
         the pilot actually supports.
       </p>
+      <p className="mt-4 text-[12.5px] leading-[1.45] text-muted">
+        Example. A made-up application, not a real score.
+      </p>
     </Frame>
+  );
+}
+
+export function AimsPair() {
+  return (
+    <div className="grid gap-5 lg:grid-cols-2">
+      <Frame title="Specific aims">
+        <div aria-hidden="true" className="mb-4 space-y-2">
+          <span className="block h-2.5 w-[92%] rounded-full bg-line" />
+          <span className="block h-2.5 w-[78%] rounded-full bg-line" />
+          <span className="block h-2.5 w-[86%] rounded-full bg-line" />
+        </div>
+        <p className="rounded-xl bg-gold/15 px-4 py-3 text-[14.5px] leading-[1.5]">
+          The power calculation assumes an effect size larger than the pilot supports.
+        </p>
+        <p className="mt-3 inline-block rounded-full bg-bg-2 px-3 py-1 text-[12px] text-gold-text">
+          Power assumption not stated
+        </p>
+        <div aria-hidden="true" className="mt-4 space-y-2">
+          <span className="block h-2.5 w-[80%] rounded-full bg-line" />
+          <span className="block h-2.5 w-[64%] rounded-full bg-line" />
+        </div>
+      </Frame>
+      <ReviewReport />
+    </div>
   );
 }
 
@@ -284,7 +312,7 @@ export function Checklist({ title, items, tag }: { title: string; items: string[
 
 export function ScoreScale() {
   return (
-    <Frame title="How the score is made" tag={null}>
+    <Frame title="How the score is made">
       <div className="relative">
         <span aria-hidden="true" className="absolute top-[7px] right-[3%] left-[3%] h-px bg-line-2" />
         <ol className="m-0 flex list-none justify-between p-0">

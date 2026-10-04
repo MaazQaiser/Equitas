@@ -19,12 +19,14 @@ function CreateAccountForm() {
 
   useEffect(() => {
     const from = params.get("from");
-    if (from) writeSession({ from });
+    const need = params.get("need");
+    if (from || need) writeSession({ from: from ?? undefined, need: need ?? undefined });
   }, [params]);
 
   function continueOn(patch: { name?: string; email?: string }) {
     const from = params.get("from") ?? undefined;
-    writeSession({ signedIn: true, from, name: patch.name ?? name, email: patch.email ?? email });
+    const need = params.get("need") ?? undefined;
+    writeSession({ signedIn: true, from, need, name: patch.name ?? name, email: patch.email ?? email });
     router.push("/onboarding/you");
   }
 

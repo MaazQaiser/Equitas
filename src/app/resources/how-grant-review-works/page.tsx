@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/Button";
 import { HashScroll } from "@/components/HashScroll";
+import { DeepIntro } from "@/components/DeepIntro";
 import { PageHero, SectionHead } from "@/components/PageHero";
 import { ScoreScale } from "@/components/Previews";
 import { H2, SECTION, WRAP } from "@/lib/ui";
@@ -84,6 +85,7 @@ export default function HowGrantReviewWorksPage() {
       <SiteHeader current="learn" />
       <HashScroll />
       <main id="main">
+        <DeepIntro current="review" />
         <PageHero
           eyebrow="Learn · How grant review works"
           title="Your application is decided in a room you will never enter."
@@ -253,10 +255,10 @@ export default function HowGrantReviewWorksPage() {
               behind them, and what to change first.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Button href="/app/tool" variant="primary">
-                See a sample review
+              <Button href="/journey/review" variant="primary">
+                Continue at Review
               </Button>
-              <Button href="/onboarding" variant="ghost">
+              <Button href="/onboarding?from=review&need=scored" variant="ghost">
                 Create a free account
               </Button>
             </div>

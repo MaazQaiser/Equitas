@@ -23,8 +23,10 @@ const LANGUAGES = [
 ];
 
 const LEARN = [
+  { label: "See how it works", href: "/how-it-works" },
   { label: "How grant review works", href: "/resources/how-grant-review-works" },
   { label: "Guides", href: "/resources/guides" },
+  { label: "Glossary", href: "/resources/how-grant-review-works#glossary" },
   { label: "FAQ", href: "/resources/faq" },
 ];
 

@@ -84,7 +84,7 @@ export default function GuidesPage() {
 
         <CtaBand
           title="See this applied to your own work."
-          primary={{ href: "/app/tool", label: "See a sample review" }}
+          primary={{ href: "/how-it-works", label: "See a sample review" }}
           secondary={{ href: "/onboarding", label: "Create a free account" }}
         />
       </main>

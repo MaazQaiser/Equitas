@@ -292,7 +292,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Which funders does it cover?",
-    a: "NIH first, plus NSF, ERC, Wellcome and LMIC funders. Each has its own review conventions built in.",
+    a: "It covers NIH R, F and K awards first, then PCORI and other U.S. funders, then international and LMIC funders. Each has its own review conventions.",
   },
   {
     q: "My application was not funded. Can this help?",
@@ -430,6 +430,85 @@ export const GUIDES: Guide[] = [
     ],
   },
 ];
+
+export const FUNDER_LEAD =
+  "NIH R, F and K first. Then PCORI, then international and LMIC funders.";
+
+export const FUNDER_COVER =
+  "It covers NIH R, F and K awards first, then PCORI and other U.S. funders, then international and LMIC funders.";
+
+export const FUNDER_GROUPS = [
+  { group: "NIH", names: "R, F and K awards. Our deepest calibration." },
+  {
+    group: "Other U.S. funders",
+    names: "PCORI, AHRQ, NSF, RWJF, American Heart Association, American Cancer Society",
+  },
+  { group: "International", names: "ERC, Wellcome, CIHR, NHMRC" },
+  { group: "Global health", names: "LMIC funders" },
+] as const;
+
+export const PERSPECTIVES = [
+  { name: "The Study Section Reviewer's Perspective", kind: "lens" as const },
+  { name: "The Program Officer's Perspective", kind: "lens" as const },
+  { name: "The Advisory Council Member's Perspective", kind: "lens" as const },
+  { name: "The Scientific Review Officer's Perspective", kind: "lens" as const },
+  { name: "The Grants Management Specialist's Perspective", kind: "lens" as const },
+  { name: "The Biostatistician Reviewer's Perspective", kind: "lens" as const },
+  { name: "The Equity Reviewer's Perspective", kind: "lens" as const },
+  { name: "The Community Advocate's Perspective", kind: "lens" as const },
+  { name: "The Generalist Reviewer's Perspective", kind: "lens" as const },
+  { name: "Your Guide to How Grant Applications Actually Work", kind: "guide" as const },
+];
+
+export type AudienceKey = "trainee" | "investigator" | "grants_manager" | "institution";
+
+export type ModuleWeight = "primary" | "secondary" | "hidden";
+
+export function audienceKey(id?: string): AudienceKey | undefined {
+  if (id === "trainee") return "trainee";
+  if (id === "early" || id === "established") return "investigator";
+  if (id === "admin") return "grants_manager";
+  if (id === "institution") return "institution";
+  return undefined;
+}
+
+const WEIGHT: Record<string, Partial<Record<AudienceKey, ModuleWeight>>> = {
+  "Funding Discovery": { trainee: "primary", investigator: "primary" },
+  "Regulatory Compliance": { investigator: "primary", grants_manager: "primary" },
+  "Pre-Award Review": { trainee: "primary", investigator: "primary", grants_manager: "secondary" },
+  "K Award Suite": { trainee: "primary", investigator: "secondary" },
+  "Trainee & GRA Tools": { trainee: "primary" },
+  "International Research": { trainee: "secondary", investigator: "primary" },
+  "Study Section Simulator": { trainee: "primary", investigator: "primary" },
+  "Resubmission Strategy": { trainee: "secondary", investigator: "primary" },
+  "Post-Award Management": {
+    investigator: "secondary",
+    grants_manager: "primary",
+    institution: "secondary",
+  },
+  "Subaward & Invoicing": { grants_manager: "primary", institution: "secondary" },
+  "Budget & Finance": {
+    investigator: "secondary",
+    grants_manager: "primary",
+    institution: "secondary",
+  },
+  "Institutional Intelligence": { grants_manager: "secondary", institution: "primary" },
+};
+
+export function moduleWeight(name: string, audience?: AudienceKey): ModuleWeight {
+  if (!audience) return "primary";
+  return WEIGHT[name]?.[audience] ?? "hidden";
+}
+
+export function visibleModules(audience?: string, mode: "primary" | "more" | "all" = "all"): Module[] {
+  const key = audienceKey(audience);
+  return MODULES.filter((module) => {
+    const weight = moduleWeight(module.name, key);
+    if (mode === "all") return key ? weight !== "hidden" : true;
+    if (mode === "primary") return weight === "primary";
+    return weight === "secondary";
+  });
+}
 
 export function guideHref(guide: Guide) {
   return guide.href ?? `/resources/guides/${guide.slug}`;

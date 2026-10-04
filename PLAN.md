@@ -80,17 +80,21 @@ Removed: tagline hero, audience pills, ten language chips, five funder chips.
 
 ## 4. Homepage sections, in order
 
-1. Hero — *Most researchers were never shown how grant review works. EQUITAS shows you.*
-2. Credibility strip — three facts, no invented numbers
-3. **Where are you in your research?** — six stage cards. The core fix.
-4. Or tell us what you need — search with four example prompts
-5. See your application through a reviewer's eyes — three steps with real screenshots
-6. Two ways in — Trainees / Investigators
-7. The reviewer behind EQUITAS — photo, name, credentials. *Missing today; highest-value addition.*
-8. Mission
-9. For institutions — one distinct band, one link
-10. Questions researchers ask — FAQ, opening with "Does EQUITAS write my grant?"
-11. Final CTA
+Founder Oct 2026: homepage must match the newer pages. No reviewer photo, no invented quote, no placeholder reviewer name.
+
+1. Hero — *Most researchers were never shown how grant review works. EQUITAS shows you.* Text only. One action: See a sample review. Header keeps Create free account.
+2. Specific aims visual — below the hero, modelled on the Review report, labelled Example. Not a real score.
+3. Credibility strip — same de-identified reviewer line and corrected funder list as the inner pages
+4. **Where are you in your research?** — six stage cards. The core fix.
+5. Or tell us what you need — search with four example prompts
+6. See your application through a reviewer's eyes — three steps
+7. Reviewer Perspectives — ten named lenses. Mentor Chat labelled **Coming**
+8. Two ways in — Trainees / Investigators
+9. The reviewer behind EQUITAS — de-identified. No photo, no quote, no placeholder name
+10. Mission
+11. For institutions — one distinct band, one link
+12. Questions researchers ask — FAQ, opening with "Does EQUITAS write my grant?"
+13. Final CTA
 
 ---
 
@@ -218,9 +222,22 @@ and stop, the redesign has not worked however good it looks.
 
 ## 12. Still needed from the client
 
-- [ ] Answers to the four decisions, especially the sixth stage
-- [ ] Reviewer biography, photo, permission to name her study section experience
-- [ ] Pricing tiers and limits
-- [ ] Product screenshots: Study Section Simulator, institutional and chair views
+- [x] Answers to the four decisions — assumed: Manage stays, Grants Manager under Institutions, Transform = Coming, module sentences done. **Manage is still pending her formal approval** and must stay removable.
+- [x] Reviewer identity — founder (Oct 2026) confirmed **de-identified**: no photo, no invented quote, no name. Use: *An active NIH study section reviewer in the health and biomedical sciences calibrates EQUITAS.*
+- [ ] Pricing tiers and limits (site states reduced pricing for under-resourced and LMIC researchers; numbers still to confirm)
+- [ ] Product screenshots: Study Section Simulator, institutional and chair views (examples stay labelled Example)
 - [ ] Brand files: logo source, design-tokens colour file, licensed fonts
-- [ ] A decision on Arial
+- [ ] A decision on Arial (site currently uses Outfit + Playfair pending sign-off)
+
+---
+
+## 13. Founder feedback, October 2026
+
+Keep: de-identified reviewer on inner pages; funder grouping; "Mentorship, not just a score"; institutions honesty (tracking vs forecasting); Learn pages; reduced-pricing commitment; status words; Example markers.
+
+Homepage catch-up (her main request):
+1. Remove reviewer photo, quote, and any placeholder reviewer name. Apply the inner-page reviewer treatment.
+2. Corrected funder list everywhere: NIH R, F and K first, then PCORI and other U.S. funders, then international, then LMIC.
+3. Name the ten Reviewer Perspectives. Mentor Chat is **Coming**, same honesty as the question stage.
+4. Move the specific aims box below the hero and make it visual, like the Review report.
+5. Footer: EQUITAS Intelligence Inc. (already correct). One Create free account near the top. Example reports stay illustrative.

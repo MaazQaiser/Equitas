@@ -8,6 +8,7 @@ export function OptionList({
   options,
   nextHref,
   skipHref,
+  selectedId,
   onChoose,
   onSkip,
 }: {
@@ -15,6 +16,7 @@ export function OptionList({
   options: readonly { id: string; label: string }[];
   nextHref: string;
   skipHref: string;
+  selectedId?: string;
   onChoose: (id: string) => void;
   onSkip?: () => void;
 }) {
@@ -38,9 +40,11 @@ export function OptionList({
             key={option.id}
             type="button"
             role="radio"
-            aria-checked="false"
+            aria-checked={option.id === selectedId}
             onClick={() => choose(option.id)}
-            className="min-h-11 rounded-2xl bg-surface px-5 py-4 text-left text-[16px] leading-[1.4] shadow-card ring-1 ring-transparent hover:ring-gold"
+            className={`min-h-11 rounded-2xl bg-surface px-5 py-4 text-left text-[16px] leading-[1.4] shadow-card ring-1 hover:ring-gold ${
+              option.id === selectedId ? "ring-gold" : "ring-transparent"
+            }`}
           >
             {option.label}
           </button>

@@ -1,8 +1,17 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 
-export function ComingCapture({ id = "coming" }: { id?: string }) {
+export function ComingCapture({
+  id = "coming",
+  nextHref = "/journey/compete",
+  nextLabel = "Go to Compete.",
+}: {
+  id?: string;
+  nextHref?: string;
+  nextLabel?: string;
+}) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
@@ -25,9 +34,17 @@ export function ComingCapture({ id = "coming" }: { id?: string }) {
 
   if (sent) {
     return (
-      <p className="mt-5 text-[15px] leading-[1.6] text-muted" role="status">
-        Thank you. We will use this to decide what to build.
-      </p>
+      <div className="mt-5" role="status">
+        <p className="text-[15px] leading-[1.6] text-muted">
+          Thank you. We will use this to decide what to build.
+        </p>
+        <p className="mt-3 text-[15px] leading-[1.6] text-muted">
+          While you wait, Compete is where most people start.{" "}
+          <Link href={nextHref} className="text-gold-text no-underline hover:underline">
+            {nextLabel}
+          </Link>
+        </p>
+      </div>
     );
   }
 
@@ -65,6 +82,12 @@ export function ComingCapture({ id = "coming" }: { id?: string }) {
           {error}
         </p>
       )}
+      <p className="mt-4 text-[15px] leading-[1.6] text-muted">
+        While you wait, Compete is where most people start.{" "}
+        <Link href={nextHref} className="text-gold-text no-underline hover:underline">
+          {nextLabel}
+        </Link>
+      </p>
     </form>
   );
 }

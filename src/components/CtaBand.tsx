@@ -6,7 +6,7 @@ export function CtaBand({
   title = "Start your research journey.",
   lede,
   primary = { href: "/onboarding", label: "Create a free account" },
-  secondary = { href: "/app/tool", label: "See a sample review" },
+  secondary = { href: "/how-it-works", label: "See a sample review" },
   note = "Free to start. No credit card. Ten languages.",
 }: {
   title?: ReactNode;

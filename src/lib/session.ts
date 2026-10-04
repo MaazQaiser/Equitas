@@ -10,6 +10,10 @@ export type Session = {
   audience?: string;
   funder?: string;
   need?: string;
+  lastTool?: string;
+  lastLabel?: string;
+  invited?: boolean;
+  lastDoing?: string;
 };
 
 export function emptySession(): Session {
@@ -39,7 +43,10 @@ export function clearSession() {
   window.dispatchEvent(new Event(SESSION_EVENT));
 }
 
-export function onboardingQuery(from?: string | null) {
-  if (!from) return "/onboarding";
-  return `/onboarding?from=${encodeURIComponent(from)}`;
+export function onboardingQuery(from?: string | null, need?: string | null) {
+  const params = new URLSearchParams();
+  if (from) params.set("from", from);
+  if (need) params.set("need", need);
+  const query = params.toString();
+  return query ? `/onboarding?${query}` : "/onboarding";
 }

@@ -21,8 +21,6 @@ const PARAS = [
 const FEEDBACK =
   "The power calculation in Aim 2 assumes an effect size the pilot doesn’t support.";
 
-const REVIEWERS = ["/hero/reviewer-1.jpg", "/hero/reviewer-2.jpg", "/hero/reviewer-3.jpg"];
-
 const WORDS = PARAS.flatMap((para, pi) => para.split(" ").map((word, wi) => ({ word, key: `${pi}-${wi}` })));
 
 const PARA_START = PARAS.map((_, pi) =>
@@ -168,20 +166,7 @@ export function HeroBento() {
             “{FEEDBACK}”
           </p>
 
-          <div className="mt-4 flex items-center gap-3">
-            <div className="flex" aria-hidden="true">
-              {REVIEWERS.map((src, i) => (
-                <img
-                  key={src}
-                  src={src}
-                  alt=""
-                  className="h-8 w-8 rounded-full object-cover ring-2 ring-surface"
-                  style={{ marginLeft: i === 0 ? 0 : -8 }}
-                />
-              ))}
-            </div>
-            <p className="text-[13px] text-muted">3 reviewers</p>
-          </div>
+          <p className="mt-4 text-[13px] text-muted">3 reviewers. Example, not a real score.</p>
         </div>
       </div>
     </article>

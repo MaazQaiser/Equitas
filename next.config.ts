@@ -23,6 +23,11 @@ const nextConfig: NextConfig = {
       },
       { source: "/contact", destination: "/about#contact", permanent: false },
       { source: "/about/reviewer", destination: "/about#credibility", permanent: false },
+      { source: "/institutions/leaders", destination: "/institutions/what-leaders-see", permanent: false },
+      { source: "/see-how-it-works", destination: "/how-it-works", permanent: false },
+      { source: "/app/admin", destination: "/app/seats", permanent: false },
+      { source: "/app/pipeline", destination: "/app/chair", permanent: false },
+      { source: "/pricing/paywall", destination: "/pricing/upgrade", permanent: false },
       { source: "/signup", destination: "/onboarding", permanent: false },
       { source: "/legal", destination: "/legal/privacy", permanent: false },
     ];

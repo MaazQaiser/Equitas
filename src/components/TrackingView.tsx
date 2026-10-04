@@ -1,3 +1,5 @@
+import { ExampleTag } from "@/components/PageHero";
+
 const ROWS = [
   { area: "Early-career faculty", inProgress: "8", needSupport: "5", submitted: "2" },
   { area: "Established investigators", inProgress: "11", needSupport: "3", submitted: "6" },
@@ -9,11 +11,14 @@ export function TrackingView({ band = false }: { band?: boolean }) {
     <figure className="m-0 text-ink">
       <div className="overflow-x-auto rounded-2xl bg-surface shadow-card">
         <div className="border-b border-line px-6 py-5">
-          <p className="text-[12px] font-medium uppercase tracking-[0.14em] text-gold-text">
-            Department view
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-[12px] font-medium uppercase tracking-[0.14em] text-gold-text">
+              Department view
+            </p>
+            <ExampleTag>Example</ExampleTag>
+          </div>
           <p className="mt-2 text-[18px] font-medium tracking-[-0.02em]">Faculty grant activity</p>
-          <p className="mt-1 text-[14px] text-muted">This cycle. Tracking only.</p>
+          <p className="mt-1 text-[14px] text-muted">This cycle. Tracking only. Not a live institution.</p>
         </div>
         <table className="w-full border-collapse text-left text-[14px]">
           <caption className="sr-only">Example tracking table. Not a live institution.</caption>

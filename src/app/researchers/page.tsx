@@ -9,6 +9,8 @@ import { PageHero, SectionHead } from "@/components/PageHero";
 import { ReviewReport } from "@/components/Previews";
 import { StatusBadge } from "@/components/StatusBadge";
 import { CtaBand } from "@/components/CtaBand";
+import { FunderList } from "@/components/FunderList";
+import { Perspectives } from "@/components/Perspectives";
 import { MODULES, STAGES } from "@/lib/content";
 import { moduleSlug } from "@/lib/onboarding";
 import { EYEBROW, EYEBROW_BAND, SECTION, WRAP } from "@/lib/ui";
@@ -41,13 +43,6 @@ const WORTH = [
   { title: "See what moves the score", body: "Changes ranked by how much they matter, so limited time goes to the right place." },
   { title: "Strengthen it first", body: "Fix what a reviewer would raise before the application leaves your desk." },
   { title: "Keep the skill", body: "Every suggestion explains its reasoning. The understanding stays after this grant is decided." },
-];
-
-const FUNDERS = [
-  { group: "U.S. federal", names: "NIH, NSF, AHRQ, PCORI" },
-  { group: "U.S. foundations", names: "RWJF, American Heart Association, American Cancer Society" },
-  { group: "International", names: "ERC, Wellcome, CIHR, NHMRC" },
-  { group: "Global health", names: "LMIC funders" },
 ];
 
 const RESEARCHER_FAQ = [
@@ -96,7 +91,7 @@ export default function ResearchersPage() {
               <Button href="/onboarding" variant="primary">
                 Create a free account
               </Button>
-              <Button href="/app/tool" variant="ghost">
+              <Button href="/how-it-works" variant="ghost">
                 See a sample review
               </Button>
             </>
@@ -183,14 +178,17 @@ export default function ResearchersPage() {
           </ol>
         </section>
 
+        <div className="bg-bg-2">
+          <Perspectives />
+        </div>
+
         <section className="bg-band text-band-ink">
           <div className={`${WRAP} ${SECTION} grid items-start gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-20`}>
             <div>
               <p className={`mb-6 ${EYEBROW_BAND}`}>Why you can trust it</p>
-              <blockquote className="font-wordmark m-0 max-w-[22ch] text-[clamp(30px,3.4vw,46px)] leading-[1.2] tracking-[-0.02em]">
-                &ldquo;Most of what determines a score is knowable in advance. Almost nobody is told
-                it.&rdquo;
-              </blockquote>
+              <h2 className="max-w-[16ch] text-[clamp(30px,3.4vw,46px)] font-light leading-[1.12] tracking-[-0.03em]">
+                Calibrated by someone who does the reviewing.
+              </h2>
               <p className="mt-8 max-w-[48ch] text-[16px] leading-[1.6] text-band-muted">
                 An active NIH study section reviewer in the health and biomedical sciences calibrates
                 EQUITAS. A study section is the NIH panel that scores an application. The scoring
@@ -203,15 +201,7 @@ export default function ResearchersPage() {
               </p>
             </div>
             <div>
-              <p className="mb-4 text-[14px] text-band-muted">Your funder, named. NIH is our deepest calibration.</p>
-              <dl className="m-0 grid gap-3">
-                {FUNDERS.map((f) => (
-                  <div key={f.group} className="rounded-2xl bg-band-2 px-6 py-5">
-                    <dt className="text-[12px] uppercase tracking-[0.14em] text-gold-on-band">{f.group}</dt>
-                    <dd className="m-0 mt-2 text-[16px] leading-[1.5]">{f.names}</dd>
-                  </div>
-                ))}
-              </dl>
+              <FunderList band />
             </div>
           </div>
         </section>

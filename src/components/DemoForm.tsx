@@ -1,18 +1,19 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/Button";
 
 const SIZES = ["Under 50", "50 to 200", "200 to 500", "More than 500"];
 
 export function DemoForm() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [institution, setInstitution] = useState("");
   const [email, setEmail] = useState("");
   const [size, setSize] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [sent, setSent] = useState(false);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,16 +25,7 @@ export function DemoForm() {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email = "Enter a valid email address.";
     if (!size) next.size = "Choose an approximate faculty size.";
     setErrors(next);
-    if (Object.keys(next).length === 0) setSent(true);
-  }
-
-  if (sent) {
-    return (
-      <p className="mt-8 max-w-[54ch] text-[16px] leading-[1.6]" role="status">
-        Thank you. A named contact who leads institutional partnerships will email you within two
-        working days with times. You can also book a slot yourself from the link in that email.
-      </p>
-    );
+    if (Object.keys(next).length === 0) router.push("/institutions/demo/confirmation");
   }
 
   const field =

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/Button";
+import { JourneyStrip } from "@/components/JourneyStrip";
 import { StageGroupedTools } from "@/components/StageGroupedTools";
 import { moduleSlug, recommend } from "@/lib/onboarding";
 import { useSession } from "@/lib/useSession";
@@ -37,7 +38,10 @@ export default function StartPage() {
           Grouped by where you are in the work, not a flat grid.
         </p>
         <div className="mt-10">
-          <StageGroupedTools showPersonalise />
+          <JourneyStrip current="compete" />
+        </div>
+        <div className="mt-10">
+          <StageGroupedTools showPersonalise collapseOthers />
         </div>
       </AuthLayout>
     );
@@ -49,6 +53,9 @@ export default function StartPage() {
         Here is where to start.
       </h1>
       <p className="mt-4 max-w-[46ch] text-[16px] leading-[1.55] text-muted">{result.summary}</p>
+      <div className="mt-8">
+        <JourneyStrip current={result.stageSlug} />
+      </div>
       <p className="mt-8 text-[18px] tracking-[-0.02em]">
         {result.stageName}
         <span className="text-muted"> · {result.stagePromise}</span>

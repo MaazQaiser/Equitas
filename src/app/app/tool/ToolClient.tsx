@@ -1,11 +1,12 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { AppHeader } from "@/components/AppHeader";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { DeepIntro } from "@/components/DeepIntro";
 import { Button } from "@/components/Button";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ExampleTag, PageHero, SectionHead } from "@/components/PageHero";
@@ -13,7 +14,9 @@ import { ScoreBars, StagePreview } from "@/components/Previews";
 import { CtaBand } from "@/components/CtaBand";
 import { MODULES, STAGES } from "@/lib/content";
 import { moduleSlug } from "@/lib/onboarding";
+import { writeSession } from "@/lib/session";
 import { useSession } from "@/lib/useSession";
+import { addSavedWork, recordReview } from "@/lib/workspace";
 import { EYEBROW_BAND, SECTION, WRAP } from "@/lib/ui";
 
 const SIMULATOR = "Study Section Simulator";
@@ -95,7 +98,133 @@ function ImpactCard() {
   );
 }
 
-function SampleReview({ signedIn }: { signedIn: boolean }) {
+const SAMPLE_DRAFT = AIMS.map((item) => item.text).join("\n\n");
+
+function SimulatorWork({ signedIn }: { signedIn: boolean }) {
+  const [draft, setDraft] = useState("");
+  const [error, setError] = useState("");
+  const [ran, setRan] = useState(false);
+
+  function run() {
+    if (!draft.trim()) {
+      setError("Paste a section, or load the sample, before you run the review.");
+      return;
+    }
+    setError("");
+    setRan(true);
+    recordReview();
+    writeSession({
+      lastTool: moduleSlug(SIMULATOR),
+      lastLabel: "your Study Section Simulator review",
+      lastDoing: "the Study Section Simulator",
+    });
+  }
+
+  if (ran) {
+    return (
+      <SampleReview
+        signedIn={signedIn}
+        note="Illustrative result on the text you provided. Not a real score."
+      />
+    );
+  }
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Study Section Simulator · Available"
+        title="Share a section. See how a study section would read it."
+        lede={
+          <p>
+            Paste your specific aims or another draft section. You will get criterion scores, the
+            discussion three reviewers would have, and the change that moves the score first.
+          </p>
+        }
+      />
+      <section className={`${WRAP} pb-[clamp(80px,10vw,136px)]`}>
+        <label htmlFor="draft" className="mb-2 block text-[14px] font-medium">
+          Your draft section
+        </label>
+        <textarea
+          id="draft"
+          value={draft}
+          onChange={(event) => {
+            setDraft(event.target.value);
+            if (error) setError("");
+          }}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? "draft-error" : "draft-privacy"}
+          placeholder="Aim 1 tests whether… Aim 2 follows…"
+          className="min-h-[220px] w-full rounded-2xl border border-line-2 bg-surface px-5 py-4 text-[16px] leading-[1.6] outline-none"
+        />
+        {error && (
+          <p id="draft-error" className="mt-2 text-[14px]" role="alert">
+            {error}
+          </p>
+        )}
+        <p id="draft-privacy" className="mt-3 max-w-[62ch] text-[14px] text-muted">
+          Your work stays yours. Drafts are not used to train models.{" "}
+          <Link href="/legal/data-security" className="text-gold-text underline">
+            How we handle your work
+          </Link>
+          .
+        </p>
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <Button type="button" variant="primary" onClick={run}>
+            Run the review
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => {
+              setDraft(SAMPLE_DRAFT);
+              setError("");
+            }}
+          >
+            Load the sample
+          </Button>
+        </div>
+        <p className="mt-4 text-[13px] text-muted">
+          Not ready to paste unpublished science? Load the sample. It is a made-up application.
+        </p>
+      </section>
+    </>
+  );
+}
+
+function SaveReviewActions({ signedIn }: { signedIn: boolean }) {
+  const [saved, setSaved] = useState(false);
+  if (!signedIn) return null;
+
+  function save() {
+    addSavedWork({
+      title: "Sample review of specific aims",
+      module: SIMULATOR,
+      slug: moduleSlug(SIMULATOR),
+      excerpt: "Approach is the weakest. State the power assumption in Aim 2.",
+      example: true,
+    });
+    setSaved(true);
+  }
+
+  return (
+    <div className="mt-6 flex flex-wrap gap-3">
+      <Button type="button" variant="primary" onClick={save}>
+        {saved ? "Saved" : "Save this review"}
+      </Button>
+      {saved ? (
+        <Button href="/app/saved" variant="ghost">
+          Open saved work
+        </Button>
+      ) : null}
+      <Button href="/pricing/upgrade?doing=the%20Study%20Section%20Simulator" variant="ghost">
+        What if I reach a limit?
+      </Button>
+    </div>
+  );
+}
+
+function SampleReview({ signedIn, note }: { signedIn: boolean; note?: string }) {
   return (
     <>
       <PageHero
@@ -118,7 +247,7 @@ function SampleReview({ signedIn }: { signedIn: boolean }) {
             </Button>
           </>
         }
-        note="Illustrative sample. Not a real application or a real reviewer."
+        note={note ?? "Illustrative sample. Not a real application or a real score."}
         visual={<ImpactCard />}
       />
 
@@ -247,6 +376,7 @@ function SampleReview({ signedIn }: { signedIn: boolean }) {
           EQUITAS does not rewrite the aims for you. It shows what a reviewer would raise, so you can
           change your own words.
         </p>
+        <SaveReviewActions signedIn={signedIn} />
       </section>
 
       <CtaBand
@@ -260,6 +390,9 @@ function SampleReview({ signedIn }: { signedIn: boolean }) {
 
 function ToolPreview({ slug, signedIn }: { slug: string; signedIn: boolean }) {
   const tool = MODULES.find((item) => moduleSlug(item.name) === slug);
+  useEffect(() => {
+    if (signedIn && tool) writeSession({ lastTool: slug, lastLabel: tool.name });
+  }, [signedIn, slug, tool]);
   if (!tool) {
     return (
       <PageHero
@@ -362,12 +495,19 @@ function ToolWorkspace() {
   const slug = params.get("module");
   const signedIn = useSession().session.signedIn;
   const showSample = !slug || slug === moduleSlug(SIMULATOR);
+  const tool = slug ? MODULES.find((item) => moduleSlug(item.name) === slug) : MODULES.find((item) => item.name === SIMULATOR);
+  const stageSlug = STAGES.find((stage) => stage.name === tool?.stage)?.slug ?? "review";
 
   return (
     <>
       {signedIn ? <AppHeader current="tools" /> : <SiteHeader />}
       <main id="main">
-        {showSample ? <SampleReview signedIn={signedIn} /> : <ToolPreview slug={slug ?? ""} signedIn={signedIn} />}
+        {!signedIn && <DeepIntro current={stageSlug} />}
+        {showSample ? (
+          signedIn ? <SimulatorWork signedIn /> : <SampleReview signedIn={false} />
+        ) : (
+          <ToolPreview slug={slug ?? ""} signedIn={signedIn} />
+        )}
       </main>
       <SiteFooter />
     </>

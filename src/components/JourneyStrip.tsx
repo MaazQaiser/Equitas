@@ -29,7 +29,7 @@ export function JourneyStrip({ current }: { current?: string }) {
     <nav aria-label="Stages">
       <ol className="m-0 grid list-none grid-cols-2 gap-x-6 gap-y-8 p-0 sm:grid-cols-3 lg:grid-cols-6">
         {stages.map((stage, i) => {
-          const href = current ? `/journey/${stage.slug}` : `#${stage.slug}`;
+          const href = `/journey/${stage.slug}`;
           const isCurrent = stage.slug === current;
           const hasNext = i < stages.length - 1;
 

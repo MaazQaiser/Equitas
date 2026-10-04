@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/Button";
 import { StatusBadge } from "@/components/StatusBadge";
+import { DeepIntro } from "@/components/DeepIntro";
 import { PageHero, SectionHead } from "@/components/PageHero";
 import { CtaBand } from "@/components/CtaBand";
 import { GUIDES, MODULES, STAGES, guideBySlug, guideHref } from "@/lib/content";
@@ -48,6 +49,7 @@ export default async function GuidePage({
     <>
       <SiteHeader current="learn" />
       <main id="main">
+        <DeepIntro current={stage?.slug} />
         <PageHero
           tone="sand"
           before={
@@ -109,7 +111,7 @@ export default async function GuidePage({
                 See how your own application would be read.
               </p>
               <div className="mt-6">
-                <Button href="/app/tool" variant="onband">
+                <Button href="/how-it-works" variant="onband">
                   See a sample review
                 </Button>
               </div>
@@ -154,8 +156,14 @@ export default async function GuidePage({
 
         <CtaBand
           title="See this applied to your own work."
-          primary={{ href: "/app/tool", label: "See a sample review" }}
-          secondary={{ href: "/onboarding", label: "Create a free account" }}
+          primary={{
+            href: stage ? `/journey/${stage.slug}` : "/journey",
+            label: stage ? `Continue at ${stage.name}` : "See the journey",
+          }}
+          secondary={{
+            href: stage ? `/onboarding?from=${stage.slug}` : "/onboarding",
+            label: "Create a free account",
+          }}
         />
       </main>
       <SiteFooter />

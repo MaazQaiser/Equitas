@@ -36,24 +36,28 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
     heading: "Institutions",
     links: [
       { label: "Overview", href: "/institutions" },
-      { label: "For grants offices", href: "/institutions#grants-offices" },
-      { label: "What leaders see", href: "/institutions#what-leaders-see" },
-      { label: "Request a demo", href: "/institutions#demo" },
+      { label: "For grants offices", href: "/institutions/grants-offices" },
+      { label: "What leaders see", href: "/institutions/what-leaders-see" },
+      { label: "Where we are headed", href: "/institutions/roadmap" },
+      { label: "Request a demo", href: "/institutions/demo" },
     ],
   },
   {
     heading: "Learn",
     links: [
+      { label: "See how it works", href: "/how-it-works" },
       { label: "How grant review works", href: "/resources/how-grant-review-works" },
       { label: "Glossary", href: "/resources/how-grant-review-works#glossary" },
       { label: "Guides", href: "/resources/guides" },
       { label: "FAQ", href: "/resources/faq" },
+      { label: "Search", href: "/search" },
     ],
   },
   {
     heading: "Company",
     links: [
       { label: "About", href: "/about" },
+      { label: "Mission", href: "/about/mission" },
       { label: "The reviewer behind EQUITAS", href: "/about#credibility" },
       { label: "Contact", href: "/about#contact" },
     ],

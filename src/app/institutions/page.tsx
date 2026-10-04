@@ -7,6 +7,7 @@ import { TrackingView } from "@/components/TrackingView";
 import { HashScroll } from "@/components/HashScroll";
 import { PageHero, SectionHead } from "@/components/PageHero";
 import { StatusBadge } from "@/components/StatusBadge";
+import { FunderList } from "@/components/FunderList";
 import { EYEBROW_BAND, SECTION, WRAP } from "@/lib/ui";
 
 const VIEWS = [
@@ -64,13 +65,6 @@ const SKILLS = [
   "Build the skill of writing to reviewers across a career",
 ];
 
-const FUNDERS: { group: string; names: string }[] = [
-  { group: "U.S. federal", names: "NIH, NSF, AHRQ, PCORI" },
-  { group: "U.S. foundations", names: "RWJF, American Heart Association, American Cancer Society" },
-  { group: "International", names: "ERC, Wellcome, CIHR, NHMRC" },
-  { group: "Global health", names: "LMIC funders" },
-];
-
 const OFFICE = [
   {
     title: "Post-Award Management",
@@ -114,7 +108,7 @@ export default function InstitutionsPage() {
               <Button href="#demo" variant="onband">
                 Request a demo
               </Button>
-              <Button href="#what-leaders-see" variant="onband-ghost">
+              <Button href="/institutions/what-leaders-see" variant="onband-ghost">
                 See what leaders see
               </Button>
             </>
@@ -123,7 +117,27 @@ export default function InstitutionsPage() {
           visual={<TrackingView band />}
         />
 
-        <section className={`${WRAP} ${SECTION}`}>
+        <nav aria-label="Institutional path" className={`${WRAP} pt-[clamp(32px,4vw,48px)]`}>
+          <ol className="m-0 flex list-none flex-wrap gap-x-6 gap-y-2 p-0 text-[14px] text-muted">
+            {[
+              ["#pain", "The problem"],
+              ["#value", "What changes"],
+              ["/institutions/what-leaders-see", "What leaders see today"],
+              ["/institutions/grants-offices", "For grants offices"],
+              ["/institutions/roadmap", "Where we are headed"],
+              ["/institutions/demo", "Request a demo"],
+            ].map(([href, label], i, list) => (
+              <li key={href}>
+                <a href={href} className="text-gold-text no-underline hover:underline">
+                  {label}
+                </a>
+                {i < list.length - 1 ? <span aria-hidden="true"> → </span> : null}
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        <section id="pain" className={`scroll-mt-24 ${WRAP} ${SECTION}`}>
           <SectionHead eyebrow="The problem" title="You cannot staff mentorship at scale." />
           <ul className="m-0 mt-12 grid list-none grid-cols-1 gap-5 p-0 md:grid-cols-3">
             {PROBLEMS.map((item, i) => (
@@ -136,7 +150,7 @@ export default function InstitutionsPage() {
           </ul>
         </section>
 
-        <section className="bg-bg-2">
+        <section id="value" className="scroll-mt-24 bg-bg-2">
           <div className={`${WRAP} ${SECTION}`}>
             <SectionHead eyebrow="What changes" title="Outcomes across a faculty, not one application at a time." />
             <ul className="m-0 mt-12 grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -190,56 +204,58 @@ export default function InstitutionsPage() {
               </p>
             </div>
             <div>
-              <p className="mb-4 text-[14px] text-band-muted">NIH is our deepest calibration. Your faculty will find their funder named.</p>
-              <dl className="m-0 grid gap-3">
-                {FUNDERS.map((f) => (
-                  <div key={f.group} className="rounded-2xl bg-band-2 px-6 py-5">
-                    <dt className="text-[12px] uppercase tracking-[0.14em] text-gold-on-band">{f.group}</dt>
-                    <dd className="m-0 mt-2 text-[16px] leading-[1.5]">{f.names}</dd>
-                  </div>
-                ))}
-              </dl>
+              <FunderList band />
             </div>
           </div>
         </section>
 
         <section id="what-leaders-see" className={`${WRAP} ${SECTION} scroll-mt-24`}>
-          <SectionHead
-            eyebrow="What leaders see"
-            title="Your view of the pipeline."
-            lede="Department and institutional views show faculty grant activity, where applications stand, and where support is needed."
-          />
-          <ul className="m-0 mt-12 grid list-none gap-5 p-0 md:grid-cols-3">
-            {VIEWS.map((v) => (
-              <li key={v.title} className="flex flex-col rounded-2xl bg-surface p-7 shadow-card">
-                <StatusBadge status="Available" />
-                <h3 className="mt-6 text-[22px] tracking-[-0.03em]">{v.title}</h3>
-                <p className="mt-3 text-[15px] leading-[1.55] text-muted">{v.body}</p>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-8 max-w-[62ch] rounded-r-xl border-l-[3px] border-gold bg-bg-2 px-5 py-4 text-[15px] leading-[1.6]">
-            These views track what is happening now. They do not forecast future funding. That is a
-            separate capability we are still building, described below.
-          </p>
+          <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-16">
+            <SectionHead
+              eyebrow="What leaders see"
+              title="Your view of the pipeline."
+              lede="Faculty grant activity, where applications stand, and where support is needed. Tracking, not forecasting. That page is its own so the limit is unmissable."
+            />
+            <div className="flex flex-col justify-end gap-6">
+              <ul className="m-0 grid list-none gap-3 p-0">
+                {VIEWS.map((view) => (
+                  <li key={view.title} className="rounded-2xl bg-surface px-5 py-4 shadow-card">
+                    <StatusBadge status="Available" />
+                    <p className="mt-2 text-[17px] tracking-[-0.02em]">{view.title}</p>
+                  </li>
+                ))}
+              </ul>
+              <div>
+                <Button href="/institutions/what-leaders-see" variant="ghost">
+                  Open what leaders see
+                </Button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section id="grants-offices" className="scroll-mt-24 bg-bg-2">
-          <div className={`${WRAP} ${SECTION}`}>
+          <div className={`${WRAP} ${SECTION} grid items-start gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-16`}>
             <SectionHead
               eyebrow="For grants offices"
-              title="The administrative side, in one place."
-              lede="Your research administration team works alongside the researcher journey rather than travelling it. They get a different view, built around awards and deadlines."
+              title="The administrative work, tracked in one place."
+              lede="Grants managers work alongside the researcher journey rather than travelling it. Post-award, subawards, invoices and budgets have their own page."
             />
-            <ul className="m-0 mt-12 grid list-none grid-cols-1 gap-5 p-0 md:grid-cols-3">
-              {OFFICE.map((item) => (
-                <li key={item.title} className="flex flex-col rounded-2xl bg-surface p-7 shadow-card">
-                  <StatusBadge status="Available" />
-                  <h3 className="mt-6 text-[22px] tracking-[-0.03em]">{item.title}</h3>
-                  <p className="mt-3 text-[15px] leading-[1.55] text-muted">{item.body}</p>
-                </li>
-              ))}
-            </ul>
+            <div className="flex flex-col justify-end gap-6">
+              <ul className="m-0 grid list-none gap-3 p-0">
+                {OFFICE.map((item) => (
+                  <li key={item.title} className="rounded-2xl bg-surface px-5 py-4 shadow-card">
+                    <StatusBadge status="Available" />
+                    <p className="mt-2 text-[17px] tracking-[-0.02em]">{item.title}</p>
+                  </li>
+                ))}
+              </ul>
+              <div>
+                <Button href="/institutions/grants-offices" variant="ghost">
+                  Open for grants offices
+                </Button>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -264,8 +280,8 @@ export default function InstitutionsPage() {
                 This is a direction we are building toward. It is not something the platform does today.
               </p>
               <div>
-                <Button href="#demo" variant="ghost">
-                  Talk to us about being an early partner
+                <Button href="/institutions/roadmap" variant="ghost">
+                  Read the full roadmap page
                 </Button>
               </div>
             </div>
@@ -277,7 +293,7 @@ export default function InstitutionsPage() {
             <SectionHead
               eyebrow="Request a demo"
               title="Talk to a person."
-              lede="Five fields. We will come back with a named contact and a time, not a marketing sequence."
+              lede="Five fields. We will come back with a named contact and a time, not a marketing sequence. You can also use the dedicated demo page."
             />
             <div className="rounded-2xl bg-surface p-7 shadow-card sm:p-9 [&>form]:mt-0">
               <DemoForm />
