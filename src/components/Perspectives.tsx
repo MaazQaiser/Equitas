@@ -15,17 +15,21 @@ export function Perspectives({
   return (
     <section id={id} className={`scroll-mt-24 ${WRAP} ${SECTION}`}>
       <SectionHead
-        eyebrow="Mentorship, not just a score"
-        title="Ten lenses you can be coached through."
-        lede="EQUITAS shows how different readers in the funding system see an application. Mentor Chat, where you talk to these perspectives, is still being built."
+        eyebrow="Simulated professional lenses"
+        title="Nine ways a draft can be read. Not officials, and not a chat yet."
+        lede="Each lens is a structured professional read: what it contributes, when it is useful, and where it stops. Mentor Chat, where you talk to these perspectives, is still being built. These are not actual reviewers, endorsement, or access to confidential deliberations."
       />
       <p className="mt-6">
         <StatusBadge status="Coming" />
+        <span className="ml-3 text-[14px] text-muted">Mentor Chat</span>
       </p>
-      <ul className="m-0 mt-10 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="m-0 mt-10 grid list-none grid-cols-1 gap-4 p-0 lg:grid-cols-3">
         {lenses.map((item) => (
-          <li key={item.name} className="rounded-2xl bg-surface p-6 shadow-card">
-            <p className="text-[17px] leading-[1.35] tracking-[-0.02em]">{item.name}</p>
+          <li key={item.name} className="flex flex-col rounded-2xl bg-surface p-6 shadow-card">
+            <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-gold-text">{item.group}</p>
+            <p className="mt-2 text-[17px] leading-[1.35] tracking-[-0.02em]">{item.name}</p>
+            <p className="mt-3 text-[14px] leading-[1.5] text-muted">{item.useful}</p>
+            <p className="mt-3 text-[13px] leading-[1.45] text-muted">{item.limit}</p>
           </li>
         ))}
       </ul>

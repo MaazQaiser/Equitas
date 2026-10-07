@@ -24,7 +24,7 @@ export const NEEDS = [
   { id: "funding", label: "Finding funding", stage: "imagine" },
   { id: "study", label: "Planning my study", stage: "design" },
   { id: "writing", label: "Writing my application", stage: "compete" },
-  { id: "scored", label: "Understanding how it will be scored", stage: "review" },
+  { id: "scored", label: "Exploring a reviewer lens on my draft", stage: "review" },
   { id: "unfunded", label: "My application was not funded", stage: "review" },
   { id: "award", label: "Managing an award I have won", stage: "manage" },
 ] as const;

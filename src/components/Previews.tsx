@@ -3,6 +3,12 @@ import type { ReactNode } from "react";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ExampleTag } from "@/components/PageHero";
 import { GUIDES, guideHref, journeyStages, type StageStatus } from "@/lib/content";
+import {
+  SAMPLE_FACTOR3,
+  SAMPLE_OVERALL,
+  SAMPLE_SCORED,
+  scoreBarWidth,
+} from "@/lib/sampleReview";
 
 // Static product previews for page heroes. Every one is labelled as an
 // example, so none of them reads as a live result or a real user.
@@ -30,29 +36,63 @@ function Frame({
   );
 }
 
-export const SAMPLE_CRITERIA = [
-  { name: "Significance", value: 3, width: 78 },
-  { name: "Investigator", value: 2, width: 90 },
-  { name: "Innovation", value: 5, width: 48 },
-  { name: "Approach", value: 6, width: 36 },
-  { name: "Environment", value: 2, width: 86 },
-];
-
-export function ScoreBars({ criteria = SAMPLE_CRITERIA }: { criteria?: typeof SAMPLE_CRITERIA }) {
+export function ScoreBars() {
   return (
     <>
-      <ul className="m-0 flex list-none flex-col gap-3 p-0">
-        {criteria.map((c) => (
-          <li key={c.name} className="grid grid-cols-[108px_1fr_1.5rem] items-center gap-3">
-            <span className="text-[14px] tracking-[-0.01em]">{c.name}</span>
-            <span aria-hidden="true" className="h-2 overflow-hidden rounded-full bg-bg-2">
-              <span className="block h-full rounded-full bg-gold" style={{ width: `${c.width}%` }} />
-            </span>
-            <span className="text-right text-[16px] tabular-nums">{c.value}</span>
+      <ul className="m-0 flex list-none flex-col gap-4 p-0">
+        {SAMPLE_SCORED.map((c) => (
+          <li key={c.factor}>
+            <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-gold-text">
+              {c.factor}
+            </p>
+            <div className="mt-1.5 grid grid-cols-[1fr_1.5rem] items-center gap-3">
+              <div>
+                <p className="text-[14.5px] tracking-[-0.01em]">{c.name}</p>
+                <p className="mt-0.5 text-[12.5px] text-muted">{c.detail}</p>
+                <span aria-hidden="true" className="mt-2 block h-2 overflow-hidden rounded-full bg-bg-2">
+                  <span
+                    className="block h-full rounded-full bg-gold"
+                    style={{ width: `${scoreBarWidth(c.value)}%` }}
+                  />
+                </span>
+              </div>
+              <span className="self-end text-right text-[16px] tabular-nums">{c.value}</span>
+            </div>
           </li>
         ))}
+        <li className="border-t border-line pt-4">
+          <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-gold-text">
+            {SAMPLE_FACTOR3.factor}
+          </p>
+          <div className="mt-1.5 flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[14.5px] tracking-[-0.01em]">{SAMPLE_FACTOR3.name}</p>
+              <p className="mt-0.5 text-[12.5px] text-muted">{SAMPLE_FACTOR3.detail}</p>
+            </div>
+            <span className="shrink-0 text-[13px] font-medium">{SAMPLE_FACTOR3.assessment}</span>
+          </div>
+          <p className="mt-2 text-[12.5px] text-muted">{SAMPLE_FACTOR3.note}</p>
+        </li>
+        <li className="border-t border-line pt-4">
+          <div className="grid grid-cols-[1fr_1.5rem] items-center gap-3">
+            <div>
+              <p className="text-[14.5px] tracking-[-0.01em]">{SAMPLE_OVERALL.name}</p>
+              <p className="mt-0.5 text-[12.5px] text-muted">{SAMPLE_OVERALL.detail}</p>
+              <span aria-hidden="true" className="mt-2 block h-2 overflow-hidden rounded-full bg-bg-2">
+                <span
+                  className="block h-full rounded-full bg-gold"
+                  style={{ width: `${scoreBarWidth(SAMPLE_OVERALL.value)}%` }}
+                />
+              </span>
+            </div>
+            <span className="self-end text-right text-[16px] tabular-nums">{SAMPLE_OVERALL.value}</span>
+          </div>
+        </li>
       </ul>
-      <p className="mt-3 text-[12px] text-muted">Each criterion is scored 1 to 9. Lower is stronger.</p>
+      <p className="mt-3 text-[12px] leading-[1.45] text-muted">
+        Factor 1 and Factor 2 are scored 1 to 9. Lower is stronger. Factor 3 is not scored on that
+        scale. Illustrative NIH R-series sample. Not a real study section score.
+      </p>
     </>
   );
 }
@@ -189,16 +229,13 @@ export function StagePreview({ slug }: { slug: string }) {
       return <ReviewReport />;
     case "manage":
       return (
-        <Frame title="Coming due">
-          <Rows
-            rows={[
-              { a: "RPPR progress report", b: "Annual report to NIH", c: "In 21 days" },
-              { a: "No-cost extension", b: "Request before the end date", c: "In 48 days" },
-              { a: "Subaward invoice, Site B", b: "Quarterly invoice", c: "Received" },
-              { a: "Budget, year two", b: "Spending against plan", c: "On track" },
-            ]}
-          />
-        </Frame>
+        <ComingPreview
+          lines={[
+            "Support existing reporting workflows",
+            "Flag gaps in progress evidence, as a future concept",
+            "Keep the researcher’s decisions in view",
+          ]}
+        />
       );
     default:
       return (
@@ -265,7 +302,7 @@ function StatusWord({ status, onBand }: { status: StageStatus; onBand?: boolean 
 export function AccessGap() {
   const rows = [
     ["Someone down the hall who has reviewed", "Nobody to ask"],
-    ["Knows what reviewers look for", "Guesses from public guidance"],
+    ["Knows what reviewers look for", "Guesses from the call text"],
     ["Told what to fix first", "Learns from a summary statement"],
     ["Understands triage before it happens", "Finds out after"],
   ];

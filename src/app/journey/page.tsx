@@ -12,7 +12,7 @@ import { EYEBROW_BAND, SECTION, WRAP } from "@/lib/ui";
 
 const PICK = [
   { when: "I have a deadline coming up.", stage: "Compete", href: "/journey/compete" },
-  { when: "I have a draft and want to know how it will score.", stage: "Review", href: "/journey/review" },
+  { when: "I have a draft and want a reviewer lens before I submit.", stage: "Review", href: "/journey/review" },
   { when: "My application was not funded.", stage: "Review", href: "/journey/review" },
   { when: "I have an idea but no funder yet.", stage: "Imagine", href: "/journey/imagine" },
   { when: "I have been funded and reports are due.", stage: "Manage", href: "/journey/manage" },
@@ -20,9 +20,9 @@ const PICK = [
 ];
 
 const LABELS = [
-  { status: "Available" as const, body: "Built and working today." },
-  { status: "Partly available" as const, body: "Some tools are live. The rest is still being built, and says so." },
-  { status: "Coming" as const, body: "Not built yet. You can see where it will sit and tell us what would help." },
+  { status: "Available" as const, body: "Built and working today. Present capability, shown with the strongest emphasis." },
+  { status: "Partly available" as const, body: "Exactly what works today is named. The rest is still being built, and says so." },
+  { status: "Coming" as const, body: "Not built yet. You can see where it will sit. Nothing here is a functioning workflow." },
 ];
 
 export const metadata: Metadata = {
@@ -43,9 +43,9 @@ export default function JourneyPage() {
           title="Research is a journey. We support every step."
           lede={
             <p>
-              We are strongest today at Compete, Review and Manage. Imagine and Design are partly
-              built. Transform is still ahead of us. Every stage is labelled, so you always know what
-              you are getting.
+              The live wedge today is the Study Section Simulator sample in Review. Compete, Imagine
+              and Design are partly available as labelled previews. Manage and Transform are coming.
+              Every stage is labelled, so you always know what you are getting.
             </p>
           }
           actions={
@@ -83,6 +83,7 @@ export default function JourneyPage() {
                     </span>
                     <span>
                       <span className="block text-[18px] leading-[1.4] tracking-[-0.02em]">{stage.promise}.</span>
+                      <span className="mt-2 block text-[14px] leading-[1.45] text-muted">{stage.statusNote}</span>
                       <span className="mt-3 flex flex-wrap gap-2">
                         {stage.tools.length > 0 ? (
                           stage.tools.map((tool) => (

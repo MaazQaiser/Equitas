@@ -10,7 +10,7 @@ import { ComingCapture } from "@/components/ComingCapture";
 import { PageHero, SectionHead } from "@/components/PageHero";
 import { StagePreview } from "@/components/Previews";
 import { CtaBand } from "@/components/CtaBand";
-import { GUIDES, STAGES, STAGE_WORDS, guideHref, journeyStages } from "@/lib/content";
+import { GUIDES, STAGES, STAGE_WORDS, guideHref, journeyStages, moduleStatus } from "@/lib/content";
 import { moduleSlug } from "@/lib/onboarding";
 import { onboardingQuery } from "@/lib/session";
 import { EYEBROW, SECTION, WRAP } from "@/lib/ui";
@@ -89,7 +89,7 @@ export default async function StagePage({ params }: { params: Promise<{ slug: st
               </>
             )
           }
-          note={isComing ? "Nothing in this stage is live yet." : "Free to start. No credit card."}
+          note={stage.statusNote}
           visual={<StagePreview slug={stage.slug} />}
         />
 
@@ -129,7 +129,7 @@ export default async function StagePage({ params }: { params: Promise<{ slug: st
                     href={`/app/tool?module=${moduleSlug(tool.name)}`}
                     className="lift flex h-full flex-col rounded-2xl bg-surface p-7 no-underline shadow-card sm:p-8"
                   >
-                    <StatusBadge status={stage.status} />
+                    <StatusBadge status={moduleStatus(tool.name)} />
                     <span className="mt-6 text-[24px] leading-[1.15] tracking-[-0.03em]">{tool.name}</span>
                     <span className="mt-3 flex-1 text-[15.5px] leading-[1.55] text-muted">{tool.description}</span>
                     <span className="mt-8 text-[15px] text-gold-text">Open {tool.name} →</span>

@@ -8,6 +8,7 @@ import { HashScroll } from "@/components/HashScroll";
 import { PageHero, SectionHead } from "@/components/PageHero";
 import { StatusBadge } from "@/components/StatusBadge";
 import { FunderList } from "@/components/FunderList";
+import { CALIBRATION_LINE } from "@/lib/content";
 import { EYEBROW_BAND, SECTION, WRAP } from "@/lib/ui";
 
 const VIEWS = [
@@ -38,7 +39,7 @@ const CHANGES = [
   },
   {
     title: "Development you cannot staff.",
-    body: "The coaching your senior faculty provide informally, available to everyone who needs it.",
+    body: "Extend your mentorship without multiplying your workload. Not a quantified efficiency claim.",
   },
   {
     title: "Pipeline visibility.",
@@ -59,7 +60,7 @@ const CHANGES = [
 ];
 
 const SKILLS = [
-  "Understand how an application will be read and scored",
+  "Understand how reviewers may see an application",
   "See what actually moves the score",
   "Strengthen the work before submission",
   "Build the skill of writing to reviewers across a career",
@@ -99,8 +100,8 @@ export default function InstitutionsPage() {
           lede={
             <p>
               Federal funding is harder to win, and your office cannot mentor every early-career
-              investigator one to one. EQUITAS gives your whole faculty the review understanding that
-              only your best-mentored researchers have today.
+              investigator one to one. EQUITAS extends senior mentorship so every faculty member can
+              see how reviewers may read their work, without implying that administrators see drafts.
             </p>
           }
           actions={
@@ -169,7 +170,7 @@ export default function InstitutionsPage() {
             <SectionHead
               eyebrow="For your faculty"
               title="Mentorship, not just a score."
-              lede="EQUITAS does not hand a researcher a number and leave. It explains how each part of their application will be read, what is weakening it, and what to change first."
+              lede="EQUITAS does not hand a researcher a number and leave. It explains how each part of an application may be read, what is weakening it, and what to change first."
             />
             <p className="mt-6 max-w-[46ch] text-[16px] leading-[1.6]">
               The fourth one matters most. Your faculty keep the skill long after this grant.
@@ -199,8 +200,7 @@ export default function InstitutionsPage() {
               </h2>
               <p className="mt-6 max-w-[48ch] text-[clamp(17px,1.6vw,20px)] leading-[1.55] text-band-muted">
                 An active NIH study section reviewer in the health and biomedical sciences calibrates
-                EQUITAS. The scoring follows how review is actually conducted, not public guidance
-                alone.
+                EQUITAS. {CALIBRATION_LINE} Calibration is not access to confidential deliberations.
               </p>
             </div>
             <div>
@@ -220,7 +220,7 @@ export default function InstitutionsPage() {
               <ul className="m-0 grid list-none gap-3 p-0">
                 {VIEWS.map((view) => (
                   <li key={view.title} className="rounded-2xl bg-surface px-5 py-4 shadow-card">
-                    <StatusBadge status="Available" />
+                    <StatusBadge status="Coming" />
                     <p className="mt-2 text-[17px] tracking-[-0.02em]">{view.title}</p>
                   </li>
                 ))}
@@ -238,14 +238,14 @@ export default function InstitutionsPage() {
           <div className={`${WRAP} ${SECTION} grid items-start gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-16`}>
             <SectionHead
               eyebrow="For grants offices"
-              title="The administrative work, tracked in one place."
-              lede="Grants managers work alongside the researcher journey rather than travelling it. Post-award, subawards, invoices and budgets have their own page."
+              title="Intelligence beside the systems you already use."
+              lede="Standard award tracking, invoicing and subawards should not become the product. Those pages are concepts. A traditional system says a report is due. A future EQUITAS layer could help spot missing progress evidence. That is not live."
             />
             <div className="flex flex-col justify-end gap-6">
               <ul className="m-0 grid list-none gap-3 p-0">
                 {OFFICE.map((item) => (
                   <li key={item.title} className="rounded-2xl bg-surface px-5 py-4 shadow-card">
-                    <StatusBadge status="Available" />
+                    <StatusBadge status="Coming" />
                     <p className="mt-2 text-[17px] tracking-[-0.02em]">{item.title}</p>
                   </li>
                 ))}
@@ -269,10 +269,10 @@ export default function InstitutionsPage() {
                 Seeing the pipeline before the awards land.
               </h2>
               <p className="mt-6 max-w-[60ch] text-[16px] leading-[1.6] text-muted">
-                Because the platform estimates how competitive an application is, those estimates
-                aggregated across a department become a forward-looking picture of likely research
-                funding. For a chair or a research finance lead, that means seeing where funding is
-                likely to come from, and where it is at risk, before the decisions arrive.
+                Financial forecasting is not built. Today leaders can see a labelled tracking
+                illustration: where researchers may need resources, where work is getting stuck,
+                and where mentoring may help. Know where support is needed. Not a forecast of
+                awards, and not a ranking of individuals from private coaching activity.
               </p>
             </div>
             <div className="flex flex-col justify-end gap-6">

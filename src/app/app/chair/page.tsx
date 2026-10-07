@@ -58,7 +58,7 @@ function ChairView() {
         <section className="mt-16">
           <div className="flex flex-wrap items-center gap-3">
             <h2 className="text-[clamp(26px,3vw,34px)] font-light tracking-[-0.03em]">Where support is needed</h2>
-            <StatusBadge status="Available" />
+            <StatusBadge status="Coming" />
           </div>
           <ul className="m-0 mt-8 grid list-none gap-4 p-0">
             {SUPPORT.map((item) => (

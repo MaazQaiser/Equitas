@@ -251,8 +251,8 @@ export default function HowGrantReviewWorksPage() {
           <div className={`${WRAP} ${SECTION}`}>
             <h2 className={`max-w-[16ch] ${H2}`}>You can see all of this before you submit.</h2>
             <p className={BODY}>
-              EQUITAS shows you the review your own application would get. The scores, the discussion
-              behind them, and what to change first.
+              EQUITAS lets you stress-test a draft through a reviewer lens. The sample scores and
+              comments are illustrative. They are not a guaranteed study section result.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
               <Button href="/journey/review" variant="primary">

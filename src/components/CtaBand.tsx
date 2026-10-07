@@ -5,9 +5,9 @@ import { WRAP } from "@/lib/ui";
 export function CtaBand({
   title = "Start your research journey.",
   lede,
-  primary = { href: "/onboarding", label: "Create a free account" },
+  primary = { href: "/onboarding", label: "Create an account" },
   secondary = { href: "/how-it-works", label: "See a sample review" },
-  note = "Free to start. No credit card. Ten languages.",
+  note = "The Study Section Simulator sample is live. Other modules are labelled for what they are.",
 }: {
   title?: ReactNode;
   lede?: ReactNode;

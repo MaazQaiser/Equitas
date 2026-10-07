@@ -53,8 +53,8 @@ function UpgradeBody() {
           available. Nothing is deleted, and nothing is counting down.
         </p>
         <p className="mt-4 max-w-[54ch] text-[16px] leading-[1.6] text-muted">
-          Paid limits are not live. The number of free reviews still says &ldquo;To confirm&rdquo; on
-          the pricing page. You can keep using the tools.
+          Paid limits are not live. The approved Individual dollar amount is not pasted into this
+          build yet. You can keep using the tools.
         </p>
 
         <ul className="m-0 mt-12 grid list-none gap-4 p-0 sm:grid-cols-2">
@@ -72,8 +72,9 @@ function UpgradeBody() {
           <li className="rounded-2xl bg-surface p-6 shadow-card">
             <h2 className="text-[22px] tracking-[-0.02em]">Ask about a paid plan</h2>
             <p className="mt-3 text-[15px] leading-[1.55] text-muted">
-              Prices are not confirmed. Individual plans stay at &ldquo;To confirm.&rdquo;
-              Institutions talk to us. You can cancel any time once billing exists.
+              Individual pricing is approved by the founder and billed in U.S. dollars. The amount
+              will appear on the pricing page when that source is in this build. Institutions talk
+              to us. You can cancel any time once billing exists.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button href="/pricing#plans" variant="ghost">

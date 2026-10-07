@@ -92,7 +92,7 @@ function ImpactCard() {
         ))}
       </ul>
       <p className="mt-4 text-[13px] leading-[1.5] text-muted">
-        Three overall scores, averaged and multiplied by ten. Likely discussed at the meeting.
+        Three overall scores, averaged and multiplied by ten. Illustrative. Not a meeting prediction.
       </p>
     </figure>
   );
@@ -163,7 +163,7 @@ function SimulatorWork({ signedIn }: { signedIn: boolean }) {
           </p>
         )}
         <p id="draft-privacy" className="mt-3 max-w-[62ch] text-[14px] text-muted">
-          Your work stays yours. Drafts are not used to train models.{" "}
+          On this version, pasted text stays in your browser session.{" "}
           <Link href="/legal/data-security" className="text-gold-text underline">
             How we handle your work
           </Link>
@@ -304,17 +304,18 @@ function SampleReview({ signedIn, note }: { signedIn: boolean; note?: string }) 
           <div>
             <SectionHead
               eyebrow="2. The scores"
-              title="A score for each criterion."
-              lede="Each reviewer scores 1 to 9, where 1 is exceptional. The criterion scores show where the application is strong and where it loses ground."
+              title="Factor scores on the current NIH framework."
+              lede="Factor 1, Importance, and Factor 2, Rigor and Feasibility, are scored 1 to 9. Factor 3, Expertise and Resources, is assessed for sufficiency, not scored on that scale. Lower is stronger."
             />
             <p className="mt-6 max-w-[48ch] text-[16px] leading-[1.6]">
-              Here, Approach is the weakest. That matches the flagged sentence: the argument is sound,
-              but the numbers behind it are not shown.
+              Here, Factor 2 is the weakest. That matches the flagged sentence: the argument is sound,
+              but the numbers behind it are not shown. This is an illustrative sample, not a real
+              study section result.
             </p>
           </div>
           <div className="rounded-2xl bg-surface p-7 shadow-card sm:p-8">
             <div className="mb-5 flex items-center justify-between gap-4">
-              <p className="text-[18px] font-medium tracking-[-0.03em]">Criterion scores</p>
+              <p className="text-[18px] font-medium tracking-[-0.03em]">Factor scores</p>
               <ExampleTag>Sample</ExampleTag>
             </div>
             <ScoreBars />
@@ -327,8 +328,8 @@ function SampleReview({ signedIn, note }: { signedIn: boolean; note?: string }) 
           <SectionHead
             band
             eyebrow="3. The discussion"
-            title="What the room would say."
-            lede="Three assigned reviewers read the application properly. This is the conversation they would have about it, written in their voice."
+            title="Contrasting reviewer lenses."
+            lede="Simulated professional reads, grounded in the excerpt. Modelling how discussion changes a panel is a longer-term concept and is not live. This is not a validated reproduction of a study section."
           />
           <ul className="m-0 mt-12 grid list-none gap-5 p-0 lg:grid-cols-3">
             {REVIEWERS.map((r) => (
@@ -350,8 +351,8 @@ function SampleReview({ signedIn, note }: { signedIn: boolean; note?: string }) 
       <section id="fixes" className={`scroll-mt-24 ${WRAP} ${SECTION}`}>
         <SectionHead
           eyebrow="4. What to fix first"
-          title="Changes ranked by how much they move the score."
-          lede="Limited time should go to the change that matters most. Each fix says why a reviewer would raise it."
+          title="Changes ranked by how much they matter to a reviewer."
+          lede="Limited time should go to the change that matters most. Each fix says why a reviewer may raise it. Not a guaranteed score movement."
         />
         <ol className="m-0 mt-12 grid list-none gap-5 p-0 lg:grid-cols-3">
           {FIXES.map((fix, i) => (

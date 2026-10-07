@@ -20,14 +20,14 @@ const IN_SHORT: Record<Slug, string[]> = {
   privacy: [
     "No credit card to start",
     "We do not sell your data",
-    "Drafts are not used to train models",
-    "Institutions see activity, not your text",
+    "This version keeps pasted text in the browser session",
+    "There is no live administrator view of drafts",
   ],
   terms: [
-    "Your work stays yours",
+    "You remain the author of your application",
     "EQUITAS teaches review. It does not write grants",
     "No one can promise funding, and we do not",
-    "You still write the application",
+    "A simulated score is not a study section result",
   ],
   accessibility: [
     "We aim for WCAG 2.1 AA",
@@ -37,9 +37,9 @@ const IN_SHORT: Record<Slug, string[]> = {
   ],
   "data-security": [
     "Do not paste grant text into the public search box",
-    "Drafts are not used to train models",
-    "Drafts are not shared with other users",
-    "We name no audit we have not completed",
+    "This version keeps pasted text in the browser session",
+    "SSO, encryption claims, and audits are not live",
+    "We name no control we have not completed",
   ],
 };
 

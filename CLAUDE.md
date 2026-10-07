@@ -35,9 +35,9 @@ four tools, not twelve.
 |---|---|---|
 | Imagine | Shape your question and find funding that fits | Partly available |
 | Design | Build a study reviewers will trust | Partly available |
-| Compete | Develop an application that can be funded | Available |
-| Review | See your application the way reviewers will | Available |
-| Manage | Steward your award and its money | Available |
+| Compete | Develop an application that can be funded | Partly available |
+| Review | See your application through a reviewer lens | Partly available |
+| Manage | Steward your award and its money | Coming |
 | Transform | Turn your research into impact | Coming |
 
 Five stages are the founder's. **Manage is our addition and is still pending her
@@ -126,7 +126,7 @@ sign-off**.
 | K Award Suite | Compete | Plan the career development sections that decide K awards, including the mentor plan and training goals. |
 | Trainee & GRA Tools | Compete | Everything an F31, F32 or T32 application needs, written for a first-time applicant. |
 | International Research | Compete | Apply to ERC, Wellcome and other non-US funders, with each one's conventions explained. |
-| Study Section Simulator | Review | See the score your application would get and the discussion behind it. |
+| Study Section Simulator | Review | Stress-test your application through a reviewer lens. The sample is illustrative, not a guaranteed study section score. |
 | Resubmission Strategy | Review | Work out why it was not funded and what to change before the A1. |
 | Post-Award Management | Manage | Keep RPPR reports, no-cost extensions and progress reporting on schedule. |
 | Subaward & Invoicing | Manage | Track subawards, subcontracts and invoices across collaborating sites. |

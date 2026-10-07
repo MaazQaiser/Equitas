@@ -83,13 +83,8 @@ export function JourneyRail({ current }: { current?: string }) {
                   {stage.name}
                 </h3>
                 <p className="tl-muted mt-3 max-w-[36ch] text-[15.5px] leading-[1.45]">{stage.promise}</p>
-                {stage.slug === "imagine" && (
-                  <p className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[14px] leading-[1.45]">
-                    <span>Start with a research question.</span>
-                    <span>Coming</span>
-                  </p>
-                )}
                 <p className="mt-4 text-[14px]">{stage.status}</p>
+                <p className="tl-muted mt-2 text-[13px] leading-[1.45]">{stage.statusNote}</p>
                 {stage.modules.length > 0 && (
                   <p className="tl-muted mt-3 text-[13.5px] leading-[1.45]">{stage.modules.join(" · ")}</p>
                 )}

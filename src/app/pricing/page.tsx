@@ -11,23 +11,24 @@ import { H2, SECTION, WRAP } from "@/lib/ui";
 const PLANS = [
   {
     name: "Free",
-    for: "Any researcher",
-    price: "£0",
+    for: "Any researcher. Introduces reviewer-informed guidance on the sample and labelled previews.",
+    price: "$0",
     href: "/onboarding",
     cta: "Create a free account",
     variant: "primary" as const,
   },
   {
     name: "Individual",
-    for: "Regular applicants",
-    price: "To confirm",
+    for: "Regular applicants. Approved depth and continuity, billed in U.S. dollars.",
+    price: "U.S. dollars",
     href: "/onboarding",
-    cta: "Choose this plan",
+    cta: "Create an account",
     variant: "ghost" as const,
+    note: "The approved Individual amount is not pasted into this build yet. We will not invent it.",
   },
   {
     name: "Institution",
-    for: "Departments and universities",
+    for: "Departments and universities. Scales access and governance across an organization.",
     price: "Talk to us",
     href: "/institutions#demo",
     cta: "Request a demo",
@@ -35,47 +36,14 @@ const PLANS = [
   },
 ];
 
-const COMPARE: { feature: string; values: [string, string, string]; same?: boolean }[] = [
-  {
-    feature: "Reviews per month",
-    values: ["Number to confirm", "Number to confirm", "Number to confirm"],
-  },
-  {
-    feature: "Tools included",
-    values: ["Stages to confirm", "Stages to confirm", "Stages to confirm"],
-  },
-  {
-    feature: "Funders",
-    values: ["All funders", "All funders", "All funders"],
-    same: true,
-  },
-  {
-    feature: "Languages",
-    values: ["All ten", "All ten", "All ten"],
-    same: true,
-  },
-  {
-    feature: "Saved work and history",
-    values: ["To confirm", "To confirm", "To confirm"],
-  },
-  {
-    feature: "Institutional dashboard",
-    values: ["Not included", "Not included", "Included"],
-  },
-  {
-    feature: "Support",
-    values: ["To confirm", "To confirm", "To confirm"],
-  },
-];
-
 const PRICING_FAQ = [
   {
     q: "What happens when I reach my limit?",
-    a: "New reviews wait until the period resets. You keep the work you have already done. The reset date will be stated here once the billing period is confirmed.",
+    a: "Usage limits are part of the approved packaging. They are not live on this version of the site, so nothing is counting down in your account today.",
   },
   {
     q: "Can I cancel?",
-    a: "Yes, any time. You keep access until the period ends.",
+    a: "Yes, any time, once billing exists. You keep access until the period ends.",
   },
   {
     q: "Do you offer institutional invoicing?",
@@ -83,14 +51,14 @@ const PRICING_FAQ = [
   },
   {
     q: "Is the free plan a trial?",
-    a: "No. It does not expire. You can understand how your application will be reviewed without paying, and without a clock running out mid-application.",
+    a: "No. It does not expire. You can explore a reviewer lens on a sample without paying, and without a clock running out.",
   },
 ];
 
 export const metadata: Metadata = {
   title: "Pricing | EQUITAS Intelligence",
   description:
-    "Free to start. Always. You can understand how your application will be reviewed without paying anything. Paid plans add more of it.",
+    "Free introduces reviewer-informed guidance. Individual adds approved depth. Institution scales access. Amounts are in U.S. dollars.",
 };
 
 export default function PricingPage() {
@@ -100,11 +68,12 @@ export default function PricingPage() {
       <main id="main">
         <PageHero
           eyebrow="Pricing"
-          title="Free to start. Always."
+          title="Free, Individual, Institution."
           lede={
             <p>
-              You can understand how your application will be reviewed without paying anything. Paid
-              plans add more of it.
+              Free introduces reviewer-informed guidance. Individual provides approved depth and
+              continuity. Institution scales approved access and governance. Amounts are in U.S.
+              dollars.
             </p>
           }
           actions={
@@ -113,7 +82,7 @@ export default function PricingPage() {
                 Create a free account
               </Button>
               <Button href="#plans" variant="ghost">
-                Compare plans
+                See the three plans
               </Button>
             </>
           }
@@ -126,7 +95,6 @@ export default function PricingPage() {
                 "Every funder we cover",
                 "All ten languages",
                 "It does not expire",
-                "Your drafts stay yours",
               ]}
             />
           }
@@ -139,6 +107,9 @@ export default function PricingPage() {
                 <h2 className="text-[clamp(28px,2.6vw,36px)] font-light tracking-[-0.03em]">{plan.name}</h2>
                 <p className="mt-3 text-[15px] leading-[1.5] text-muted">{plan.for}</p>
                 <p className="mt-8 text-[clamp(32px,3vw,44px)] font-light tracking-[-0.03em]">{plan.price}</p>
+                {"note" in plan && plan.note ? (
+                  <p className="mt-3 text-[13px] leading-[1.5] text-muted">{plan.note}</p>
+                ) : null}
                 <div className="mt-8">
                   <Button href={plan.href} variant={plan.variant}>
                     {plan.cta}
@@ -147,52 +118,10 @@ export default function PricingPage() {
               </li>
             ))}
           </ul>
-        </section>
-
-        <section className="bg-bg-2">
-          <div className={`${WRAP} ${SECTION}`}>
-            <h2 className={`max-w-[16ch] ${H2}`}>What is in each plan.</h2>
-            <div className="mt-12 overflow-x-auto">
-              <table className="w-full min-w-[640px] border-collapse text-left text-[15px] leading-[1.45]">
-                <caption className="sr-only">What each plan includes</caption>
-                <thead>
-                  <tr className="border-b border-line">
-                    <th scope="col" className="py-3 pr-6 font-medium">
-                      <span className="sr-only">Feature</span>
-                    </th>
-                    {PLANS.map((plan) => (
-                      <th key={plan.name} scope="col" className="py-3 pr-6 font-medium last:pr-0">
-                        {plan.name}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {COMPARE.map((row) => (
-                    <tr key={row.feature} className="border-b border-line">
-                      <th scope="row" className="py-4 pr-6 align-top font-medium">
-                        {row.feature}
-                      </th>
-                      {row.values.map((value, i) => (
-                        <td
-                          key={PLANS[i].name}
-                          className={`py-4 pr-6 align-top last:pr-0 ${
-                            row.same ? "text-ink" : "text-muted"
-                          }`}
-                        >
-                          {value}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <p className="mt-8 max-w-[54ch] text-[15px] leading-[1.55] text-muted">
-              Funders and languages are the same on every plan. A researcher in any country gets all
-              ten languages, including on Free.
-            </p>
-          </div>
+          <p className="mt-8 max-w-[58ch] text-[15px] leading-[1.55] text-muted">
+            A feature comparison will appear when approved entitlements are in this build. Until
+            then the three cards are the offer. We will not fill empty rows with placeholders.
+          </p>
         </section>
 
         <section id="reduced-pricing" className={`scroll-mt-24 ${WRAP} ${SECTION}`}>
@@ -220,7 +149,7 @@ export default function PricingPage() {
         </section>
 
         <CtaBand
-          title="Start free. Decide later."
+          title="Start on Free. Decide later."
           secondary={{ href: "/institutions#demo", label: "Talk to us about your institution" }}
         />
       </main>

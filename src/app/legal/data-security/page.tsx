@@ -5,7 +5,7 @@ import { LegalBlock, LegalLayout } from "@/components/LegalLayout";
 export const metadata: Metadata = {
   title: "Data and security | EQUITAS Intelligence",
   description:
-    "How EQUITAS handles drafts, the public search box, and accounts. Your work stays yours. Drafts are not used to train models.",
+    "How EQUITAS handles drafts, the public search box, and accounts on this version of the site. What is not built is named.",
 };
 
 export default function DataSecurityPage() {
@@ -13,7 +13,7 @@ export default function DataSecurityPage() {
     <LegalLayout
       slug="data-security"
       title="Data and security"
-      intro="Your work stays yours. Drafts are not used to train models. This page is the full version of the line under the homepage search box."
+      intro="This page is the full version of the line under the homepage search box, and a list of security claims we will not make until they are true."
     >
       <LegalBlock title="The public search box">
         <p>
@@ -28,9 +28,9 @@ export default function DataSecurityPage() {
 
       <LegalBlock title="What you paste into a tool">
         <p>
-          When you paste aims or a draft into a tool, that text is yours. It is not used to train
-          models. It is not shared with other users. It is not shown on institutional dashboards.
-          Those views track activity, not the wording of an application.
+          When you paste aims or a draft into a tool on this version, that text stays in your
+          browser session. It is not shown on institutional illustrations. Those views are tracking
+          examples, not the wording of an application.
         </p>
         <p>
           On this version of the site, a signed-in session lives in your browser. A full account
@@ -46,18 +46,26 @@ export default function DataSecurityPage() {
           the product without claiming a live link to those services yet.
         </p>
         <p>
-          Self-serve account deletion is not built yet. Email to confirm, and we will delete what
-          we hold.
+          Self-serve account deletion is not built yet. Use the institutional demo form if you need
+          a person to delete a later account store.
         </p>
       </LegalBlock>
 
       <LegalBlock title="What we do not do">
         <p>We do not sell drafts or account data.</p>
-        <p>We do not use your unpublished work to train models.</p>
         <p>We do not put patient-identifying data into a public search index.</p>
+      </LegalBlock>
+
+      <LegalBlock title="Not yet built, so not claimed">
         <p>
-          We do not claim a third-party security audit we have not completed. When one exists, it
-          will be named here.
+          Encryption at rest, SSO or SAML, role-based administrator views, audit logs, subprocessor
+          lists, provider retention, and a Responsible AI page with verified training policy are not
+          implemented in this version. We will not describe them as live. Self-serve deletion is not
+          built. A named security audit has not been completed.
+        </p>
+        <p>
+          On this version, pasted text lives in the browser session. When a server-side store exists,
+          this page will say where drafts sit, who can see them, and how long they are kept.
         </p>
       </LegalBlock>
 

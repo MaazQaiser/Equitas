@@ -39,8 +39,9 @@ export default function WhatLeadersSeePage() {
           title="Your view of the pipeline."
           lede={
             <p>
-              Department and chair views show faculty grant activity, where applications stand, and
-              where support is needed. These screens exist today. They track what is happening now.
+              Department and chair views are labelled tracking illustrations: faculty grant activity,
+              where applications stand, and where support is needed. They are not a live deployment
+              and not a forecast. Know where support is needed. They do not show drafts.
             </p>
           }
           actions={
@@ -59,14 +60,14 @@ export default function WhatLeadersSeePage() {
 
         <section className={`${WRAP} ${SECTION}`}>
           <SectionHead
-            eyebrow="Built today"
-            title="Three things a chair can point at."
-            lede="Every number on these screens is labelled as tracking. Nothing here is a forecast of awards that have not landed."
+            eyebrow="Tracking only"
+            title="Three things a chair could point at."
+            lede="Every number on these screens is a labelled example. Nothing here is a live institution, a forecast, or a ranking of private coaching activity."
           />
           <ul className="m-0 mt-12 grid list-none gap-5 p-0 md:grid-cols-3">
             {VIEWS.map((view) => (
               <li key={view.title} className="flex flex-col rounded-2xl bg-surface p-7 shadow-card">
-                <StatusBadge status="Available" />
+                <StatusBadge status="Coming" />
                 <h3 className="mt-6 text-[22px] tracking-[-0.03em]">{view.title}</h3>
                 <p className="mt-3 text-[15.5px] leading-[1.55] text-muted">{view.body}</p>
               </li>

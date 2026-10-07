@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { MODULES, STAGES, moduleWeight, audienceKey } from "@/lib/content";
+import { MODULES, STAGES, moduleStatus, moduleWeight, audienceKey } from "@/lib/content";
 import { moduleSlug } from "@/lib/onboarding";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useSession } from "@/lib/useSession";
@@ -74,6 +74,7 @@ export function StageGroupedTools({
               <p className="mt-2 max-w-[46ch] text-[15px] leading-[1.5] text-muted">
                 {stage.promise.endsWith(".") ? stage.promise : `${stage.promise}.`}
               </p>
+              <p className="mt-2 max-w-[46ch] text-[13.5px] leading-[1.5] text-muted">{stage.statusNote}</p>
               {isOpen &&
                 (shown.length > 0 ? (
                   <ul className="mt-5 m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2">
@@ -85,7 +86,10 @@ export function StageGroupedTools({
                             href={`/app/tool?module=${moduleSlug(tool.name)}`}
                             className="block h-full rounded-2xl bg-surface p-5 no-underline shadow-card"
                           >
-                            <h3 className="text-[18px] font-medium tracking-[-0.02em]">{tool.name}</h3>
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <h3 className="text-[18px] font-medium tracking-[-0.02em]">{tool.name}</h3>
+                              <StatusBadge status={moduleStatus(tool.name)} compact />
+                            </div>
                             {key && weight === "secondary" && (
                               <p className="mt-1 text-[12px] uppercase tracking-[0.1em] text-gold-text">More tools</p>
                             )}

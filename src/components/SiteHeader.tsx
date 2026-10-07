@@ -38,7 +38,7 @@ type MenuId = "journey" | "learn";
 export function SiteHeader({
   current,
   ctaHref = "/onboarding",
-  ctaLabel = "Create free account",
+  ctaLabel = "Create an account",
 }: {
   current?: "institutions" | "researchers" | "learn" | "pricing";
   ctaHref?: string;
@@ -298,9 +298,9 @@ export function SiteHeader({
               href={ctaHref}
               className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-[8px] bg-band px-3 text-[14px] text-band-ink no-underline ring-1 ring-band-line hover:bg-band-2 sm:px-4 sm:text-[15px]"
             >
-              {ctaLabel === "Create free account" ? (
+              {ctaLabel === "Create an account" ? (
                 <>
-                  <span className="min-[400px]:hidden">Start free</span>
+                  <span className="min-[400px]:hidden">Account</span>
                   <span className="hidden min-[400px]:inline">{ctaLabel}</span>
                 </>
               ) : (

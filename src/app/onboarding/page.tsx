@@ -134,7 +134,7 @@ function CreateAccountForm() {
         </Button>
       </div>
       <p className="mt-8 max-w-[42ch] text-[14px] leading-[1.55] text-muted">
-        Free to start. No card needed. Your work stays yours.
+        The Study Section Simulator sample is live. Other modules are labelled previews.
       </p>
     </>
   );

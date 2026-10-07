@@ -11,7 +11,7 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { CtaBand } from "@/components/CtaBand";
 import { FunderList } from "@/components/FunderList";
 import { Perspectives } from "@/components/Perspectives";
-import { MODULES, STAGES } from "@/lib/content";
+import { CALIBRATION_LINE, MODULES, STAGES, moduleStatus } from "@/lib/content";
 import { moduleSlug } from "@/lib/onboarding";
 import { EYEBROW, EYEBROW_BAND, SECTION, WRAP } from "@/lib/ui";
 
@@ -20,7 +20,7 @@ const AUDIENCES = [
     id: "trainees",
     eyebrow: "Trainees and postdocs",
     title: "Your first grant, without a grants office behind you.",
-    body: "Most trainees write their first fellowship or K award alone. Nobody explains how it will be read, what reviewers look for, or why the last person in your lab was funded.",
+    body: "Most trainees write their first fellowship or K award alone. Nobody explains how reviewers may see it, what they look for, or why the last person in your lab was funded.",
     tools: ["Trainee & GRA Tools", "K Award Suite", "Pre-Award Review", "Funding Discovery"],
     start: "Start at Compete if you have a deadline.",
     href: "/journey/compete",
@@ -29,7 +29,7 @@ const AUDIENCES = [
   {
     id: "investigators",
     eyebrow: "Investigators",
-    title: "Know how it will score before you send it.",
+    title: "Stress-test a draft through a reviewer lens.",
     body: "A strong idea still scores badly if reviewers cannot find what they need. Summary statements rarely explain why, and by the time you read one it is too late.",
     tools: ["Study Section Simulator", "Resubmission Strategy", "Pre-Award Review", "International Research"],
     start: "Start at Review if you have a draft. Compete if you are still writing.",
@@ -39,8 +39,8 @@ const AUDIENCES = [
 ];
 
 const WORTH = [
-  { title: "See how it is read", body: "Understand how your application will be read and scored, section by section." },
-  { title: "See what moves the score", body: "Changes ranked by how much they matter, so limited time goes to the right place." },
+  { title: "See how it may be read", body: "Explore how reviewers may see the work, section by section." },
+  { title: "See where evidence is thin", body: "Concerns ranked by how much they matter, so limited time goes to the right place." },
   { title: "Strengthen it first", body: "Fix what a reviewer would raise before the application leaves your desk." },
   { title: "Keep the skill", body: "Every suggestion explains its reasoning. The understanding stays after this grant is decided." },
 ];
@@ -48,15 +48,15 @@ const WORTH = [
 const RESEARCHER_FAQ = [
   {
     q: "Does EQUITAS write my grant?",
-    a: "No. It helps you understand how your own work will be read and scored. We do not draft applications, and for NIH submissions that distinction matters.",
+    a: "No. It helps you understand how reviewers may see your work. We do not draft applications, and for NIH submissions that distinction matters.",
   },
   {
     q: "Is it free?",
-    a: "Free to start, no card needed. You can create an account and use the core tools without a card.",
+    a: "The Free plan is $0 and does not need a card. The Study Section Simulator sample is live. Other modules are labelled previews.",
   },
   {
     q: "Who sees my work?",
-    a: "Only you. Drafts are not used to train models and are not shared with other users or institutions.",
+    a: "On this version, a signed-in session lives in your browser. Institutional views do not show draft text. Server-side policy will be named on the privacy page when accounts are live.",
   },
 ];
 
@@ -96,7 +96,7 @@ export default function ResearchersPage() {
               </Button>
             </>
           }
-          note="Free to start. No credit card. Ten languages."
+          note="The Study Section Simulator sample is live. Other tools are labelled previews."
           visual={<ReviewReport />}
         />
 
@@ -138,7 +138,7 @@ export default function ResearchersPage() {
                         >
                           <span className="flex flex-wrap items-center justify-between gap-3">
                             <span className="text-[12px] uppercase tracking-[0.14em] text-muted">{stage.name}</span>
-                            <StatusBadge status={stage.status} />
+                            <StatusBadge status={moduleStatus(name)} />
                           </span>
                           <span className="text-[21px] tracking-[-0.025em]">{name}</span>
                           <span className="text-[15px] leading-[1.55] text-muted">{mod.description}</span>
@@ -191,8 +191,8 @@ export default function ResearchersPage() {
               </h2>
               <p className="mt-8 max-w-[48ch] text-[16px] leading-[1.6] text-band-muted">
                 An active NIH study section reviewer in the health and biomedical sciences calibrates
-                EQUITAS. A study section is the NIH panel that scores an application. The scoring
-                follows how review is actually conducted, not public guidance alone.
+                EQUITAS. A study section is the NIH panel that scores an application. {CALIBRATION_LINE}
+                Calibration is not access to confidential deliberations.
               </p>
               <p className="mt-6">
                 <Link href="/about#credibility" className="text-[15px] text-gold-on-band no-underline hover:underline">

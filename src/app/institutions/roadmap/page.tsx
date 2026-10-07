@@ -41,14 +41,13 @@ export default function RoadmapPage() {
 
         <section className={`${WRAP} ${SECTION}`}>
           <p className="max-w-[68ch] text-[18px] leading-[1.6]">
-            Because the platform estimates how competitive an application is, those estimates
-            aggregated across a department become a forward-looking picture of likely research
-            funding. For a chair or a research finance lead, that means seeing where funding is
-            likely to come from, and where it is at risk, before the decisions arrive.
+            A future leadership view could help chairs see where researchers need resources, where
+            work is getting stuck, and where mentoring may help. That is decision support. It is
+            not a funding forecast, and it is not built yet.
           </p>
           <p className="mt-6 max-w-[68ch] text-[18px] leading-[1.6]">
-            That picture is not available yet. Today you can see faculty grant activity, pipeline
-            status, and where support is needed. Those views track what is happening now.
+            What exists today is a labelled tracking illustration. It does not show drafts, and it
+            is not a live institutional deployment.
           </p>
           <p className="mt-10 inline-block rounded-full bg-band px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.14em] text-gold-on-band">
             On our roadmap. Not built yet.

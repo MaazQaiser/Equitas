@@ -15,7 +15,7 @@ const LINES = [
   },
   {
     title: "Most researchers do not have that.",
-    body: "They write a first fellowship, a K award or an R-series application without anyone who has been in the room. Strong science still scores badly when nobody has shown how it will be read.",
+    body: "They write a first fellowship, a K award or an R-series application without anyone who has been in the room. Strong science still scores badly when nobody has shown how reviewers may see it.",
   },
   {
     title: "That gap is about access, not ability.",
@@ -82,12 +82,13 @@ export default function MissionPage() {
             <SectionHead
               eyebrow="What this is not"
               title="EQUITAS does not write your grant."
-              lede="It helps you understand how your own work will be read and scored. For an NIH audience that distinction is an integrity question, not a marketing preference."
+              lede="It helps you understand how reviewers may see your work. For an NIH audience that distinction is an integrity question, not a marketing preference."
             />
             <div>
               <p className="max-w-[48ch] text-[16px] leading-[1.6] text-muted">
                 We do not claim guaranteed funding. We do not invent user counts. We label what is
-                not built. The journey is strongest today at Compete, Review and Manage.
+                not built. The live wedge today is the Study Section Simulator sample. Manage is
+                coming. EQUITAS is an independent company, not a university product.
               </p>
               <p className="mt-8">
                 <Link href="/about" className={`${EYEBROW} no-underline hover:underline`}>

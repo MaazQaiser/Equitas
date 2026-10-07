@@ -1,25 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-const CRITERIA: { name: string; value: number; width: number }[] = [
-  { name: "Significance", value: 3, width: 78 },
-  { name: "Investigator", value: 2, width: 90 },
-  { name: "Innovation", value: 5, width: 48 },
-  { name: "Approach", value: 6, width: 36 },
-  { name: "Environment", value: 2, width: 86 },
-];
+import { ScoreBars } from "@/components/Previews";
+import { SAMPLE_CONCERN } from "@/lib/sampleReview";
 
 const PARAS = [
   "Aim 1 tests whether a brief check-in after discharge lowers readmission among adults leaving the ward.",
   "Aim 2 follows 240 patients for 30 days. The outcome is readmission. The power calculation assumes an effect size larger than the pilot supports.",
   "The sample is named. The site is named. The assumption the calculation depends on is left unnamed.",
-  "Reviewers can see that gap before the discussion begins. The score moves when the assumption is stated in the aim.",
+  "A reviewer can see that gap before a discussion begins. The concern sits under Factor 2, Rigor and Feasibility.",
   "State the assumption next to the effect size the pilot actually supports.",
 ];
-
-const FEEDBACK =
-  "The power calculation in Aim 2 assumes an effect size the pilot doesn’t support.";
 
 const WORDS = PARAS.flatMap((para, pi) => para.split(" ").map((word, wi) => ({ word, key: `${pi}-${wi}` })));
 
@@ -40,7 +31,6 @@ export function HeroBento() {
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    // Reduced motion: CSS hides the paper and shows the finished report.
     if (mq.matches) return;
 
     let cancelled = false;
@@ -148,25 +138,12 @@ export function HeroBento() {
 
         <div className="hero-report">
           <p className="text-[18px] font-medium leading-none tracking-[-0.03em]">Review report</p>
-
-          <ul className="mt-4 flex flex-col gap-3">
-            {CRITERIA.map((c) => (
-              <li key={c.name} className="grid grid-cols-[108px_1fr_1.5rem] items-center gap-3">
-                <span className="text-[14px] tracking-[-0.01em]">{c.name}</span>
-                <span className="h-2 overflow-hidden rounded-full bg-bg-2">
-                  <span className="block h-full rounded-full bg-gold" style={{ width: `${c.width}%` }} />
-                </span>
-                <span className="text-right text-[16px] tabular-nums">{c.value}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-3 text-[12px] text-muted">Lower is stronger.</p>
-
+          <div className="mt-4">
+            <ScoreBars />
+          </div>
           <p className="mt-5 border-t border-line pt-4 text-[14.5px] leading-[1.5] tracking-[-0.02em]">
-            “{FEEDBACK}”
+            “{SAMPLE_CONCERN}”
           </p>
-
-          <p className="mt-4 text-[13px] text-muted">3 reviewers. Example, not a real score.</p>
         </div>
       </div>
     </article>

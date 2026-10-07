@@ -5,7 +5,7 @@ import { LegalBlock, LegalLayout } from "@/components/LegalLayout";
 export const metadata: Metadata = {
   title: "Terms | EQUITAS Intelligence",
   description:
-    "The terms for using EQUITAS. It does not write grants. It does not guarantee funding. Your work stays yours.",
+    "The terms for using EQUITAS. It does not write grants. It does not guarantee funding.",
 };
 
 export default function TermsPage() {
@@ -13,14 +13,14 @@ export default function TermsPage() {
     <LegalLayout
       slug="terms"
       title="Terms"
-      intro="EQUITAS teaches how an application will be read and scored. You remain the author of your own work."
+      intro="EQUITAS teaches how reviewers may see an application. You remain the author of your own work."
     >
       <LegalBlock title="What EQUITAS is">
         <p>
-          EQUITAS Intelligence shows researchers how a grant application is likely to be read,
-          scored and discussed, so they can strengthen it before they submit. It does not write
-          applications. For NIH submissions that distinction is an integrity issue, not a marketing
-          preference.
+          EQUITAS Intelligence helps researchers explore potential reviewer concerns so they can
+          strengthen a draft before they submit. It does not write applications. For NIH
+          submissions that distinction is an integrity issue, not a marketing preference. A
+          simulated score is not a study section result.
         </p>
         <p>We never claim guaranteed funding. Nobody can promise that.</p>
       </LegalBlock>
@@ -72,7 +72,8 @@ export default function TermsPage() {
         <p>
           Stages and tools are labelled Available, Partly available, or Coming. Features on the
           roadmap, including institutional financial forecasting, are labelled as not built yet.
-          Paid plan limits that still say &ldquo;To confirm&rdquo; are not live offers.
+          Paid plan amounts and entitlements are not published on this version until the approved
+          schedule is in the build. They are not live offers.
         </p>
         <p>
           This version of the site uses a browser session for sign-in. A full account system is
@@ -82,9 +83,8 @@ export default function TermsPage() {
       </LegalBlock>
 
       <LegalBlock title="Contact">
-        <p>EQUITAS Intelligence Inc.</p>
-        <p>Address to confirm.</p>
-        <p>Email to confirm.</p>
+        <p>EQUITAS Intelligence Inc. An independent company.</p>
+        <p>Use the institutional demo form to reach a person. We will not invent an address here.</p>
       </LegalBlock>
     </LegalLayout>
   );

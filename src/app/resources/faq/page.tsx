@@ -57,9 +57,9 @@ export default function FaqPage() {
               q="Does EQUITAS write my grant?"
               a="No."
               lines={[
-                "It shows how your own work will be read and scored.",
-                "Your drafts are not used to train models.",
-                "Free to start. No card needed.",
+                "It shows how reviewers may see your work.",
+                "On this version, pasted text stays in your browser session.",
+                "The Free plan is $0. No card needed.",
               ]}
             />
           }

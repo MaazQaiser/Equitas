@@ -38,11 +38,12 @@ export default function GrantsOfficesPage() {
       <main id="main">
         <PageHero
           eyebrow="For grants offices"
-          title="The administrative work, tracked in one place."
+          title="Intelligence beside the systems you already use."
           lede={
             <p>
-              Grants managers work alongside the researcher journey rather than travelling it. This
-              view is built around awards, deadlines and invoices, not around a single application.
+              Standard award tracking, invoicing and subawards should stay in the tools you already
+              run. EQUITAS is not a live grants-office product. What follows is a concept for an
+              intelligence layer, labelled Coming.
             </p>
           }
           actions={
@@ -55,7 +56,7 @@ export default function GrantsOfficesPage() {
               </Button>
             </>
           }
-          note="An individual can try the tools. An office buys through the institution."
+          note="Concept. Not a live administrative system."
           visual={
             <ul className="m-0 grid list-none gap-3 p-0">
               {ATTENTION.map((item, i) => (
@@ -73,12 +74,12 @@ export default function GrantsOfficesPage() {
           <SectionHead
             eyebrow="What you get"
             title="Four jobs, one list of what needs attention."
-            lede="Post-award reporting, subawards, budgets, and portfolio compliance. Each one says what it does."
+            lede="Each module is a concept. A traditional system says RPPR due in 18 days. A future EQUITAS layer could help spot milestones that lack progress data. That is not current capability."
           />
           <ul className="m-0 mt-12 grid list-none gap-5 p-0 md:grid-cols-2">
             {tools.map((tool) => (
               <li key={tool.name} className="flex flex-col rounded-2xl bg-surface p-7 shadow-card sm:p-8">
-                <StatusBadge status="Available" />
+                <StatusBadge status="Coming" />
                 <h3 className="mt-6 text-[22px] tracking-[-0.03em]">{tool.name}</h3>
                 <p className="mt-3 flex-1 text-[15.5px] leading-[1.55] text-muted">{tool.description}</p>
                 <p className="mt-6">
@@ -92,7 +93,7 @@ export default function GrantsOfficesPage() {
               </li>
             ))}
             <li className="flex flex-col rounded-2xl bg-surface p-7 shadow-card sm:p-8">
-              <StatusBadge status="Available" />
+              <StatusBadge status="Coming" />
               <h3 className="mt-6 text-[22px] tracking-[-0.03em]">Portfolio compliance</h3>
               <p className="mt-3 flex-1 text-[15.5px] leading-[1.55] text-muted">
                 See which awards need a report, an invoice or a budget check, across the investigators

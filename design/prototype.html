@@ -470,12 +470,11 @@ input,select,textarea{font-family:inherit;color:inherit}
       </div>
       <div class="score">
         <div class="score-head"><span class="score-title">Study section simulation</span><span class="score-tag">Sample</span></div>
-        <div class="crit"><span class="crit-name">Significance</span><span class="meter"><i style="width:78%"></i></span><span class="crit-val">3</span></div>
-        <div class="crit"><span class="crit-name">Investigator</span><span class="meter"><i style="width:88%"></i></span><span class="crit-val">2</span></div>
-        <div class="crit"><span class="crit-name">Innovation</span><span class="meter"><i style="width:52%"></i></span><span class="crit-val">5</span></div>
-        <div class="crit"><span class="crit-name">Approach</span><span class="meter"><i style="width:42%"></i></span><span class="crit-val">6</span></div>
-        <div class="crit"><span class="crit-name">Environment</span><span class="meter"><i style="width:84%"></i></span><span class="crit-val">2</span></div>
-        <p class="score-foot"><b>Approach is carrying your score.</b> Two reviewers would raise the same concern about statistical power in Aim 2. Fixing that one section moves the overall impact score more than anything else here.</p>
+        <div class="crit"><span class="crit-name">Factor 1 Importance</span><span class="meter"><i style="width:77.8%"></i></span><span class="crit-val">3</span></div>
+        <div class="crit"><span class="crit-name">Factor 2 Rigor</span><span class="meter"><i style="width:44.4%"></i></span><span class="crit-val">6</span></div>
+        <div class="crit"><span class="crit-name">Factor 3 Expertise</span><span class="meter"><i style="width:0"></i></span><span class="crit-val">Sufficient</span></div>
+        <div class="crit"><span class="crit-name">Overall Impact</span><span class="meter"><i style="width:77.8%"></i></span><span class="crit-val">3</span></div>
+        <p class="score-foot"><b>Factor 2 is the weak point.</b> Factor 3 is assessed for sufficiency, not scored 1 to 9. Illustrative NIH Simplified Review Framework sample. Not a real study section score.</p>
       </div>
     </div>
   </section>
@@ -551,7 +550,7 @@ input,select,textarea{font-family:inherit;color:inherit}
     <div class="rev">
       <div>
         <p class="eyebrow">The reviewer behind EQUITAS</p>
-        <p>An active NIH study section reviewer in the health and biomedical sciences calibrates EQUITAS. A study section is the NIH panel that scores an application. The scoring follows how review is actually conducted, not public guidance alone.</p>
+        <p>An active NIH study section reviewer in the health and biomedical sciences calibrates EQUITAS. A study section is the NIH panel that scores an application. EQUITAS is calibrated to how NIH review criteria are actually applied.</p>
       </div>
     </div>
     <p class="note"><b>Design note.</b> De-identified. No photograph, no quote, no placeholder name.</p>
@@ -732,7 +731,7 @@ input,select,textarea{font-family:inherit;color:inherit}
 
     <h3 style="font-size:21px;margin-top:44px;margin-bottom:16px">Tools for your stage</h3>
     <div class="tools">
-      <button class="tool" data-go="tool"><h4>Study Section Simulator</h4><p>See the score your application would get and the discussion behind it.</p><span class="tool-meta">In progress</span></button>
+      <button class="tool" data-go="tool"><h4>Study Section Simulator</h4><p>Stress-test your application through a reviewer lens.</p><span class="tool-meta">In progress</span></button>
       <button class="tool" data-go="tool"><h4>Pre-Award Review</h4><p>Read your draft the way a reviewer will, section by section.</p><span class="tool-meta">Available</span></button>
     </div>
 
@@ -761,7 +760,7 @@ input,select,textarea{font-family:inherit;color:inherit}
       <span>Study Section Simulator</span>
     </div>
     <h1>Study Section Simulator</h1>
-    <p>See the score your application would get, and the discussion a study section would actually have about it.</p>
+    <p>Stress-test your application through a reviewer lens. The sample is illustrative, not a guaranteed study section score.</p>
   </div></div>
 
   <section class="wrap band--tight" style="padding-bottom:60px">
@@ -779,7 +778,7 @@ input,select,textarea{font-family:inherit;color:inherit}
         </div>
         <div class="pane" style="margin-top:16px">
           <h3>Scored against</h3>
-          <p class="side-note">NIH review criteria: Significance, Investigator, Innovation, Approach, Environment. Each scored 1 to 9, where 1 is strongest.</p>
+          <p class="side-note">NIH Simplified Review Framework: Factor 1 Importance and Factor 2 Rigor and Feasibility are scored 1 to 9. Factor 3 Expertise and Resources is assessed for sufficiency. Lower is stronger.</p>
         </div>
       </div>
     </div>
@@ -929,7 +928,7 @@ input,select,textarea{font-family:inherit;color:inherit}
       ["K Award Suite","Plan the career development sections that decide K awards."],
       ["Trainee &amp; GRA Tools","Everything an F31, F32 or T32 application needs."]]},
     {n:"Review",c:"2 tools",open:false,mods:[
-      ["Study Section Simulator","See the score your application would get and the discussion behind it."],
+      ["Study Section Simulator","Stress-test your application through a reviewer lens."],
       ["Resubmission Strategy","Work out why it was not funded and what to change before the A1."]]},
     {n:"Imagine",c:"1 tool",open:false,mods:[
       ["Funding Discovery","Find what has already been funded in your area, and who funded it."]]},
@@ -989,7 +988,7 @@ input,select,textarea{font-family:inherit;color:inherit}
       onb.innerHTML='<p class="onb-step">You are set up</p><h2>Here is where to start.</h2>'+
         '<p class="onb-intro">Based on what you told us: '+who.toLowerCase()+', working on '+need.toLowerCase()+'.</p>'+
         '<div class="result"><h3>Review</h3><p>See your application the way reviewers will.</p>'+
-        '<div class="rec"><h4>Study Section Simulator</h4><p>See the score your application would get, and the discussion a study section would actually have about it.</p>'+
+        '<div class="rec"><h4>Study Section Simulator</h4><p>Stress-test your application through a reviewer lens. The sample is illustrative, not a guaranteed study section score.</p>'+
         '<div class="btns" style="margin-top:14px"><button class="btn btn--primary" data-go="tool">Start</button></div></div>'+
         '<div class="rec-small"><div>Pre-Award Review</div><div>Resubmission Strategy</div></div></div>'+
         '<div class="onb-foot"><button class="linkbtn" data-restart="1">Run through it again</button>'+
@@ -1025,7 +1024,7 @@ input,select,textarea{font-family:inherit;color:inherit}
         '<button class="btn btn--ghost" id="sampleBtn">Load the sample</button></div>';
   }
 
-  var CRIT=[["Significance",3,78],["Investigator",2,88],["Innovation",5,52],["Approach",6,42],["Environment",2,84]];
+  var CRIT=[["Factor 1 Importance",3,77.8],["Factor 2 Rigor",6,44.4],["Overall Impact",3,77.8]];
   function resultState(){
     if(toolTitle) toolTitle.textContent="What a study section would say";
     toolBody.innerHTML=

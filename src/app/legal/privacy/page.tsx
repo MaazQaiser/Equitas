@@ -5,7 +5,7 @@ import { LegalBlock, LegalLayout } from "@/components/LegalLayout";
 export const metadata: Metadata = {
   title: "Privacy | EQUITAS Intelligence",
   description:
-    "What EQUITAS collects, what it does not, and who can see your work. Your drafts stay yours.",
+    "What EQUITAS collects on this version of the site, what is not built yet, and who can see your work.",
 };
 
 export default function PrivacyPage() {
@@ -13,7 +13,7 @@ export default function PrivacyPage() {
     <LegalLayout
       slug="privacy"
       title="Privacy"
-      intro="Your work stays yours. This page says what we collect, what we do not, and who can see it."
+      intro="This page says what we collect on this version of the site, what we do not, and what is not built yet."
     >
       <LegalBlock title="What this page covers">
         <p>
@@ -40,9 +40,10 @@ export default function PrivacyPage() {
 
       <LegalBlock title="Your drafts">
         <p>
-          Drafts you paste into a tool are yours. They are not used to train models. They are not
-          shown to other users. They are not shown on institutional dashboards. Those views track
-          activity, not the text of an application.
+          On this version, text you paste into a tool stays in your browser session. There is no
+          server-side draft store to audit yet. Institutional illustrations track activity, not
+          application text. Claims about training, subprocessors, encryption, and administrator
+          visibility will be named here only when those controls exist.
         </p>
         <p>
           Do not paste grant text or patient data into the public search box on the homepage. That
@@ -56,9 +57,8 @@ export default function PrivacyPage() {
 
       <LegalBlock title="Who we share with">
         <p>
-          We do not sell your data. We do not share drafts with other researchers or with an
-          institution unless you are on an institutional plan and the sharing is limited to
-          activity tracking, not application text.
+          We do not sell your data. Institutional illustrations do not show draft text. There is no
+          live administrator view of a researcher’s application on this version.
         </p>
         <p>
           Payment and identity providers (when those are live) will receive only what they need to
@@ -68,16 +68,15 @@ export default function PrivacyPage() {
 
       <LegalBlock title="How long we keep it">
         <p>
-          Account details are kept while the account exists. Self-serve deletion is not built yet.
-          Email to confirm, and we will delete what we hold. Session data on this version lives in
-          your browser and goes away when that session is cleared.
+          Self-serve deletion is not built yet. Session data on this version lives in your browser
+          and goes away when that session is cleared. Use the demo form if you need a person to
+          delete what a later account store holds.
         </p>
       </LegalBlock>
 
       <LegalBlock title="Contact">
         <p>EQUITAS Intelligence Inc.</p>
-        <p>Address to confirm.</p>
-        <p>Email to confirm.</p>
+        <p>Use the institutional demo form to reach a person. We will not invent an address here.</p>
       </LegalBlock>
     </LegalLayout>
   );

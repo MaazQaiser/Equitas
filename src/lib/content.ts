@@ -10,6 +10,7 @@ export type Stage = {
   name: string;
   promise: string;
   status: StageStatus;
+  statusNote: string;
   modules: string[];
 };
 
@@ -19,6 +20,7 @@ export const STAGES: Stage[] = [
     name: "Imagine",
     promise: "Shape your question and find funding that fits",
     status: "Partly available",
+    statusNote: "Funding Discovery is a labelled preview. The matcher is not built.",
     modules: ["Funding Discovery"],
   },
   {
@@ -26,13 +28,15 @@ export const STAGES: Stage[] = [
     name: "Design",
     promise: "Build a study reviewers will trust",
     status: "Partly available",
+    statusNote: "Regulatory answers are labelled examples, not legal advice.",
     modules: ["Regulatory Compliance"],
   },
   {
     slug: "compete",
     name: "Compete",
     promise: "Develop an application that can be funded",
-    status: "Available",
+    status: "Partly available",
+    statusNote: "Module pages are labelled previews, not live scorers.",
     modules: [
       "Pre-Award Review",
       "K Award Suite",
@@ -43,15 +47,19 @@ export const STAGES: Stage[] = [
   {
     slug: "review",
     name: "Review",
-    promise: "See your application the way reviewers will",
-    status: "Available",
+    promise: "See your application through a reviewer lens",
+    status: "Partly available",
+    statusNote:
+      "The Study Section Simulator sample is live and illustrative. It is not a real study section. Resubmission Strategy is a preview.",
     modules: ["Study Section Simulator", "Resubmission Strategy"],
   },
   {
     slug: "manage",
     name: "Manage",
     promise: "Steward your award and its money",
-    status: "Available",
+    status: "Coming",
+    statusNote:
+      "Post-award tools are concepts and labelled examples, not a live grants office.",
     modules: ["Post-Award Management", "Subaward & Invoicing", "Budget & Finance"],
   },
   {
@@ -59,6 +67,7 @@ export const STAGES: Stage[] = [
     name: "Transform",
     promise: "Turn your research into impact",
     status: "Coming",
+    statusNote: "This stage is not built. The page shows where it will sit.",
     modules: [],
   },
 ];
@@ -110,7 +119,7 @@ export const MODULES: Module[] = [
     name: "Study Section Simulator",
     stage: "Review",
     description:
-      "See the score your application would get and the discussion behind it.",
+      "Stress-test your application through a reviewer lens. The sample is illustrative, not a guaranteed study section score.",
   },
   {
     name: "Resubmission Strategy",
@@ -121,23 +130,23 @@ export const MODULES: Module[] = [
     name: "Post-Award Management",
     stage: "Manage",
     description:
-      "Keep RPPR reports, no-cost extensions and progress reporting on schedule.",
+      "A future intelligence layer for progress reporting. Not a live RPPR system.",
   },
   {
     name: "Subaward & Invoicing",
     stage: "Manage",
     description:
-      "Track subawards, subcontracts and invoices across collaborating sites.",
+      "A concept for supporting existing subaward workflows. Not a live invoicing product.",
   },
   {
     name: "Budget & Finance",
     stage: "Manage",
-    description: "Build and monitor a grant budget that survives review and audit.",
+    description: "A concept for budget decisions reviewers and auditors will test. Not live finance software.",
   },
   {
     name: "Institutional Intelligence",
     stage: null,
-    description: "See grant activity and pipeline across a department or institution.",
+    description: "Tracking illustrations of grant activity. Not a forecast, and not access to drafts.",
   },
 ];
 
@@ -199,23 +208,23 @@ export const STAGE_PAGES: Record<string, StagePage> = {
     getBody:
       "Every tool in this stage explains its reasoning. You see what is weakening the application, why a reviewer would raise it, and what to change first. That is what a mentor who has sat on panels would tell you.",
     getLines: [
-      "See what actually moves your score",
+      "See what a reviewer may raise",
       "Strengthen the work before you submit",
-      "Build the skill of writing to reviewers, not just this one application",
+      "Build judgment for the next application, not only this one",
     ],
   },
   review: {
     hereIf: [
-      "You want to know how it will score before you send it.",
+      "You have a draft and want to explore potential reviewer concerns before you submit.",
       "It was not funded, and nobody has told you why.",
       "You are preparing an A1 and need to know what to change.",
     ],
-    getHeading: "The score, and the discussion behind it.",
+    getHeading: "A reviewer lens on the draft you have.",
     getBody:
-      "Review is where you see the application the way a study section would. A study section is the NIH panel that scores an application. You get the score, the reasons, and what to change before you submit or resubmit.",
+      "Review is where you stress-test an application through a reviewer lens. A study section is the NIH panel that scores an application. The Study Section Simulator sample is live and illustrative. It is not a guaranteed score and not a reproduction of a real panel.",
     getLines: [
-      "See how each section would be read",
-      "Understand why the score sits where it does",
+      "Explore where a reviewer may need stronger evidence",
+      "See which factor the concern sits under",
       "Know what to change before the next version",
     ],
   },
@@ -225,14 +234,17 @@ export const STAGE_PAGES: Record<string, StagePage> = {
       "Reporting, no-cost extensions or progress reports are coming due.",
       "You have subawards or a budget to keep on track.",
     ],
-    getHeading: "The award is won. The work is not over.",
+    getHeading: "Intelligence for the award, not a new grants office.",
     getBody:
-      "Manage is for the reporting, subawards and budget that follow the award. Keep the administrative work on schedule so it does not interrupt the science.",
+      "Manage is still being built. The long-term idea is an intelligence layer that supports the workflows you already use, not a replacement for RPPR tracking, invoicing or subawards. Nothing here is a live administrative system.",
     getLines: [
-      "Keep reports and extensions on schedule",
-      "Track subawards and invoices across sites",
-      "Watch the budget the way an audit would",
+      "Support existing reporting workflows",
+      "Flag gaps in progress evidence, as a future concept",
+      "Keep the researcher’s decisions in view",
     ],
+    coming:
+      "Standard award tracking, invoicing and subawards should stay in the systems you already use. A future EQUITAS layer could help spot milestones that lack progress data, or possible scope drift. That is a concept, not a current capability.",
+    captureEmail: true,
   },
   transform: {
     hereIf: [
@@ -253,6 +265,17 @@ export const STAGE_PAGES: Record<string, StagePage> = {
     captureEmail: true,
   },
 };
+
+export const CALIBRATION_LINE =
+  "EQUITAS is calibrated to how NIH review criteria are actually applied.";
+
+export function moduleStatus(name: string): StageStatus {
+  if (name === "Study Section Simulator") return "Available";
+  if (name === "Institutional Intelligence") return "Coming";
+  const mod = MODULES.find((item) => item.name === name);
+  const stage = STAGES.find((item) => item.name === mod?.stage);
+  return stage?.status ?? "Coming";
+}
 
 export type JourneyStage = Stage &
   StagePage & {
@@ -280,15 +303,15 @@ export function journeyStages(): JourneyStage[] {
 export const FAQ: { q: string; a: string }[] = [
   {
     q: "Does EQUITAS write my grant?",
-    a: "No. It helps you understand how your own work will be read and scored. We do not draft applications, and for NIH submissions that distinction matters.",
+    a: "No. It helps you understand how reviewers may see your work. We do not draft applications, and for NIH submissions that distinction matters.",
   },
   {
     q: "Is it really free?",
-    a: "Yes, to start. You can create an account and use the core tools without a card. Paid plans add more reviews and higher limits.",
+    a: "Yes, to start. You can create an account and use the sample Simulator without a card. Paid plans, when the approved amounts are published, add depth and limits.",
   },
   {
     q: "Who sees my work?",
-    a: "Only you. Your drafts are not used to train models and are not shared with other users or institutions.",
+    a: "On this version, a signed-in session lives in your browser. Institutional dashboards are tracking illustrations and do not show draft text. Server-side accounts, deletion, and training policy will be named on the privacy page when they are live.",
   },
   {
     q: "Which funders does it cover?",
@@ -303,11 +326,11 @@ export const FAQ: { q: string; a: string }[] = [
 export const FAQ_MORE: { q: string; a: string }[] = [
   {
     q: "Does it guarantee funding?",
-    a: "No. Nobody can promise that. EQUITAS shows how an application is likely to be read, so you can strengthen it before you submit.",
+    a: "No. Nobody can promise that. EQUITAS is a reviewer lens on the draft you have. A simulated score is not a study section result and not a funding prediction.",
   },
   {
     q: "How is it calibrated?",
-    a: "By an active NIH study section reviewer in the health and biomedical sciences. A study section is the NIH panel that scores an application. The scoring follows how review is actually conducted, not published guidance alone.",
+    a: "By an active NIH study section reviewer in the health and biomedical sciences. A study section is the NIH panel that scores an application. EQUITAS is calibrated to how NIH review criteria are actually applied. Calibration is not access to confidential deliberations.",
   },
   {
     q: "Can my institution pay?",
@@ -448,16 +471,76 @@ export const FUNDER_GROUPS = [
 ] as const;
 
 export const PERSPECTIVES = [
-  { name: "The Study Section Reviewer's Perspective", kind: "lens" as const },
-  { name: "The Program Officer's Perspective", kind: "lens" as const },
-  { name: "The Advisory Council Member's Perspective", kind: "lens" as const },
-  { name: "The Scientific Review Officer's Perspective", kind: "lens" as const },
-  { name: "The Grants Management Specialist's Perspective", kind: "lens" as const },
-  { name: "The Biostatistician Reviewer's Perspective", kind: "lens" as const },
-  { name: "The Equity Reviewer's Perspective", kind: "lens" as const },
-  { name: "The Community Advocate's Perspective", kind: "lens" as const },
-  { name: "The Generalist Reviewer's Perspective", kind: "lens" as const },
-  { name: "Your Guide to How Grant Applications Actually Work", kind: "guide" as const },
+  {
+    name: "The Study Section Reviewer's Perspective",
+    kind: "lens" as const,
+    group: "Scientific review",
+    useful: "When you need to see how assigned reviewers may weigh importance, rigor, and feasibility.",
+    limit: "A simulated lens, not an actual reviewer or a confidential deliberation.",
+  },
+  {
+    name: "The Program Officer's Perspective",
+    kind: "lens" as const,
+    group: "Funding strategy",
+    useful: "When fit to a funder’s portfolio and mission may matter as much as the science.",
+    limit: "Does not speak for an institute or promise a program decision.",
+  },
+  {
+    name: "The Advisory Council Member's Perspective",
+    kind: "lens" as const,
+    group: "Funding strategy",
+    useful: "When high-level significance and program balance come into view after scoring.",
+    limit: "Not a council vote or an endorsement.",
+  },
+  {
+    name: "The Scientific Review Officer's Perspective",
+    kind: "lens" as const,
+    group: "Review administration",
+    useful: "When process, assignment, and what can be discussed at the meeting are the question.",
+    limit: "Not access to an SRO or to meeting records.",
+  },
+  {
+    name: "The Grants Management Specialist's Perspective",
+    kind: "lens" as const,
+    group: "Review administration",
+    useful: "When budget, terms, and post-award rules may affect how a plan is read.",
+    limit: "Not a grants-office system and not a live compliance check.",
+  },
+  {
+    name: "The Biostatistician Reviewer's Perspective",
+    kind: "lens" as const,
+    group: "Scientific review",
+    useful: "When sample size, power, and analysis choices are the likely pressure point.",
+    limit: "Illustrative reasoning, not a statistical review of your data.",
+  },
+  {
+    name: "The Equity Reviewer's Perspective",
+    kind: "lens" as const,
+    group: "Relevance or impact",
+    useful: "When inclusion, population, and who benefits from the work may be challenged.",
+    limit: "Not a judgement of the researcher, and not a diversity score.",
+  },
+  {
+    name: "The Community Advocate's Perspective",
+    kind: "lens" as const,
+    group: "Relevance or impact",
+    useful: "When relevance to the people the work claims to serve is easy to miss on the page.",
+    limit: "Not a community endorsement.",
+  },
+  {
+    name: "The Generalist Reviewer's Perspective",
+    kind: "lens" as const,
+    group: "Scientific review",
+    useful: "When a reader outside your exact method has to find the question and the stakes.",
+    limit: "Not a claim that every panel includes this voice.",
+  },
+  {
+    name: "Your Guide to How Grant Applications Actually Work",
+    kind: "guide" as const,
+    group: "Guidance",
+    useful: "When you want the review process explained in plain language.",
+    limit: "A guide, not a simulation.",
+  },
 ];
 
 export type AudienceKey = "trainee" | "investigator" | "grants_manager" | "institution";
