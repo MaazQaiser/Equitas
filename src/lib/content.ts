@@ -95,7 +95,7 @@ export const MODULES: Module[] = [
     name: "Pre-Award Review",
     stage: "Compete",
     description:
-      "Read your draft the way a reviewer will, section by section, before you submit.",
+      "Read your draft section by section through a reviewer lens, before you submit.",
   },
   {
     name: "K Award Suite",
@@ -171,7 +171,7 @@ export const STAGE_PAGES: Record<string, StagePage> = {
     ],
     getHeading: "A question that can find a funder.",
     getBody:
-      "Imagine is where you shape the question and see what has already been funded in your area. Funding Discovery is live. The rest of this stage is still being built.",
+      "Imagine is where you shape the question and see what has already been funded in your area. Funding Discovery is a labelled preview. The rest of this stage is still being built.",
     getLines: [
       "See what has already been funded in your area",
       "Find who funded it",
@@ -319,7 +319,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "My application was not funded. Can this help?",
-    a: "Yes. Resubmission Strategy is built for exactly that, and works from your summary statement.",
+    a: "Yes. Resubmission Strategy is a labelled preview for that moment: what to change before the A1. It is not a live scorer of your summary statement.",
   },
 ];
 

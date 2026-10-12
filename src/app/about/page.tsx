@@ -102,6 +102,39 @@ export default function AboutPage() {
           </div>
         </section>
 
+        <section id="evolved" className={`scroll-mt-24 ${WRAP} ${SECTION}`}>
+          <SectionHead
+            eyebrow="How the concept evolved"
+            title="From a gap in mentorship to a teaching tool."
+            lede="Three beats. No invented dates, and no university ownership claim."
+          />
+          <ol className="m-0 mt-12 list-none p-0">
+            {[
+              {
+                title: "The gap",
+                body: "A reviewer saw that most researchers never get taught how review is read. Mentorship of that kind sits with a few well-connected labs.",
+              },
+              {
+                title: "The start",
+                body: "EQUITAS started as a way to teach that judgment. It does not write grants. For NIH submissions that distinction is an integrity question.",
+              },
+              {
+                title: "The company",
+                body: "It is an independent company. University affiliations are background. They are not ownership, sponsorship, endorsement, or access to institutional data.",
+              },
+            ].map((item, i) => (
+              <li
+                key={item.title}
+                className="grid gap-3 border-t border-gold/35 py-7 first:border-t-0 first:pt-0 md:grid-cols-[4.5rem_minmax(0,0.7fr)_minmax(0,1.3fr)] md:items-baseline"
+              >
+                <span className="text-[13px] tabular-nums text-gold-text">{`0${i + 1}`}</span>
+                <h3 className="text-[22px] leading-[1.25] tracking-[-0.025em]">{item.title}</h3>
+                <p className="text-[15.5px] leading-[1.55] text-muted">{item.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
         <section id="methodology" className={`scroll-mt-24 ${WRAP} ${SECTION}`}>
           <SectionHead
             eyebrow="Methodology"

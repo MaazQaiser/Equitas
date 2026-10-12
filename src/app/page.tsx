@@ -11,7 +11,8 @@ import { Perspectives } from "@/components/Perspectives";
 import { FunderList } from "@/components/FunderList";
 import { AimsPair } from "@/components/Previews";
 import { ReviewLens } from "@/components/ReviewLens";
-import { CALIBRATION_LINE, FUNDER_COVER } from "@/lib/content";
+import { StatusBadge } from "@/components/StatusBadge";
+import { CALIBRATION_LINE, FUNDER_COVER, type StageStatus } from "@/lib/content";
 import { EYEBROW_BAND } from "@/lib/ui";
 
 const delay = (ms: number) => ({ "--reveal-delay": `${ms}ms` }) as CSSProperties;
@@ -29,17 +30,30 @@ const EXAMPLE_PROMPTS = [
   "Find funding that fits",
 ];
 
-const PATHWAYS = [
-  { when: "I have an idea.", href: "/journey/imagine" },
-  { when: "I am writing my first application.", href: "/journey/compete" },
-  { when: "I have a draft.", href: "/how-it-works" },
+const PATHWAYS: {
+  when: string;
+  href: string;
+  dest: string;
+  status: StageStatus;
+  note?: string;
+}[] = [
+  { when: "I have an idea.", href: "/journey/imagine", dest: "Imagine", status: "Partly available" },
+  {
+    when: "I am writing my first application.",
+    href: "/journey/compete",
+    dest: "Compete",
+    status: "Partly available",
+  },
+  { when: "I have a draft.", href: "/how-it-works", dest: "How it works", status: "Available" },
   {
     when: "I am preparing a resubmission.",
     href: "/journey/review",
+    dest: "Review",
+    status: "Partly available",
     note: "Already have reviewer comments? Understand what needs to change.",
   },
-  { when: "I received my reviews.", href: "/journey/review" },
-  { when: "I have an award.", href: "/journey/manage" },
+  { when: "I received my reviews.", href: "/journey/review", dest: "Review", status: "Partly available" },
+  { when: "I have an award.", href: "/journey/manage", dest: "Manage", status: "Coming" },
 ];
 
 const MENTORSHIP = [
@@ -117,19 +131,35 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="overflow-hidden bg-band py-[clamp(72px,9vw,120px)] text-band-ink">
-          <div className={WRAP}>
-            <p className="text-[clamp(28px,3.1vw,46px)] font-light leading-[1.2] tracking-[-0.035em]">
-              <span className="md:block">An active NIH study section reviewer in the health and biomedical sciences calibrates EQUITAS. </span>
-              <span className="md:block">A study section is the NIH panel that scores an application. </span>
-              <span className="md:block">{FUNDER_COVER} </span>
-              <span className="md:block">Available in ten languages.</span>
-            </p>
-          </div>
-          <div className="mt-[clamp(40px,5vw,64px)]">
-            <CapabilityRows />
-          </div>
+        <section className={`${WRAP} ${SECTION}`}>
+          <p className={`mb-6 ${EYEBROW}`}>The developmental difference</p>
+          <h2 className={`max-w-[18ch] ${H2}`}>Better applications now. Better judgment for the next one.</h2>
+          <p className="mt-6 max-w-[54ch] text-[17px] leading-[1.55] text-muted">
+            EQUITAS is a mentor because it teaches you to notice what a reviewer may raise, not
+            because it writes the next sentence for you.
+          </p>
+          <ol className="m-0 mt-12 list-none p-0">
+            {MENTORSHIP.map((item, i) => (
+              <li
+                key={item.title}
+                className="grid gap-4 border-t border-gold/35 py-7 first:border-t-0 first:pt-0 md:grid-cols-[4.5rem_minmax(0,0.9fr)_minmax(0,1.2fr)] md:items-baseline md:gap-8"
+              >
+                <span className="text-[13px] tabular-nums text-gold-text">{`0${i + 1}`}</span>
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-gold-text">
+                    {item.now ? "What this means today" : "Coming"}
+                  </p>
+                  <h3 className="mt-2 text-[22px] leading-[1.25] tracking-[-0.025em]">{item.title}</h3>
+                </div>
+                <p className="text-[15.5px] leading-[1.55] text-muted">{item.body}</p>
+              </li>
+            ))}
+          </ol>
         </section>
+
+        <div className="bg-bg-2">
+          <Perspectives />
+        </div>
 
         <section id="find-your-place" className={`scroll-mt-24 ${SECTION}`}>
           <div className={`${WRAP} grid items-start gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.05fr)] lg:gap-16`}>
@@ -142,6 +172,68 @@ export default function Home() {
               </p>
             </div>
             <JourneyRail />
+          </div>
+        </section>
+
+        <section className="bg-bg-2">
+          <div className={`${WRAP} ${SECTION}`}>
+            <p className={`mb-6 ${EYEBROW}`}>Start from the task</p>
+            <h2 className={`max-w-[16ch] ${H2}`}>You do not have to choose a career category first.</h2>
+            <p className="mt-6 max-w-[54ch] text-[17px] leading-[1.55] text-muted">
+              Each path goes only to what exists today, labelled honestly.
+            </p>
+            <ul className="m-0 mt-12 list-none divide-y divide-line border-y border-line p-0">
+              {PATHWAYS.map((item) => (
+                <li key={item.when}>
+                  <Link
+                    href={item.href}
+                    className="flex flex-col gap-3 py-5 no-underline sm:flex-row sm:items-center sm:justify-between sm:gap-8"
+                  >
+                    <span>
+                      <span className="block text-[18px] leading-[1.35] tracking-[-0.02em]">{item.when}</span>
+                      {item.note ? (
+                        <span className="mt-1 block text-[14px] leading-[1.45] text-muted">{item.note}</span>
+                      ) : null}
+                    </span>
+                    <span className="flex shrink-0 flex-wrap items-center gap-3 text-[14px] text-muted">
+                      <span>{item.dest}</span>
+                      <StatusBadge status={item.status} compact />
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className={`${WRAP} ${SECTION}`}>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {[
+              {
+                h: "Trainees",
+                p: "Your first fellowship or K award, without a grants office behind you. F31, F32, T32 and K awards, explained for someone doing this for the first time.",
+                href: "/researchers#trainees",
+                cta: "Start at Compete",
+              },
+              {
+                h: "Investigators",
+                p: "Your R-series application or resubmission, seen through a reviewer lens. Including why the last one was not funded.",
+                href: "/researchers#investigators",
+                cta: "Start at Review",
+              },
+            ].map((w, i) => (
+              <Link
+                key={w.h}
+                href={w.href}
+                className="lift flex flex-col gap-4 rounded-2xl bg-surface p-8 no-underline shadow-card sm:p-10"
+                data-reveal
+                style={delay(i * 110)}
+              >
+                <h3 className="text-[clamp(32px,3vw,44px)] tracking-[-0.03em]">{w.h}</h3>
+                <p className="text-[15.5px] leading-[1.6] text-muted">{w.p}</p>
+                <span className="mt-auto pt-4 text-[15px] text-gold-text">{w.cta} →</span>
+              </Link>
+            ))}
           </div>
         </section>
 
@@ -200,91 +292,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className={`${WRAP} ${SECTION}`}>
-          <p className={`mb-6 ${EYEBROW}`}>The developmental difference</p>
-          <h2 className={`max-w-[18ch] ${H2}`}>Better applications now. Better judgment for the next one.</h2>
-          <p className="mt-6 max-w-[54ch] text-[17px] leading-[1.55] text-muted">
-            EQUITAS is a mentor because it teaches you to notice what a reviewer may raise, not
-            because it writes the next sentence for you.
-          </p>
-          <ul className="m-0 mt-12 grid list-none gap-5 p-0 md:grid-cols-2">
-            {MENTORSHIP.map((item) => (
-              <li key={item.title} className="rounded-2xl bg-surface p-7 shadow-card sm:p-8">
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-gold-text">
-                  {item.now ? "What this means today" : "Coming"}
-                </p>
-                <h3 className="mt-4 text-[22px] leading-[1.25] tracking-[-0.025em]">{item.title}</h3>
-                <p className="mt-3 text-[15.5px] leading-[1.55] text-muted">{item.body}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <div className="bg-bg-2">
-          <Perspectives />
-        </div>
-
-        <section className={`${WRAP} ${SECTION}`}>
-          <p className={`mb-6 ${EYEBROW}`}>Start from the task</p>
-          <h2 className={`max-w-[16ch] ${H2}`}>You do not have to choose a career category first.</h2>
-          <p className="mt-6 max-w-[54ch] text-[17px] leading-[1.55] text-muted">
-            Each path goes only to what exists today, labelled honestly.
-          </p>
-          <ul className="m-0 mt-12 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
-            {PATHWAYS.map((item) => (
-              <li key={item.when}>
-                <Link
-                  href={item.href}
-                  className="lift flex h-full flex-col justify-between gap-6 rounded-2xl bg-surface p-6 no-underline shadow-card sm:p-7"
-                >
-                  <span>
-                    <span className="block text-[18px] leading-[1.35] tracking-[-0.02em]">{item.when}</span>
-                    {"note" in item && item.note ? (
-                      <span className="mt-2 block text-[14px] leading-[1.45] text-muted">{item.note}</span>
-                    ) : null}
-                  </span>
-                  <span className="text-[15px] text-gold-text">Continue →</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="bg-bg-2">
-          <div className={`${WRAP} ${SECTION}`}>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {[
-              {
-                h: "Trainees",
-                p: "Your first fellowship or K award, without a grants office behind you. F31, F32, T32 and K awards, explained for someone doing this for the first time.",
-                href: "/researchers#trainees",
-                cta: "Start at Compete",
-              },
-              {
-                h: "Investigators",
-                p: "Your R-series application or resubmission, seen through a reviewer lens. Including why the last one was not funded.",
-                href: "/researchers#investigators",
-                cta: "Start at Review",
-              },
-            ].map((w, i) => (
-              <Link
-                key={w.h}
-                href={w.href}
-                className="lift flex flex-col gap-4 rounded-2xl bg-surface p-8 no-underline shadow-card sm:p-10"
-                data-reveal
-                style={delay(i * 110)}
-              >
-                <h3 className="text-[clamp(32px,3vw,44px)] tracking-[-0.03em]">{w.h}</h3>
-                <p className="text-[15.5px] leading-[1.6] text-muted">{w.p}</p>
-                <span className="mt-auto pt-4 text-[15px] text-gold-text">{w.cta} →</span>
-              </Link>
-            ))}
-          </div>
-          </div>
-        </section>
-
-        <section className="bg-band text-band-ink">
-          <div className={`${WRAP} ${SECTION} grid items-start gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-20`}>
+        <section className="overflow-hidden bg-band py-[clamp(72px,9vw,120px)] text-band-ink">
+          <div className={`${WRAP} grid items-start gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-20`}>
             <div>
               <p className={`mb-6 ${EYEBROW_BAND}`}>The reviewer behind EQUITAS</p>
               <h2 className="max-w-[16ch] text-[clamp(34px,4.4vw,56px)] font-light leading-[1.04] tracking-[-0.035em]">
@@ -292,8 +301,8 @@ export default function Home() {
               </h2>
               <p className="mt-6 max-w-[48ch] text-[clamp(17px,1.6vw,20px)] leading-[1.55] text-band-muted">
                 An active NIH study section reviewer in the health and biomedical sciences calibrates
-                EQUITAS. A study section is the NIH panel that scores an application. {CALIBRATION_LINE}
-                Calibration is not access to confidential deliberations.
+                EQUITAS. A study section is the NIH panel that scores an application. {CALIBRATION_LINE}{" "}
+                {FUNDER_COVER} Calibration is not access to confidential deliberations.
               </p>
               <p className="mt-6">
                 <Link href="/about#credibility" className="text-[15px] text-gold-on-band no-underline hover:underline">
@@ -304,6 +313,9 @@ export default function Home() {
             <div>
               <FunderList band />
             </div>
+          </div>
+          <div className="mt-[clamp(40px,5vw,64px)]">
+            <CapabilityRows />
           </div>
         </section>
 

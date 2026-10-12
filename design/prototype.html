@@ -661,7 +661,7 @@ input,select,textarea{font-family:inherit;color:inherit}
 
     <h2 style="font-size:25px;margin-top:44px">Tools in this stage</h2>
     <div class="tools">
-      <button class="tool" data-go="tool"><h4>Pre-Award Review</h4><p>Read your draft the way a reviewer will, section by section, before you submit it.</p><span class="tool-meta">Available</span></button>
+      <button class="tool" data-go="tool"><h4>Pre-Award Review</h4><p>Read your draft section by section through a reviewer lens, before you submit it.</p><span class="tool-meta">Available</span></button>
       <button class="tool" data-go="tool"><h4>K Award Suite</h4><p>Plan the career development sections that decide K awards, including the mentor plan and training goals.</p><span class="tool-meta">Available</span></button>
       <button class="tool" data-go="tool"><h4>Trainee &amp; GRA Tools</h4><p>Everything an F31, F32 or T32 application needs, written for a first-time applicant.</p><span class="tool-meta">Available</span></button>
       <button class="tool" data-go="tool"><h4>International Research</h4><p>Apply to ERC, Wellcome and other non-US funders, with each one's conventions explained.</p><span class="tool-meta">Available</span></button>
@@ -732,7 +732,7 @@ input,select,textarea{font-family:inherit;color:inherit}
     <h3 style="font-size:21px;margin-top:44px;margin-bottom:16px">Tools for your stage</h3>
     <div class="tools">
       <button class="tool" data-go="tool"><h4>Study Section Simulator</h4><p>Stress-test your application through a reviewer lens.</p><span class="tool-meta">In progress</span></button>
-      <button class="tool" data-go="tool"><h4>Pre-Award Review</h4><p>Read your draft the way a reviewer will, section by section.</p><span class="tool-meta">Available</span></button>
+      <button class="tool" data-go="tool"><h4>Pre-Award Review</h4><p>Read your draft section by section through a reviewer lens.</p><span class="tool-meta">Available</span></button>
     </div>
 
     <h3 style="font-size:21px;margin-top:44px;margin-bottom:4px">All tools</h3>
@@ -814,7 +814,7 @@ input,select,textarea{font-family:inherit;color:inherit}
     <p class="eyebrow">What it changes</p>
     <h2 style="font-size:clamp(25px,3vw,35px);max-width:20ch">Outcomes across a faculty, not one application at a time</h2>
     <div class="vals">
-      <div class="val"><h4>More competitive applications</h4><p>Every investigator sees how their work will be read before it reaches a study section.</p></div>
+      <div class="val"><h4>More competitive applications</h4><p>Every investigator sees how reviewers may see their work before it reaches a study section.</p></div>
       <div class="val"><h4>Development you cannot staff</h4><p>The mentorship your most senior faculty provide, available to everyone who needs it.</p></div>
       <div class="val"><h4>Pipeline visibility</h4><p>See who is applying, where the gaps are, and which submissions need support.</p></div>
       <div class="val"><h4>A retention tool</h4><p>Early-career faculty stay where they are given the infrastructure to succeed.</p></div>
@@ -899,11 +899,11 @@ input,select,textarea{font-family:inherit;color:inherit}
   }
 
   var FAQ=[
-    ["Does EQUITAS write my grant?","No. It helps you understand how your own work will be read and scored. We do not draft applications, and for NIH submissions that distinction matters."],
+    ["Does EQUITAS write my grant?","No. It helps you understand how reviewers may see your work. We do not draft applications, and for NIH submissions that distinction matters."],
     ["Is it really free?","Yes, to start. You can create an account and use the core tools without a card. Paid plans add more reviews and higher limits."],
     ["Who sees my work?","Only you. Your drafts are not used to train models and are not shared with other users or institutions."],
     ["Which funders does it cover?","NIH first, plus NSF, ERC, Wellcome and LMIC funders. Each has its own review conventions built in."],
-    ["My application was not funded. Can this help?","Yes. Resubmission Strategy is built for exactly that, and works from your summary statement."]
+    ["My application was not funded. Can this help?","Yes. Resubmission Strategy is a labelled preview for that moment: what to change before the A1."]
   ];
   var fq=document.getElementById("faq");
   if(fq){
@@ -924,7 +924,7 @@ input,select,textarea{font-family:inherit;color:inherit}
 
   var GROUPS=[
     {n:"Compete",c:"Your stage",open:true,mods:[
-      ["Pre-Award Review","Read your draft the way a reviewer will, section by section."],
+      ["Pre-Award Review","Read your draft section by section through a reviewer lens."],
       ["K Award Suite","Plan the career development sections that decide K awards."],
       ["Trainee &amp; GRA Tools","Everything an F31, F32 or T32 application needs."]]},
     {n:"Review",c:"2 tools",open:false,mods:[

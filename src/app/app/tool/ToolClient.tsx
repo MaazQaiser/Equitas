@@ -201,7 +201,7 @@ function SaveReviewActions({ signedIn }: { signedIn: boolean }) {
       title: "Sample review of specific aims",
       module: SIMULATOR,
       slug: moduleSlug(SIMULATOR),
-      excerpt: "Approach is the weakest. State the power assumption in Aim 2.",
+      excerpt: "Factor 2 is the weak point. State the power assumption in Aim 2.",
       example: true,
     });
     setSaved(true);

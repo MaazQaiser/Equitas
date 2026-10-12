@@ -35,7 +35,7 @@ const PROBLEMS = [
 const CHANGES = [
   {
     title: "More competitive applications.",
-    body: "Every investigator can see how their work will be read before it reaches a study section.",
+    body: "Every investigator can see how reviewers may see their work before it reaches a study section.",
   },
   {
     title: "Development you cannot staff.",
@@ -174,6 +174,8 @@ export default function InstitutionsPage() {
             />
             <p className="mt-6 max-w-[46ch] text-[16px] leading-[1.6]">
               The fourth one matters most. Your faculty keep the skill long after this grant.
+              Program directors and training programs can use the same reviewer lens across a cohort,
+              without turning private coaching into a ranking.
             </p>
           </div>
           <ol className="m-0 grid list-none gap-3 p-0">

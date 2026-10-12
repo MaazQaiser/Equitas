@@ -122,7 +122,7 @@ sign-off**.
 |---|---|---|
 | Funding Discovery | Imagine | Find what has already been funded in your area, and who funded it. |
 | Regulatory Compliance | Design | Get IRB, human subjects and policy questions answered in plain language. |
-| Pre-Award Review | Compete | Read your draft the way a reviewer will, section by section, before you submit. |
+| Pre-Award Review | Compete | Read your draft section by section through a reviewer lens, before you submit. |
 | K Award Suite | Compete | Plan the career development sections that decide K awards, including the mentor plan and training goals. |
 | Trainee & GRA Tools | Compete | Everything an F31, F32 or T32 application needs, written for a first-time applicant. |
 | International Research | Compete | Apply to ERC, Wellcome and other non-US funders, with each one's conventions explained. |

@@ -30,7 +30,7 @@ const AUDIENCES = [
     id: "investigators",
     eyebrow: "Investigators",
     title: "Stress-test a draft through a reviewer lens.",
-    body: "A strong idea still scores badly if reviewers cannot find what they need. Summary statements rarely explain why, and by the time you read one it is too late.",
+    body: "Early-career investigators can build reviewer instinct while they build a career. Established PIs get a rigorous independent read before submission. A strong idea still scores badly if reviewers cannot find what they need.",
     tools: ["Study Section Simulator", "Resubmission Strategy", "Pre-Award Review", "International Research"],
     start: "Start at Review if you have a draft. Compete if you are still writing.",
     href: "/journey/review",
