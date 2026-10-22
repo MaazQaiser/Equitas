@@ -42,6 +42,7 @@ export function DemoForm() {
           name="name"
           type="text"
           autoComplete="name"
+          placeholder="e.g. Amara Okafor"
           value={name}
           onChange={(event) => setName(event.target.value)}
           aria-invalid={errors.name ? true : undefined}
@@ -63,6 +64,7 @@ export function DemoForm() {
           name="role"
           type="text"
           autoComplete="organization-title"
+          placeholder="e.g. Director of Research Development"
           value={role}
           onChange={(event) => setRole(event.target.value)}
           aria-invalid={errors.role ? true : undefined}
@@ -84,6 +86,7 @@ export function DemoForm() {
           name="institution"
           type="text"
           autoComplete="organization"
+          placeholder="e.g. University of Nairobi"
           value={institution}
           onChange={(event) => setInstitution(event.target.value)}
           aria-invalid={errors.institution ? true : undefined}
@@ -105,6 +108,7 @@ export function DemoForm() {
           name="email"
           type="email"
           autoComplete="email"
+          placeholder="you@university.edu"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           aria-invalid={errors.email ? true : undefined}

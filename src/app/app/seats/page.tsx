@@ -78,6 +78,7 @@ function SeatsConsole() {
                 id="seat-name"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
+                placeholder="Colleague's full name"
                 className={FIELD}
               />
             </p>
@@ -88,6 +89,7 @@ function SeatsConsole() {
               <input
                 id="seat-email"
                 type="email"
+                placeholder="colleague@university.edu"
                 value={email}
                 onChange={(event) => {
                   setEmail(event.target.value);

@@ -60,6 +60,7 @@ export function ComingCapture({
             name="email"
             type="email"
             autoComplete="email"
+            placeholder="you@university.edu"
             value={email}
             onChange={(event) => {
               setEmail(event.target.value);

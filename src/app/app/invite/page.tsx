@@ -65,7 +65,7 @@ function InviteForm() {
             <label htmlFor="invite-name" className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">
               Name
             </label>
-            <input id="invite-name" value={name} onChange={(event) => setName(event.target.value)} className={FIELD} />
+            <input id="invite-name" value={name} onChange={(event) => setName(event.target.value)} placeholder="Your full name" className={FIELD} />
           </p>
           <p>
             <label htmlFor="invite-email" className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">
@@ -74,6 +74,7 @@ function InviteForm() {
             <input
               id="invite-email"
               type="email"
+              placeholder="you@university.edu"
               value={email}
               onChange={(event) => {
                 setEmail(event.target.value);

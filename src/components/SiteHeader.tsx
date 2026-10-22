@@ -1,10 +1,37 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Logo } from "@/components/Logo";
 import { StatusBadge } from "@/components/StatusBadge";
 import { STAGES } from "@/lib/content";
+import { appUrl } from "@/lib/sites";
+
+function NavCta({
+  href,
+  className,
+  children,
+  onClick,
+}: {
+  href: string;
+  className: string;
+  children: ReactNode;
+  onClick?: () => void;
+}) {
+  const external = href.startsWith("http://") || href.startsWith("https://");
+  if (external) {
+    return (
+      <a href={href} className={className} onClick={onClick}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={className} onClick={onClick}>
+      {children}
+    </Link>
+  );
+}
 
 const OPEN_MS = 150;
 const CLOSE_MS = 250;
@@ -37,13 +64,14 @@ type MenuId = "journey" | "learn";
 
 export function SiteHeader({
   current,
-  ctaHref = "/onboarding",
+  ctaHref = appUrl("/sign-up"),
   ctaLabel = "Create an account",
 }: {
   current?: "institutions" | "researchers" | "learn" | "pricing";
   ctaHref?: string;
   ctaLabel?: string;
 }) {
+  const signInHref = appUrl("/sign-in");
   const onInstitutions = current === "institutions";
   const onResearchers = current === "researchers";
   const onLearn = current === "learn";
@@ -283,9 +311,9 @@ export function SiteHeader({
         </nav>
 
         <div className="ml-auto flex shrink-0 items-center gap-2.5 text-[14px] sm:gap-5">
-          <Link href="/signin" className="hidden no-underline hover:text-muted lg:inline">
+          <NavCta href={signInHref} className="hidden no-underline hover:text-muted lg:inline">
             Sign in
-          </Link>
+          </NavCta>
           {ctaHref.startsWith("#") ? (
             <a
               href={ctaHref}
@@ -294,19 +322,19 @@ export function SiteHeader({
               {ctaLabel}
             </a>
           ) : (
-            <Link
+            <NavCta
               href={ctaHref}
               className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-[8px] bg-band px-3 text-[14px] text-band-ink no-underline ring-1 ring-band-line hover:bg-band-2 sm:px-4 sm:text-[15px]"
             >
               {ctaLabel === "Create an account" ? (
                 <>
-                  <span className="min-[400px]:hidden">Account</span>
+                  <span className="min-[400px]:hidden">Sign up</span>
                   <span className="hidden min-[400px]:inline">{ctaLabel}</span>
                 </>
               ) : (
                 ctaLabel
               )}
-            </Link>
+            </NavCta>
           )}
           <button
             ref={mobileBtnRef}
@@ -411,13 +439,13 @@ export function SiteHeader({
                 </div>
               )}
             </div>
-            <Link
-              href="/signin"
+            <NavCta
+              href={signInHref}
               onClick={() => setMobileOpen(false)}
               className="flex min-h-[44px] items-center border-b border-line px-4 py-4 text-[16px] no-underline"
             >
               Sign in
-            </Link>
+            </NavCta>
           </nav>
           <div className="border-t border-line px-4 py-5">
             <label htmlFor="mobile-lang" className="mb-2 block text-[12px] font-bold uppercase tracking-[0.1em] text-muted">
