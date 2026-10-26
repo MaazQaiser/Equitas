@@ -7,7 +7,8 @@ function run(command, args) {
 }
 
 if (!existsSync("equitas-app/node_modules/vite")) {
-  run("npm", ["ci", "--prefix", "equitas-app"]);
+  // Vercel sets NODE_ENV=production; nested ci would omit devDependencies (vite, tsc).
+  run("npm", ["ci", "--prefix", "equitas-app", "--include=dev"]);
 }
 
 run("npm", ["run", "build", "--prefix", "equitas-app"]);
