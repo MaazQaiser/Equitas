@@ -1,11 +1,12 @@
 import type { ReactNode } from "react";
 import { Button } from "@/components/Button";
+import { appUrl } from "@/lib/sites";
 import { WRAP } from "@/lib/ui";
 
 export function CtaBand({
   title = "Start your research journey.",
   lede,
-  primary = { href: "/onboarding", label: "Create an account" },
+  primary = { href: appUrl("/sign-up"), label: "Create an account" },
   secondary = { href: "/how-it-works", label: "See a sample review" },
   note = "The Study Section Simulator sample is live. Other modules are labelled for what they are.",
 }: {

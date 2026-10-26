@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ModuleGate } from "../components/AccessGate";
-import { Button, Card, Field, Honesty, Page, inputClass } from "../components/ui";
+import { Button, Card, Field, FormPage, FormSection, Full, Honesty, Page, inputClass } from "../components/ui";
 
 export function InstitutionalPage() {
   return (
@@ -77,24 +77,25 @@ export function PilotPage() {
       </Page>
     );
   return (
-    <Page narrow title="Start an institutional pilot" lede="Tell us about your institution and we will be in touch to plan a pilot.">
-      <Card>
-        <form
-          className="space-y-5"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setSent(true);
-          }}
-        >
+    <Page title="Start an institutional pilot" lede="Tell us about your institution and we will be in touch to plan a pilot.">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setSent(true);
+        }}
+      >
+        <FormSection title="Your institution" description="We use this only to contact you about a pilot.">
           <Field label="Institution">
             <input required className={inputClass} autoComplete="organization" placeholder="e.g. University of Nairobi" />
           </Field>
           <Field label="Contact email">
             <input required className={inputClass} type="email" autoComplete="email" placeholder="you@university.edu" />
           </Field>
+        </FormSection>
+        <div className="flex justify-end border-t border-line py-4">
           <Button type="submit">Send</Button>
-        </form>
-      </Card>
+        </div>
+      </form>
     </Page>
   );
 }
@@ -118,19 +119,29 @@ export function T32PdNewPage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   return (
-    <Page narrow title="New T32 workspace" lede="One workspace per training grant. You can add trainees after.">
-      <form
-        className="max-w-md space-y-3"
-        onSubmit={(e: FormEvent) => {
-          e.preventDefault();
-          navigate("/dashboard/t32pd");
-        }}
-      >
-        <Field label="Program name">
-          <input required className={inputClass} placeholder="e.g. Cardiovascular Research Training Program" value={name} onChange={(e) => setName(e.target.value)} />
-        </Field>
-        <Button type="submit">Create workspace</Button>
-      </form>
-    </Page>
+    <FormPage
+      title="New T32 workspace"
+      lede="One workspace per training grant. You can add trainees after."
+      onSubmit={(e: FormEvent) => {
+        e.preventDefault();
+        navigate("/dashboard/t32pd");
+      }}
+      actions={
+        <>
+          <Button to="/dashboard/t32pd" variant="ghost">
+            Cancel
+          </Button>
+          <Button type="submit">Create workspace</Button>
+        </>
+      }
+    >
+      <FormSection title="Training program" description="The name your trainees and grants office use for it.">
+        <Full>
+          <Field label="Program name">
+            <input required className={inputClass} placeholder="e.g. Cardiovascular Research Training Program" value={name} onChange={(e) => setName(e.target.value)} />
+          </Field>
+        </Full>
+      </FormSection>
+    </FormPage>
   );
 }

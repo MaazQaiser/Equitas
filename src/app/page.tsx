@@ -1,4 +1,5 @@
-import Link from "next/link";
+import Link from "@/components/SiteLink";
+import { appUrl } from "@/lib/sites";
 import type { CSSProperties } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -104,7 +105,7 @@ export default function Home() {
                 <Button href="/how-it-works" variant="primary" className="font-outfit">
                   See a sample review
                 </Button>
-                <Button href="/onboarding" variant="ghost" className="font-outfit">
+                <Button href={appUrl("/sign-up")} variant="ghost" className="font-outfit">
                   Create an account
                 </Button>
               </div>
@@ -365,7 +366,7 @@ export default function Home() {
             Start your research journey.
           </h2>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Button href="/onboarding" variant="primary">
+            <Button href={appUrl("/sign-up")} variant="primary">
               Create an account
             </Button>
             <Button href="/how-it-works" variant="ghost">

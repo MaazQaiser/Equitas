@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 
 export function Logo({ dark = false, href = "/" }: { dark?: boolean; href?: string }) {
   return (

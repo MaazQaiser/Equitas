@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const APP = (process.env.NEXT_PUBLIC_APP_ORIGIN || "http://localhost:5173").replace(/\/$/, "");
+const PRODUCT = "/product";
 
 const MODULE_ROUTES: Record<string, string> = {
   "funding-discovery": "/dashboard/discovery",
@@ -20,7 +20,7 @@ const MODULE_ROUTES: Record<string, string> = {
 const moduleRedirects = Object.entries(MODULE_ROUTES).map(([slug, dest]) => ({
   source: "/app/tool",
   has: [{ type: "query" as const, key: "module", value: slug }],
-  destination: `${APP}${dest}`,
+  destination: `${PRODUCT}${dest}`,
   permanent: false,
 }));
 
@@ -54,16 +54,33 @@ const nextConfig: NextConfig = {
       { source: "/pricing/paywall", destination: "/pricing/upgrade", permanent: false },
       { source: "/legal", destination: "/legal/privacy", permanent: false },
 
-      // One product, two surfaces: marketing auth entry → product app
-      { source: "/signin", destination: `${APP}/sign-in`, permanent: false },
-      { source: "/signin/:path*", destination: `${APP}/sign-in`, permanent: false },
-      { source: "/signup", destination: `${APP}/sign-up`, permanent: false },
-      { source: "/onboarding", destination: `${APP}/sign-up`, permanent: false },
-      { source: "/onboarding/:path*", destination: `${APP}/sign-up`, permanent: false },
+      // Legacy entry paths stay on this host and open the product app.
+      { source: "/signin", destination: `${PRODUCT}/sign-in`, permanent: false },
+      { source: "/signin/:path*", destination: `${PRODUCT}/sign-in`, permanent: false },
+      { source: "/signup", destination: `${PRODUCT}/sign-up`, permanent: false },
+      { source: "/onboarding", destination: `${PRODUCT}/sign-up`, permanent: false },
+      { source: "/onboarding/:path*", destination: `${PRODUCT}/sign-up`, permanent: false },
       ...moduleRedirects,
-      { source: "/app/tool", destination: `${APP}/tools`, permanent: false },
-      { source: "/app", destination: `${APP}/dashboard`, permanent: false },
-      { source: "/app/:path*", destination: `${APP}/dashboard`, permanent: false },
+      { source: "/app/tool", destination: `${PRODUCT}/tools`, permanent: false },
+      { source: "/app", destination: `${PRODUCT}/dashboard`, permanent: false },
+      { source: "/app/:path*", destination: `${PRODUCT}/dashboard`, permanent: false },
+    ];
+  },
+  async rewrites() {
+    // In dev, Next proxies /product to the Vite server so sign-in stays on this origin.
+    // In production, the Vite build is static files under public/product.
+    if (process.env.NODE_ENV === "development") {
+      const vite = (process.env.EQUITAS_APP_DEV_ORIGIN || "http://127.0.0.1:5173").replace(/\/$/, "");
+      return {
+        beforeFiles: [
+          { source: "/product", destination: `${vite}/product/` },
+          { source: "/product/:path*", destination: `${vite}/product/:path*` },
+        ],
+      };
+    }
+    return [
+      { source: "/product", destination: "/product/index.html" },
+      { source: "/product/:path*", destination: "/product/index.html" },
     ];
   },
 };

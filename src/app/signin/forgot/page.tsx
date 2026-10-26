@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { AuthAside, AuthLayout } from "@/components/AuthLayout";
 
 export default function ForgotPasswordPage() {

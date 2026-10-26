@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { Logo } from "@/components/Logo";
 import { audienceKey } from "@/lib/content";
 import { FUNDERS } from "@/lib/onboarding";

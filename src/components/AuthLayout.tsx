@@ -1,5 +1,5 @@
 import { Logo } from "@/components/Logo";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import type { ReactNode } from "react";
 
 export function AuthLayout({

@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# Product app build, emitted by `npm run build` into the site
+/public/product/
+
 # production
 /build
 

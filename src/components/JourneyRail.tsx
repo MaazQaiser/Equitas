@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { useEffect, useRef, useState } from "react";
 import { STAGES, type StageStatus } from "@/lib/content";
 

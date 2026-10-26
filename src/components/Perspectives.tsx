@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { StatusBadge } from "@/components/StatusBadge";
 import { SectionHead } from "@/components/PageHero";
 import { PERSPECTIVES } from "@/lib/content";

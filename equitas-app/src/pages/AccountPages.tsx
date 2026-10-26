@@ -12,7 +12,7 @@ import {
   useSession,
   type RoleId,
 } from "../lib/session";
-import { Badge, Button, Card, Field, Honesty, Page, formatDate, inputClass } from "../components/ui";
+import { Badge, Button, Card, Field, FormPage, FormSection, Full, Honesty, Page, formatDate, inputClass } from "../components/ui";
 import { EquityAccessCard } from "./PublicPages";
 import { marketingUrl } from "../lib/sites";
 
@@ -33,7 +33,11 @@ export function PlansPage() {
 
   if (user.invitedInstitutional) {
     return (
-      <Page narrow title="Your institution covers your access" lede="You were invited by your institution, so there is nothing to buy or manage here.">
+      <Page
+        narrow
+        title="Your institution covers your access"
+        lede="You were invited by your institution, so there is nothing to buy or manage here."
+      >
         <Button to="/dashboard">Go to my dashboard</Button>
       </Page>
     );
@@ -190,7 +194,9 @@ export function MyProfilePage() {
             <p id="cancel-title" className="text-[15px] font-medium">
               Cancel your {plan.name} plan?
             </p>
-            <p className="mt-1 text-[14px] text-muted">You will move to the Free plan. Your workspaces stay saved, but some tools will lock.</p>
+            <p className="mt-1 text-[14px] text-muted">
+              You will move to the Free plan. Your workspaces stay saved, but some tools will lock.
+            </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <Button
                 variant="danger"
@@ -232,15 +238,14 @@ export function SettingsPage() {
   };
 
   return (
-    <Page narrow title="Settings" lede="Changes save as you make them.">
+    <FormPage title="Settings" lede="Changes save as you make them.">
       <p aria-live="polite" className="sr-only">
         {saved ? "Saved" : ""}
       </p>
-      <div className="space-y-4">
-        <Card>
-          <h2 className="text-[20px]">Your tools</h2>
-          <div className="mt-4">
-            <Field label="I am mainly a" hint="This decides which tools appear first on your home page.">
+      <div>
+        <FormSection title="Your tools" description="This decides which tools appear first on your home page.">
+          <Full>
+            <Field label="I am mainly a">
               <select
                 className={inputClass}
                 value={user.role}
@@ -257,72 +262,75 @@ export function SettingsPage() {
                 ))}
               </select>
             </Field>
-          </div>
-        </Card>
-        <Card>
-          <h2 className="text-[20px]">Display</h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <Field label="Theme">
-              <select
-                className={inputClass}
-                value={theme}
-                onChange={(e) => {
-                  setTheme(e.target.value as "light" | "dark");
-                  flash();
-                }}
-              >
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-              </select>
-            </Field>
-            <Field label="Language" hint="Only English text is ready. Arabic switches the layout to right-to-left.">
-              <select
-                className={inputClass}
-                value={language}
-                onChange={(e) => {
-                  setLanguage(e.target.value);
-                  flash();
-                }}
-              >
-                {LANGS.map((l) => (
-                  <option key={l}>{l}</option>
-                ))}
-              </select>
-            </Field>
-          </div>
-        </Card>
-        <Card>
-          <h2 className="text-[20px]">Email notifications</h2>
-          <fieldset className="mt-3 space-y-1">
-            <legend className="sr-only">Email notifications</legend>
-            {(
-              [
-                ["deadlines", "Deadline reminders"],
-                ["tips", "Writing tips"],
-                ["product", "Product updates"],
-              ] as const
-            ).map(([k, label]) => (
-              <label key={k} className="flex min-h-11 cursor-pointer items-center gap-3 text-[15px]">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 accent-[#B39952]"
-                  checked={user.notifications[k]}
-                  onChange={(e) => {
-                    updateUser({ notifications: { ...user.notifications, [k]: e.target.checked } });
-                    flash();
-                  }}
-                />
-                {label}
-              </label>
-            ))}
-          </fieldset>
-        </Card>
+          </Full>
+        </FormSection>
+        <FormSection title="Display" description="Theme and language for this browser.">
+          <Field label="Theme">
+            <select
+              className={inputClass}
+              value={theme}
+              onChange={(e) => {
+                setTheme(e.target.value as "light" | "dark");
+                flash();
+              }}
+            >
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </Field>
+          <Field label="Language" hint="Only English text is ready. Arabic switches the layout to right-to-left.">
+            <select
+              className={inputClass}
+              value={language}
+              onChange={(e) => {
+                setLanguage(e.target.value);
+                flash();
+              }}
+            >
+              {LANGS.map((l) => (
+                <option key={l}>{l}</option>
+              ))}
+            </select>
+          </Field>
+        </FormSection>
+        <FormSection title="Email notifications" description="What we may email you about.">
+          <Full>
+            <fieldset className="space-y-1">
+              <legend className="sr-only">Email notifications</legend>
+              {(
+                [
+                  ["deadlines", "Deadline reminders"],
+                  ["tips", "Writing tips"],
+                  ["product", "Product updates"],
+                ] as const
+              ).map(([k, label]) => (
+                <label key={k} className="flex min-h-11 cursor-pointer items-center gap-3 text-[15px]">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 accent-[#B39952]"
+                    checked={user.notifications[k]}
+                    onChange={(e) => {
+                      updateUser({
+                        notifications: {
+                          ...user.notifications,
+                          [k]: e.target.checked,
+                        },
+                      });
+                      flash();
+                    }}
+                  />
+                  {label}
+                </label>
+              ))}
+            </fieldset>
+          </Full>
+        </FormSection>
       </div>
       {saved ? (
         <p className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-full bg-band px-4 py-2 text-[14px] text-band-ink shadow-card">
           Saved
         </p>
       ) : null}
-    </Page>
+    </FormPage>
   );
 }

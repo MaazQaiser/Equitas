@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { MODULE_META } from "../lib/plans";
 import { GSN_STAGES, createExpiredShare, createShare, createWorkspace, setGsnStage, useSession } from "../lib/session";
 import { ModuleGate } from "../components/AccessGate";
-import { Badge, Button, Card, Field, Page, formatDate, inputClass } from "../components/ui";
+import { productAbsolute } from "../lib/sites";
+import { Badge, Button, Card, Field, FormPage, FormSection, Full, Page, formatDate, inputClass } from "../components/ui";
 
 const STAGE_TOOLS: Record<number, (keyof typeof MODULE_META)[]> = {
   0: ["funding_discovery"],
@@ -72,100 +73,130 @@ function GsnNewInner() {
   }
 
   if (summary) {
-    const rows: [string, string][] = [
-      ["Name", title],
-      ["Funder", funder],
-      ["Institute or center", ic || "Not set"],
-      ["Mechanism", mechanism],
-      ["Application type", revision === "A1" ? "Resubmission (A1)" : "New application (A0)"],
-      ["Deadline", deadline ? formatDate(deadline) : "Not set. We will use 90 days from today."],
-      ["Funding opportunity", foa || "Not set"],
-      ["Program Officer meeting", poMeeting ? "Planned" : "Not planned"],
+    const groups: [string, [string, string][]][] = [
+      [
+        "The grant",
+        [
+          ["Name", title],
+          ["Application type", revision === "A1" ? "Resubmission (A1)" : "New application (A0)"],
+        ],
+      ],
+      [
+        "Funder",
+        [
+          ["Funder", funder],
+          ["Mechanism", mechanism],
+          ["Institute or center", ic || "Not set"],
+          ["Funding opportunity", foa || "Not set"],
+        ],
+      ],
+      [
+        "Timing",
+        [
+          ["Deadline", deadline ? formatDate(deadline) : "Not set. We will use 90 days from today."],
+          ["Program Officer meeting", poMeeting ? "Planned" : "Not planned"],
+        ],
+      ],
     ];
     return (
-      <Page narrow eyebrow="New grant workspace" title="Check the details" lede="You can edit these later from the Navigator.">
-        <Card>
-          <dl className="divide-y divide-line text-[15px]">
-            {rows.map(([k, v]) => (
-              <div key={k} className="grid gap-1 py-3 sm:grid-cols-[180px_1fr]">
-                <dt className="text-muted">{k}</dt>
-                <dd className="m-0">{v}</dd>
-              </div>
-            ))}
-          </dl>
-          <div className="mt-6 flex flex-wrap gap-2">
-            <Button onClick={create}>Create workspace</Button>
+      <FormPage
+        eyebrow="New grant workspace"
+        title="Check the details"
+        lede="You can edit these later from the Navigator."
+        actions={
+          <>
             <Button variant="ghost" onClick={() => setSummary(false)}>
               Edit details
             </Button>
-          </div>
-        </Card>
-      </Page>
+            <Button onClick={create}>Create workspace</Button>
+          </>
+        }
+      >
+        {groups.map(([section, rows]) => (
+          <FormSection key={section} title={section}>
+            {rows.map(([k, v]) => (
+              <div key={k}>
+                <p className="text-[13px] text-muted">{k}</p>
+                <p className="mt-1 text-[16px]">{v}</p>
+              </div>
+            ))}
+          </FormSection>
+        ))}
+      </FormPage>
     );
   }
 
   return (
-    <Page narrow eyebrow="New grant workspace" title="Tell us about this grant" lede="One workspace holds one application. Only the name is required to start.">
-      <Card>
-        <form onSubmit={onSubmit} noValidate className="space-y-5">
-          <Field label="Grant name" hint="Something short you will recognise." error={errors.title}>
-            <input className={inputClass} placeholder="e.g. R01 hospital readmission trial" value={title} onChange={(e) => setTitle(e.target.value)} />
+    <FormPage
+      eyebrow="New grant workspace"
+      title="Tell us about this grant"
+      lede="One workspace holds one application. Only the name is required to start."
+      onSubmit={onSubmit}
+      actions={
+        <>
+          <Button to="/dashboard" variant="ghost">
+            Cancel
+          </Button>
+          <Button type="submit">Continue</Button>
+        </>
+      }
+    >
+      <FormSection title="The grant" description="A name you will recognise, and whether this is a first try or a resubmission.">
+        <Field label="Grant name" hint="Something short you will recognise." error={errors.title}>
+          <input className={inputClass} placeholder="e.g. R01 hospital readmission trial" value={title} onChange={(e) => setTitle(e.target.value)} />
+        </Field>
+        <Field label="Application type">
+          <select className={inputClass} value={revision} onChange={(e) => setRevision(e.target.value as "A0" | "A1")}>
+            <option value="A0">New application (A0)</option>
+            <option value="A1">Resubmission (A1)</option>
+          </select>
+        </Field>
+      </FormSection>
+
+      <FormSection title="Funder" description="Who you are applying to. This decides which stages and tools we suggest.">
+        <Field label="Funder">
+          <select className={inputClass} value={funder} onChange={(e) => setFunder(e.target.value)}>
+            <option>NIH</option>
+            <option>CIHR</option>
+            <option>Wellcome</option>
+            <option>ERC</option>
+          </select>
+        </Field>
+        <Field label="Mechanism">
+          <select className={inputClass} value={mechanism} onChange={(e) => setMechanism(e.target.value)}>
+            <option>R01</option>
+            <option>R21</option>
+            <option>K08</option>
+            <option>F31</option>
+            <option>T32</option>
+          </select>
+        </Field>
+        <div>
+          <Field label="Institute or center" optional hint={funder === "NIH" ? "The NIH institute you expect to fund this, like NHLBI." : undefined}>
+            <input className={inputClass} placeholder={funder === "NIH" ? "e.g. NHLBI" : "Not needed for this funder"} value={ic} onChange={(e) => setIc(e.target.value)} />
           </Field>
-          <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Funder">
-              <select className={inputClass} value={funder} onChange={(e) => setFunder(e.target.value)}>
-                <option>NIH</option>
-                <option>CIHR</option>
-                <option>Wellcome</option>
-                <option>ERC</option>
-              </select>
-            </Field>
-            <Field label="Mechanism">
-              <select className={inputClass} value={mechanism} onChange={(e) => setMechanism(e.target.value)}>
-                <option>R01</option>
-                <option>R21</option>
-                <option>K08</option>
-                <option>F31</option>
-                <option>T32</option>
-              </select>
-            </Field>
-          </div>
-          <div>
-            <Field label="Institute or center" optional hint={funder === "NIH" ? "The NIH institute you expect to fund this, like NHLBI." : undefined}>
-              <input className={inputClass} placeholder={funder === "NIH" ? "e.g. NHLBI" : "Not needed for this funder"} value={ic} onChange={(e) => setIc(e.target.value)} />
-            </Field>
-            {funder === "NIH" ? (
-              <button type="button" className="mt-2 min-h-9 text-[14px] text-gold-text underline underline-offset-2" onClick={() => setIc("NHLBI")}>
-                Suggest an institute
-              </button>
-            ) : null}
-          </div>
-          <Field label="Application type">
-            <select className={inputClass} value={revision} onChange={(e) => setRevision(e.target.value as "A0" | "A1")}>
-              <option value="A0">New application (A0)</option>
-              <option value="A1">Resubmission (A1)</option>
-            </select>
-          </Field>
-          <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Deadline" optional error={errors.deadline}>
-              <input type="date" className={inputClass} value={deadline} onChange={(e) => setDeadline(e.target.value)} />
-            </Field>
-            <Field label="Funding opportunity number" optional>
-              <input className={inputClass} placeholder="e.g. PAR-25-123" value={foa} onChange={(e) => setFoa(e.target.value)} />
-            </Field>
-          </div>
+          {funder === "NIH" ? (
+            <button type="button" className="mt-2 min-h-9 text-[14px] text-gold-text underline underline-offset-2" onClick={() => setIc("NHLBI")}>
+              Suggest an institute
+            </button>
+          ) : null}
+        </div>
+        <Field label="Funding opportunity number" optional>
+          <input className={inputClass} placeholder="e.g. PAR-25-123" value={foa} onChange={(e) => setFoa(e.target.value)} />
+        </Field>
+      </FormSection>
+
+      <FormSection title="Timing" description="If you leave the deadline empty, we plan for 90 days from today.">
+        <Field label="Deadline" optional error={errors.deadline}>
+          <input type="date" className={inputClass} value={deadline} onChange={(e) => setDeadline(e.target.value)} />
+        </Field>
+        <Full>
           <label className="flex min-h-11 cursor-pointer items-center gap-3 text-[15px]">
             <input type="checkbox" className="h-4 w-4 accent-[#B39952]" checked={poMeeting} onChange={(e) => setPoMeeting(e.target.checked)} />I plan to meet the Program Officer first
           </label>
-          <div className="flex flex-wrap gap-2 pt-2">
-            <Button type="submit">Continue</Button>
-            <Button to="/dashboard" variant="ghost">
-              Cancel
-            </Button>
-          </div>
-        </form>
-      </Card>
-    </Page>
+        </Full>
+      </FormSection>
+    </FormPage>
   );
 }
 
@@ -197,7 +228,7 @@ function GsnInner() {
 
   function makeLink(expired = false) {
     const s = expired ? createExpiredShare(ws.id) : createShare(ws.id, ws.title);
-    setShareUrl(`${window.location.origin}/review/${s.token}`);
+    setShareUrl(productAbsolute(`/review/${s.token}`));
     setCopied(false);
   }
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AnalysisTool } from "../components/AnalysisTool";
 import { ModuleGate } from "../components/AccessGate";
-import { Badge, Button, Card, Field, Honesty, Page, inputClass } from "../components/ui";
+import { Badge, Button, Card, Field, FormPage, FormSection, Full, Honesty, Page, inputClass } from "../components/ui";
 
 const SAMPLE_FUNDED = [
   { title: "Community hypertension pragmatic trial", funder: "NHLBI", mech: "R01", year: "FY2024" },
@@ -98,31 +98,38 @@ export function SummaryStatementPage() {
   const [file, setFile] = useState("");
   return (
     <ModuleGate module="resubmission">
-      <Page narrow title="Upload a summary statement" lede="Your summary statement is the starting point for a resubmission plan. Remove names before you upload.">
-        <Card>
-          <label htmlFor="summary-file" className="block text-[14px] font-medium">
-            Summary statement (PDF or text)
-          </label>
-          <input
-            id="summary-file"
-            type="file"
-            accept=".pdf,.txt"
-            onChange={(e) => setFile(e.target.files?.[0]?.name ?? "")}
-            className="mt-2 block w-full text-[14px] file:mr-3 file:min-h-10 file:rounded-[8px] file:border-0 file:bg-band file:px-4 file:text-band-ink"
-          />
-          {file ? (
-            <p role="status" className="mt-3 text-[14px] text-muted">
-              {file} is ready. It stays in your browser and is not uploaded anywhere.
-            </p>
-          ) : null}
-          <div className="mt-5 flex flex-wrap gap-2">
-            <Button to="/dashboard/resubmission">Continue to resubmission plan</Button>
+      <FormPage
+        title="Upload a summary statement"
+        lede="Your summary statement is the starting point for a resubmission plan. Remove names before you upload."
+        actions={
+          <>
             <Button to="/dashboard/de-identification" variant="ghost">
               Remove names first
             </Button>
-          </div>
-        </Card>
-      </Page>
+            <Button to="/dashboard/resubmission">Continue to resubmission plan</Button>
+          </>
+        }
+      >
+        <FormSection title="Your file" description="PDF or plain text. It stays in your browser and is not uploaded anywhere.">
+          <Full>
+            <label htmlFor="summary-file" className="block text-[14px] font-medium">
+              Summary statement (PDF or text)
+            </label>
+            <input
+              id="summary-file"
+              type="file"
+              accept=".pdf,.txt"
+              onChange={(e) => setFile(e.target.files?.[0]?.name ?? "")}
+              className="mt-2 block w-full rounded-[12px] border border-dashed border-line-2 bg-surface p-6 text-[14px] file:mr-3 file:min-h-10 file:rounded-[8px] file:border-0 file:bg-band file:px-4 file:text-band-ink"
+            />
+            {file ? (
+              <p role="status" className="mt-3 text-[14px] text-muted">
+                {file} is ready.
+              </p>
+            ) : null}
+          </Full>
+        </FormSection>
+      </FormPage>
     </ModuleGate>
   );
 }

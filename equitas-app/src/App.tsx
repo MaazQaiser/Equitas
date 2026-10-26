@@ -72,9 +72,11 @@ function AutoShell() {
   return user ? <AppShell /> : <PublicShell />;
 }
 
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, "") || undefined;
+
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={routerBasename}>
       <Routes>
         <Route element={<PublicShell />}>
           <Route path="/sign-in" element={<SignInPage />} />

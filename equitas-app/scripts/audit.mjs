@@ -7,7 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const MKT = process.env.MKT || "http://localhost:3003";
-const APP = process.env.APP || "http://localhost:5173";
+const APP = process.env.APP || "http://localhost:5173/product";
 const OUT = path.resolve(process.cwd(), "../.tmp/audit");
 fs.mkdirSync(OUT, { recursive: true });
 

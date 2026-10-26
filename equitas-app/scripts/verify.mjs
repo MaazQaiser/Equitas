@@ -4,7 +4,7 @@
  */
 import { createRequire } from "node:module";
 
-const BASE = process.env.EQUITAS_APP_URL || "http://localhost:5173";
+const BASE = process.env.EQUITAS_APP_URL || "http://localhost:5173/product";
 const results = [];
 
 function pass(id, note = "") {
@@ -74,7 +74,7 @@ async function main() {
     await page.waitForURL(/\/onboard\/plan/);
     await page.getByRole("button", { name: "Start trial" }).click();
     await page.waitForURL(/\/onboard\/preferences/);
-    await page.getByRole("button", { name: "Go to my dashboard" }).click();
+    await page.getByRole("button", { name: "Continue" }).click();
     await page.waitForURL(/\/dashboard$/);
   }
 

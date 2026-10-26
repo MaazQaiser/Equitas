@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ModuleGate } from "../components/AccessGate";
-import { Button, Card, Field, Honesty, Page, inputClass } from "../components/ui";
+import { Button, Card, Field, FormPage, FormSection, Full, Honesty, Page, inputClass } from "../components/ui";
 
 export function MentorHubPage() {
   return (
@@ -35,21 +35,31 @@ export function MentorSessionPage() {
   const navigate = useNavigate();
   return (
     <ModuleGate module="mentor_hub">
-      <Page narrow title="Mentor session" lede="Write down what you discussed and what you will do next. Mentor matching is not live yet, so no one is contacted.">
-        <Card>
-          <Field label="Session notes">
-            <textarea
-              className={`${inputClass} min-h-[160px]`}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="What did you discuss? What will you do before the next session?"
-            />
-          </Field>
-          <div className="mt-4">
+      <FormPage
+        title="Mentor session"
+        lede="Write down what you discussed and what you will do next. Mentor matching is not live yet, so no one is contacted."
+        actions={
+          <>
+            <Button to="/dashboard/mentor" variant="ghost">
+              Back to Mentor Hub
+            </Button>
             <Button onClick={() => navigate("/dashboard/mentor-quality")}>End session and rate it</Button>
-          </div>
-        </Card>
-      </Page>
+          </>
+        }
+      >
+        <FormSection title="Notes" description="Only you can see these. Short bullet points are fine.">
+          <Full>
+            <Field label="Session notes">
+              <textarea
+                className={`${inputClass} min-h-[280px]`}
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="What did you discuss? What will you do before the next session?"
+              />
+            </Field>
+          </Full>
+        </FormSection>
+      </FormPage>
     </ModuleGate>
   );
 }

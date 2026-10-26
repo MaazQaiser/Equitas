@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/Button";
 import { ExampleTag } from "@/components/PageHero";

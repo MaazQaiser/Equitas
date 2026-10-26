@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { ComingCapture } from "@/components/ComingCapture";
 import { Button } from "@/components/Button";
 import { SectionHead } from "@/components/PageHero";

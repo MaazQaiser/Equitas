@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { cloneElement, isValidElement, useId, type ReactElement, type ReactNode } from "react";
+import { cloneElement, isValidElement, useId, type FormEvent, type ReactElement, type ReactNode } from "react";
 import type { Confidence } from "../lib/session";
 import { marketingUrl } from "../lib/sites";
 
@@ -130,6 +130,75 @@ export function Honesty({ children }: { children: ReactNode }) {
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-gold-text">{children}</p>;
+}
+
+/** Full-width form layout. Actions stay pinned to the bottom unless the viewport is short or zoomed. */
+export function FormPage({
+  eyebrow,
+  title,
+  lede,
+  onSubmit,
+  actions,
+  children,
+}: {
+  eyebrow?: string;
+  title: string;
+  lede?: ReactNode;
+  onSubmit?: (e: FormEvent) => void;
+  actions?: ReactNode;
+  children: ReactNode;
+}) {
+  const body = (
+    <>
+      <div className="pb-4">{children}</div>
+      {actions ? (
+        <div className="-mx-4 border-t border-line bg-bg px-4 py-4 md:-mx-8 md:px-8 [@media(min-height:560px)]:sticky [@media(min-height:560px)]:bottom-0 [@media(min-height:560px)]:z-30">
+          <div className="flex flex-wrap items-center justify-end gap-3">{actions}</div>
+        </div>
+      ) : null}
+    </>
+  );
+  return (
+    <div className="mx-auto w-full max-w-[1180px] px-4 pt-8 md:px-8 md:pt-12">
+      <div className="mb-4">
+        {eyebrow ? <div className="mb-3">{<Eyebrow>{eyebrow}</Eyebrow>}</div> : null}
+        <h1 className="max-w-[22ch] text-[clamp(30px,4.4vw,46px)]">{title}</h1>
+        {lede ? <p className="mt-3 max-w-[62ch] text-[16px] leading-[1.55] text-muted">{lede}</p> : null}
+      </div>
+      {onSubmit ? (
+        <form noValidate onSubmit={onSubmit}>
+          {body}
+        </form>
+      ) : (
+        body
+      )}
+    </div>
+  );
+}
+
+export function FormSection({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <section className="grid gap-4 border-t border-line py-8 md:grid-cols-[minmax(200px,320px)_1fr] md:gap-10">
+      <div>
+        <h2 className="text-[20px]">{title}</h2>
+        {description ? <p className="mt-1.5 text-[14px] leading-[1.55] text-muted">{description}</p> : null}
+      </div>
+      <div className="grid content-start gap-5 sm:grid-cols-2">{children}</div>
+    </section>
+  );
+}
+
+/** Spans both columns of a FormSection grid. */
+export function Full({ children }: { children: ReactNode }) {
+  return <div className="sm:col-span-2">{children}</div>;
 }
 
 export function Page({

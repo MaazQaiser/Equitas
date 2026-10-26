@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/Button";
 import { RequireSignIn } from "@/components/RequireSignIn";

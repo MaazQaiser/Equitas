@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { useRouter } from "next/navigation";
 import { AuthAside, AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/Button";

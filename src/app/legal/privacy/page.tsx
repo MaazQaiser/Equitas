@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { LegalBlock, LegalLayout } from "@/components/LegalLayout";
 
 export const metadata: Metadata = {

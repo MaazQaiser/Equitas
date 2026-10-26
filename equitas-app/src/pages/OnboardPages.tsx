@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import type { PlanId } from "../lib/plans";
 import { completeOnboarding, requestEquity, updateUser, useSession, type RoleId } from "../lib/session";
-import { Button, Card, Page } from "../components/ui";
+import { Button, Card } from "../components/ui";
 import { clearNext, peekNext, takeNext } from "./PublicPages";
 
 const ROLES: { id: RoleId; title: string; blurb: string }[] = [
@@ -18,7 +18,7 @@ const ROLES: { id: RoleId; title: string; blurb: string }[] = [
 function Steps({ current }: { current: 1 | 2 | 3 }) {
   const labels = ["About you", "Your plan", "Notifications"];
   return (
-    <nav aria-label="Setup progress" className="mb-6">
+    <nav aria-label="Setup progress" className="mt-4">
       <p className="text-[13px] text-muted">
         Step {current} of 3
       </p>
@@ -34,6 +34,40 @@ function Steps({ current }: { current: 1 | 2 | 3 }) {
         ))}
       </ol>
     </nav>
+  );
+}
+
+/** Title and progress stay pinned under the app header; the action bar stays pinned to the bottom. Pinning is skipped on short or heavily zoomed viewports so content is never squeezed out. */
+function OnboardFrame({
+  step,
+  title,
+  lede,
+  wide,
+  footer,
+  children,
+}: {
+  step: 1 | 2 | 3;
+  title: string;
+  lede: string;
+  wide?: boolean;
+  footer: ReactNode;
+  children: ReactNode;
+}) {
+  const pin = "[@media(min-height:560px)]:sticky";
+  return (
+    <div className={`mx-auto w-full ${wide ? "max-w-[1180px]" : "max-w-[560px]"} px-4 md:px-8`}>
+      <div className={`${pin} top-[69px] z-30 -mx-4 border-b border-line bg-bg px-4 pb-4 pt-6 md:-mx-8 md:px-8 md:pt-10`}>
+        <div className={wide ? "max-w-[560px]" : undefined}>
+          <h1 className="text-[clamp(26px,4vw,40px)]">{title}</h1>
+          <Steps current={step} />
+        </div>
+      </div>
+      <p className="mt-6 max-w-[62ch] text-[16px] leading-[1.55] text-muted">{lede}</p>
+      <div className="mt-6 pb-8">{children}</div>
+      <div className={`${pin} bottom-0 z-30 -mx-4 border-t border-line bg-bg px-4 py-4 md:-mx-8 md:px-8`}>
+        <div className="flex flex-wrap-reverse items-center justify-between gap-3">{footer}</div>
+      </div>
+    </div>
   );
 }
 
@@ -59,8 +93,24 @@ export function OnboardRolePage() {
   if (user.isFounder) return <Navigate to="/dashboard/ceo" replace />;
 
   return (
-    <Page narrow title="What brings you to EQUITAS?" lede="Pick the one closest to you. It decides which tools we show first. You can change it later.">
-      <Steps current={1} />
+    <OnboardFrame
+      step={1}
+      title="What brings you to EQUITAS?"
+      lede="Pick the one closest to you. It decides which tools we show first. You can change it later."
+      footer={
+        <>
+          <span />
+          <Button
+            onClick={() => {
+              sessionStorage.setItem("equitas-onboard-role", role);
+              navigate("/onboard/plan");
+            }}
+          >
+            Continue
+          </Button>
+        </>
+      }
+    >
       <fieldset>
         <legend className="sr-only">Your role</legend>
         <div className="grid gap-3">
@@ -90,23 +140,38 @@ export function OnboardRolePage() {
           })}
         </div>
       </fieldset>
-      <div className="mt-8">
-        <Button
-          onClick={() => {
-            sessionStorage.setItem("equitas-onboard-role", role);
-            navigate("/onboard/plan");
-          }}
-        >
-          Continue
-        </Button>
-      </div>
-    </Page>
+    </OnboardFrame>
   );
 }
+
+type StartChoice = "trial" | "subscribe" | "equity";
+
+const START_OPTIONS: { id: StartChoice; title: string; body: string; action: string; recommended?: boolean }[] = [
+  {
+    id: "trial",
+    title: "Free trial",
+    body: "14 days with every tool and reviewer perspective. No card needed.",
+    action: "Start trial",
+    recommended: true,
+  },
+  {
+    id: "subscribe",
+    title: "Subscribe now",
+    body: "Start on the Investigator plan at $199 a month. Checkout is a demo here.",
+    action: "Subscribe",
+  },
+  {
+    id: "equity",
+    title: "Equity Access",
+    body: "For lower-resource settings. We review each request by hand. Your trial starts while you wait.",
+    action: "Request Equity Access",
+  },
+];
 
 export function OnboardPlanPage() {
   const navigate = useNavigate();
   const { user } = useSession();
+  const [choice, setChoice] = useState<StartChoice>("trial");
   if (!user) return <Navigate to="/sign-in" replace />;
 
   function finish(plan: PlanId, trial: boolean) {
@@ -115,46 +180,64 @@ export function OnboardPlanPage() {
     navigate("/onboard/preferences");
   }
 
+  function go() {
+    if (choice === "subscribe") return finish("investigator", false);
+    if (choice === "equity") requestEquity(user!.email, "Not given");
+    finish("free", true);
+  }
+
+  const selected = START_OPTIONS.find((o) => o.id === choice)!;
+
   return (
-    <Page title="How would you like to start?" lede="Most people start with the free trial. You will not be charged when it ends unless you choose a plan.">
-      <div className="max-w-[560px]">
-        <Steps current={2} />
-      </div>
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card className="ring-2 ring-gold">
-          <p className="text-[12px] font-bold uppercase tracking-[0.12em] text-gold-text">Recommended</p>
-          <h2 className="mt-2 text-[24px]">Free trial</h2>
-          <p className="mt-2 text-[15px] text-muted">14 days with every tool and reviewer perspective. No card needed.</p>
-          <div className="mt-5">
-            <Button onClick={() => finish("free", true)}>Start trial</Button>
-          </div>
-        </Card>
-        <Card>
-          <h2 className="text-[24px]">Subscribe now</h2>
-          <p className="mt-2 text-[15px] text-muted">Start on the Investigator plan at $199 a month. Checkout is a demo here.</p>
-          <div className="mt-5">
-            <Button variant="ghost" onClick={() => finish("investigator", false)}>
-              Subscribe
-            </Button>
-          </div>
-        </Card>
-        <Card>
-          <h2 className="text-[24px]">Equity Access</h2>
-          <p className="mt-2 text-[15px] text-muted">For lower-resource settings. We review each request by hand. Your trial starts while you wait.</p>
-          <div className="mt-5">
-            <Button
-              variant="ghost"
-              onClick={() => {
-                requestEquity(user.email, "Not given");
-                finish("free", true);
-              }}
-            >
-              Request Equity Access
-            </Button>
-          </div>
-        </Card>
-      </div>
-    </Page>
+    <OnboardFrame
+      wide
+      step={2}
+      title="How would you like to start?"
+      lede="Most people start with the free trial. You will not be charged when it ends unless you choose a plan."
+      footer={
+        <>
+          <Button variant="ghost" to="/onboard">
+            Back
+          </Button>
+          <Button onClick={go}>{selected.action}</Button>
+        </>
+      }
+    >
+      <fieldset>
+        <legend className="sr-only">How would you like to start?</legend>
+        <div className="grid gap-4 md:grid-cols-3">
+          {START_OPTIONS.map((o) => {
+            const on = choice === o.id;
+            return (
+              <label
+                key={o.id}
+                className={`flex cursor-pointer flex-col rounded-[16px] border bg-surface p-5 shadow-card transition-colors md:p-6 ${
+                  on ? "border-gold ring-2 ring-gold" : "border-line hover:border-line-2"
+                }`}
+              >
+                <span className="flex items-center justify-between gap-3">
+                  <span className="flex items-center gap-3">
+                    <input
+                      type="radio"
+                      name="start"
+                      value={o.id}
+                      checked={on}
+                      onChange={() => setChoice(o.id)}
+                      className="h-4 w-4 accent-[#B39952]"
+                    />
+                    <span className="text-[22px] font-light">{o.title}</span>
+                  </span>
+                  {o.recommended ? (
+                    <span className="text-[12px] font-bold uppercase tracking-[0.12em] text-gold-text">Recommended</span>
+                  ) : null}
+                </span>
+                <span className="mt-2 text-[15px] text-muted">{o.body}</span>
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
+    </OnboardFrame>
   );
 }
 
@@ -164,8 +247,19 @@ export function OnboardPreferencesPage() {
   if (!user) return <Navigate to="/sign-in" replace />;
 
   return (
-    <Page narrow title="What should we email you about?" lede="You can change these any time in Settings.">
-      <Steps current={3} />
+    <OnboardFrame
+      step={3}
+      title="What should we email you about?"
+      lede="You can change these any time in Settings."
+      footer={
+        <>
+          <Button variant="ghost" to="/onboard/plan">
+            Back
+          </Button>
+          <Button onClick={() => navigate(takeNext())}>Continue</Button>
+        </>
+      }
+    >
       <Card>
         <fieldset className="space-y-1">
           <legend className="sr-only">Email notifications</legend>
@@ -190,10 +284,7 @@ export function OnboardPreferencesPage() {
             </label>
           ))}
         </fieldset>
-        <div className="mt-6">
-          <Button onClick={() => navigate(takeNext())}>Go to my dashboard</Button>
-        </div>
       </Card>
-    </Page>
+    </OnboardFrame>
   );
 }

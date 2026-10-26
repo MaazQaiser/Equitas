@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { STAGES, guideHref, type Guide } from "@/lib/content";
 
 export function GuidesIndex({ guides }: { guides: Guide[] }) {
