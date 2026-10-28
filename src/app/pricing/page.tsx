@@ -10,21 +10,22 @@ import { H2, SECTION, WRAP } from "@/lib/ui";
 
 const PLANS = [
   {
-    name: "Free",
-    for: "Any researcher. Introduces reviewer-informed guidance on the sample and labelled previews.",
-    price: "$0",
-    href: "/onboarding",
-    cta: "Create a free account",
+    name: "Researchers",
+    for: "Individual researchers who want early access to reviewer-informed guidance.",
+    price: "Register interest",
+    href: "/#early-access",
+    cta: "Register interest",
     variant: "primary" as const,
+    note: "We will write when a place opens. No card is asked for here.",
   },
   {
     name: "Individual",
-    for: "Regular applicants. Approved depth and continuity, billed in U.S. dollars.",
-    price: "U.S. dollars",
-    href: "/onboarding",
-    cta: "Create an account",
+    for: "Regular applicants who need ongoing depth once access is open.",
+    price: "Talk to us",
+    href: "/#early-access",
+    cta: "Register interest",
     variant: "ghost" as const,
-    note: "The approved Individual amount is not pasted into this build yet. We will not invent it.",
+    note: "Approved amounts are not published on this page. Ask us when you are ready.",
   },
   {
     name: "Institution",
@@ -50,51 +51,50 @@ const PRICING_FAQ = [
     a: "Yes. Institutional plans are set up through a conversation, not checkout. Request a demo and we will invoice from there.",
   },
   {
-    q: "Is the free plan a trial?",
-    a: "No. It does not expire. You can explore a reviewer lens on a sample without paying, and without a clock running out.",
+    q: "How do I get access today?",
+    a: "Register interest for early access, or request an institutional demo. Invited by your institution? Use your invitation. You will not need a public plan.",
   },
 ];
 
 export const metadata: Metadata = {
   title: "Pricing | EQUITAS Intelligence",
   description:
-    "Free introduces reviewer-informed guidance. Individual adds approved depth. Institution scales access. Amounts are in U.S. dollars.",
+    "Register interest for researcher access, or request an institutional demo. Amounts are set in conversation, not on this page.",
 };
 
 export default function PricingPage() {
   return (
     <>
-      <SiteHeader current="pricing" />
+      <SiteHeader current="pricing" ctaHref="/#early-access" ctaLabel="Join early access" />
       <main id="main">
         <PageHero
-          eyebrow="Pricing"
-          title="Free, Individual, Institution."
+          eyebrow="Access"
+          title="Interest first. Amounts in conversation."
           lede={
             <p>
-              Free introduces reviewer-informed guidance. Individual provides approved depth and
-              continuity. Institution scales approved access and governance. Amounts are in U.S.
-              dollars.
+              Register interest for early access as a researcher, or request a demo for your institution. We do not
+              publish unapproved dollar amounts or a public trial promise on this page.
             </p>
           }
           actions={
             <>
-              <Button href="/onboarding" variant="primary">
-                Create a free account
+              <Button href="/#early-access" variant="primary">
+                Register interest
               </Button>
-              <Button href="#plans" variant="ghost">
-                See the three plans
+              <Button href="/institutions#demo" variant="ghost">
+                Request a demo
               </Button>
             </>
           }
-          note="Invited by your institution? Use your invitation instead. You will not need a plan."
+          note="Invited by your institution? Use your invitation instead. You will not need a public plan."
           visual={
             <Checklist
-              title="Free, on every account"
+              title="What you get when you write"
               items={[
-                "No card needed to start",
-                "Every funder we cover",
-                "All ten languages",
-                "It does not expire",
+                "A place on the early access list",
+                "Or a named contact for institutions",
+                "No card collected on this page",
+                "Plain labels for what is built today",
               ]}
             />
           }
@@ -106,7 +106,7 @@ export default function PricingPage() {
               <li key={plan.name} className="flex flex-col rounded-2xl bg-surface p-8 shadow-card">
                 <h2 className="text-[clamp(28px,2.6vw,36px)] font-light tracking-[-0.03em]">{plan.name}</h2>
                 <p className="mt-3 text-[15px] leading-[1.5] text-muted">{plan.for}</p>
-                <p className="mt-8 text-[clamp(32px,3vw,44px)] font-light tracking-[-0.03em]">{plan.price}</p>
+                <p className="mt-8 text-[clamp(28px,2.6vw,36px)] font-light tracking-[-0.03em]">{plan.price}</p>
                 {"note" in plan && plan.note ? (
                   <p className="mt-3 text-[13px] leading-[1.5] text-muted">{plan.note}</p>
                 ) : null}
@@ -119,8 +119,8 @@ export default function PricingPage() {
             ))}
           </ul>
           <p className="mt-8 max-w-[58ch] text-[15px] leading-[1.55] text-muted">
-            A feature comparison will appear when approved entitlements are in this build. Until
-            then the three cards are the offer. We will not fill empty rows with placeholders.
+            A feature comparison will appear when approved entitlements are in this build. Until then the three cards
+            are the offer. We will not fill empty rows with placeholders.
           </p>
         </section>
 
@@ -131,9 +131,8 @@ export default function PricingPage() {
             </p>
             <h2 className={`mt-6 max-w-[16ch] ${H2}`}>Reduced pricing where it is needed.</h2>
             <p className="mt-6 max-w-[54ch] text-[clamp(17px,1.6vw,20px)] leading-[1.55] text-muted">
-              Researchers at under-resourced institutions are why EQUITAS exists. We are working out a
-              reduced price, or a free upgrade, for researchers based in low- and middle-income
-              countries, and for minority-serving institutions.
+              Researchers at under-resourced institutions are why EQUITAS exists. We are working out access for
+              researchers based in low- and middle-income countries, and for minority-serving institutions.
             </p>
             <p className="mt-5 max-w-[54ch] text-[16px] font-medium leading-[1.55]">
               This is not an offer yet. When the terms are set, they will be stated here, plainly.
@@ -143,13 +142,14 @@ export default function PricingPage() {
 
         <section className="bg-bg-2">
           <div className={`${WRAP} ${SECTION} grid items-start gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16`}>
-            <SectionHead eyebrow="Billing" title="Billing questions." />
+            <SectionHead eyebrow="Access" title="Access questions." />
             <FaqAccordion items={PRICING_FAQ} />
           </div>
         </section>
 
         <CtaBand
-          title="Start on Free. Decide later."
+          title="Register interest, or talk to us."
+          primary={{ href: "/#early-access", label: "Join early access" }}
           secondary={{ href: "/institutions#demo", label: "Talk to us about your institution" }}
         />
       </main>

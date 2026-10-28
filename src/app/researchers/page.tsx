@@ -88,8 +88,8 @@ export default function ResearchersPage() {
           }
           actions={
             <>
-              <Button href="/onboarding" variant="primary">
-                Create a free account
+              <Button href="/#early-access" variant="primary">
+                Join early access
               </Button>
               <Button href="/how-it-works" variant="ghost">
                 See a sample review

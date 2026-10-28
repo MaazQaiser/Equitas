@@ -59,6 +59,7 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
       { label: "About", href: "/about" },
       { label: "Mission", href: "/about/mission" },
       { label: "The reviewer behind EQUITAS", href: "/about#credibility" },
+      { label: "Early access", href: "/#early-access" },
       { label: "Contact", href: "/about#contact" },
     ],
   },

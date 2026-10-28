@@ -258,8 +258,8 @@ export default function HowGrantReviewWorksPage() {
               <Button href="/journey/review" variant="primary">
                 Continue at Review
               </Button>
-              <Button href="/onboarding?from=review&need=scored" variant="ghost">
-                Create a free account
+              <Button href="/#early-access" variant="ghost">
+                Join early access
               </Button>
             </div>
           </div>

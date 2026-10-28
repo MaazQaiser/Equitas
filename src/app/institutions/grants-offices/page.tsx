@@ -125,7 +125,7 @@ export default function GrantsOfficesPage() {
         <CtaBand
           title="Talk to a person about your office."
           primary={{ href: "/institutions/demo", label: "Request a demo" }}
-          secondary={{ href: "/onboarding?from=manage", label: "Create a free account" }}
+          secondary={{ href: "/institutions#demo", label: "Request a demo" }}
           note="An individual can try the tools. An office buys through the institution."
         />
       </main>

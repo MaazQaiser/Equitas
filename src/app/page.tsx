@@ -1,5 +1,4 @@
 import Link from "@/components/SiteLink";
-import { appUrl } from "@/lib/sites";
 import type { CSSProperties } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -11,7 +10,7 @@ import { CapabilityRows } from "@/components/Marquee";
 import { Perspectives } from "@/components/Perspectives";
 import { FunderList } from "@/components/FunderList";
 import { AimsPair } from "@/components/Previews";
-import { ReviewLens } from "@/components/ReviewLens";
+import { EarlyAccessForm } from "@/components/EarlyAccessForm";
 import { StatusBadge } from "@/components/StatusBadge";
 import { CALIBRATION_LINE, FUNDER_COVER, type StageStatus } from "@/lib/content";
 import { EYEBROW_BAND } from "@/lib/ui";
@@ -102,31 +101,20 @@ export default function Home() {
                 across the research journey.
               </p>
               <div className="enter mt-8 flex flex-wrap items-center gap-3" style={enterDelay(160)}>
-                <Button href="/how-it-works" variant="primary" className="font-outfit">
-                  See a sample review
+                <Button href="#early-access" variant="primary" className="font-outfit">
+                  Join early access
                 </Button>
-                <Button href={appUrl("/sign-up")} variant="ghost" className="font-outfit">
-                  Create an account
+                <Button href="/how-it-works" variant="ghost" className="font-outfit">
+                  How the sample works
                 </Button>
               </div>
+              <p className="enter mt-5 max-w-[46ch] text-[13px] leading-[1.5] text-muted" style={enterDelay(200)}>
+                Illustrative sample on the right. NIH Simplified Review Framework. Not a real score and not a
+                funding prediction.
+              </p>
             </div>
             <div className="enter" style={enterDelay(120)}>
-              <ReviewLens />
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-bg-2">
-          <div className={`${WRAP} ${SECTION}`}>
-            <p className={`mb-4 ${EYEBROW}`}>What it looks like</p>
-            <h2 className="max-w-[16ch] text-[clamp(32px,4vw,48px)] font-light leading-[1.06] tracking-[-0.035em]">
-              A draft on the left. A reviewer lens on the right.
-            </h2>
-            <p className="mt-4 max-w-[54ch] text-[15px] leading-[1.55] text-muted">
-              Illustrative sample. NIH Simplified Review Framework. Not a real score and not a
-              funding prediction.
-            </p>
-            <div className="mt-10">
+              <p className={`mb-3 ${EYEBROW}`}>Sample review</p>
               <AimsPair />
             </div>
           </div>
@@ -212,15 +200,15 @@ export default function Home() {
             {[
               {
                 h: "Trainees",
-                p: "Your first fellowship or K award, without a grants office behind you. F31, F32, T32 and K awards, explained for someone doing this for the first time.",
+                p: "Tools for a first fellowship or K award, written for someone doing this for the first time. F31, F32, T32 and K paths.",
                 href: "/researchers#trainees",
-                cta: "Start at Compete",
+                cta: "Researcher resources",
               },
               {
                 h: "Investigators",
-                p: "Your R-series application or resubmission, seen through a reviewer lens. Including why the last one was not funded.",
+                p: "Reviewer-lens tools for an R-series draft or resubmission. See how a study section may read the work.",
                 href: "/researchers#investigators",
-                cta: "Start at Review",
+                cta: "Researcher resources",
               },
             ].map((w, i) => (
               <Link
@@ -318,6 +306,16 @@ export default function Home() {
           <div className="mt-[clamp(40px,5vw,64px)]">
             <CapabilityRows />
           </div>
+          <div className={`${WRAP} mt-[clamp(48px,6vw,72px)] max-w-[720px]`}>
+            <p className={`mb-4 ${EYEBROW_BAND}`}>Not a general writing tool</p>
+            <h2 className="max-w-[20ch] text-[clamp(28px,3.2vw,40px)] font-light leading-[1.08] tracking-[-0.03em]">
+              Built around how grant review works.
+            </h2>
+            <p className="mt-5 text-[clamp(16px,1.5vw,18px)] leading-[1.55] text-band-muted">
+              EQUITAS follows a grant-review workflow: a draft, a reviewer lens, and what to strengthen next. It does
+              not write your application, and it does not claim a score that guarantees funding.
+            </p>
+          </div>
         </section>
 
         <section className="bg-bg-2">
@@ -361,20 +359,30 @@ export default function Home() {
           <FaqAccordion />
         </section>
 
-        <section className={`${WRAP} py-[clamp(120px,14vw,200px)] text-center`}>
+        <section id="early-access" className={`scroll-mt-24 ${WRAP} ${SECTION}`}>
+          <p className={`mb-4 ${EYEBROW}`}>Early access</p>
+          <h2 className={`max-w-[16ch] ${H2}`}>Join the early access list.</h2>
+          <p className="mt-6 max-w-[54ch] text-[17px] leading-[1.55] text-muted">
+            Tell us who you are. We will write when a place opens. This is not a paid trial and it does not open the
+            full product by itself.
+          </p>
+          <EarlyAccessForm />
+        </section>
+
+        <section className={`${WRAP} py-[clamp(80px,10vw,140px)] text-center`}>
           <h2 className="mx-auto max-w-[14ch] text-[clamp(48px,6vw,84px)] leading-[1.02] tracking-[-0.04em]">
             Start your research journey.
           </h2>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Button href={appUrl("/sign-up")} variant="primary">
-              Create an account
+            <Button href="#early-access" variant="primary">
+              Join early access
             </Button>
-            <Button href="/how-it-works" variant="ghost">
-              See a sample review
+            <Button href="/institutions" variant="ghost">
+              For institutions
             </Button>
           </div>
           <p className="mt-5 text-[14px] tracking-[-0.01em] text-muted">
-            The Study Section Simulator sample is live. Other modules are labelled for what they are.
+            The sample above is illustrative. Other modules are labelled for what they are.
           </p>
         </section>
       </main>

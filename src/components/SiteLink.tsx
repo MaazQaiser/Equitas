@@ -15,6 +15,7 @@ const SiteLink = forwardRef<HTMLAnchorElement, Props>(function SiteLink(props, r
   const path = typeof props.href === "string" ? props.href : "";
   const hard =
     path.startsWith("#") ||
+    path.includes("#") ||
     path.startsWith("mailto:") ||
     path.startsWith("http://") ||
     path.startsWith("https://") ||

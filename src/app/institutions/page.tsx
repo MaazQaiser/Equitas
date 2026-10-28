@@ -295,9 +295,12 @@ export default function InstitutionsPage() {
             <SectionHead
               eyebrow="Request a demo"
               title="Talk to a person."
-              lede="Five fields. We will come back with a named contact and a time, not a marketing sequence. You can also use the dedicated demo page."
+              lede="Institutional dashboards today track grant activity across a department. They do not forecast funding, and they do not open a researcher's drafts or individual feedback. Five fields below. We will come back with a named contact and a time."
             />
             <div className="rounded-2xl bg-surface p-7 shadow-card sm:p-9 [&>form]:mt-0">
+              <p className="mb-2 text-[15px] leading-[1.55] text-muted">
+                Tracking for a department. Not forecasting. Not access to confidential research materials.
+              </p>
               <DemoForm />
             </div>
           </div>

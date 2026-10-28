@@ -50,7 +50,7 @@ export default function JourneyPage() {
           }
           actions={
             <>
-              <Button href="/onboarding" variant="primary">
+              <Button href="/#early-access" variant="primary">
                 Find my stage
               </Button>
               <Button href="#pick" variant="ghost">
@@ -153,7 +153,7 @@ export default function JourneyPage() {
         <CtaBand
           title="Three questions. One place to start."
           lede="Most people start at Compete if they have a deadline, or Review if they already have a draft."
-          primary={{ href: "/onboarding", label: "Find my stage" }}
+          primary={{ href: "/#early-access", label: "Join early access" }}
         />
       </main>
       <SiteFooter />

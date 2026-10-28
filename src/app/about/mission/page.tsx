@@ -51,8 +51,8 @@ export default function MissionPage() {
           }
           actions={
             <>
-              <Button href="/onboarding" variant="primary">
-                Create a free account
+              <Button href="/#early-access" variant="primary">
+                Join early access
               </Button>
               <Button href="/about#credibility" variant="ghost">
                 The reviewer behind EQUITAS

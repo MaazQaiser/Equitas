@@ -40,8 +40,8 @@ export function SearchResults({ query }: { query: string }) {
           ))}
           </ul>
           <p className="mt-10">
-            <Button href={onboardingQuery(from, need)} variant="primary">
-              Create a free account
+            <Button href="/#early-access" variant="primary">
+              Join early access
             </Button>
           </p>
         </section>

@@ -64,8 +64,8 @@ type MenuId = "journey" | "learn";
 
 export function SiteHeader({
   current,
-  ctaHref = appUrl("/sign-up"),
-  ctaLabel = "Create an account",
+  ctaHref = "/#early-access",
+  ctaLabel = "Join early access",
 }: {
   current?: "institutions" | "researchers" | "learn" | "pricing";
   ctaHref?: string;
@@ -326,9 +326,9 @@ export function SiteHeader({
               href={ctaHref}
               className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-[8px] bg-band px-3 text-[14px] text-band-ink no-underline ring-1 ring-band-line hover:bg-band-2 sm:px-4 sm:text-[15px]"
             >
-              {ctaLabel === "Create an account" ? (
+              {ctaLabel === "Join early access" ? (
                 <>
-                  <span className="min-[400px]:hidden">Sign up</span>
+                  <span className="min-[400px]:hidden">Join</span>
                   <span className="hidden min-[400px]:inline">{ctaLabel}</span>
                 </>
               ) : (

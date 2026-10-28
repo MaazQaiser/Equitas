@@ -161,8 +161,8 @@ export default async function GuidePage({
             label: stage ? `Continue at ${stage.name}` : "See the journey",
           }}
           secondary={{
-            href: stage ? `/onboarding?from=${stage.slug}` : "/onboarding",
-            label: "Create a free account",
+            href: "/#early-access",
+            label: "Join early access",
           }}
         />
       </main>

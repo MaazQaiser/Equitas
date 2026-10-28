@@ -72,7 +72,7 @@ export default async function SearchPage({
           </div>
         )}
       </main>
-      <CtaBand primary={{ href: onboardingQuery(from, need), label: "Create a free account" }} />
+      <CtaBand primary={{ href: "/#early-access", label: "Join early access" }} />
       <SiteFooter />
     </>
   );

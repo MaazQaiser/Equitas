@@ -143,9 +143,10 @@ export default function HowItWorksPage() {
         </section>
 
         <CtaBand
-          title="Now see the sample on a draft you paste."
-          primary={{ href: "/onboarding?from=review", label: "Create an account" }}
-          secondary={{ href: "/app/tool", label: "Open the Study Section Simulator" }}
+          title="Ready for early access?"
+          primary={{ href: "/#early-access", label: "Join early access" }}
+          secondary={{ href: "/app/tool?module=study-section-simulator", label: "Open the Study Section Simulator" }}
+          note="The sample is illustrative. Not a real score and not a funding prediction."
         />
       </main>
       <SiteFooter />

@@ -7,6 +7,7 @@ import { HashScroll } from "@/components/HashScroll";
 import { StatusBadge } from "@/components/StatusBadge";
 import { PageHero, SectionHead } from "@/components/PageHero";
 import { CtaBand } from "@/components/CtaBand";
+import { ContactForm } from "@/components/ContactForm";
 import { FunderList } from "@/components/FunderList";
 import { CALIBRATION_LINE } from "@/lib/content";
 import { EYEBROW, EYEBROW_BAND, SECTION, WRAP } from "@/lib/ui";
@@ -191,7 +192,8 @@ export default function AboutPage() {
                 <span className={EYEBROW}>Trainees and investigators</span>
                 <span className="text-[clamp(28px,3vw,40px)] leading-[1.05] tracking-[-0.03em]">For researchers</span>
                 <span className="text-[15.5px] leading-[1.6] text-muted">
-                  Explore a reviewer lens on a sample. Other modules are labelled previews.
+                  Explore a reviewer lens on a sample. Other modules are labelled for what they are. No promise of
+                  funding.
                 </span>
                 <span className="mt-auto pt-4 text-[15px] text-gold-text">Go to researchers →</span>
               </Link>
@@ -199,7 +201,7 @@ export default function AboutPage() {
                 <span className={EYEBROW_BAND}>Departments and grants offices</span>
                 <span className="text-[clamp(28px,3vw,40px)] leading-[1.05] tracking-[-0.03em]">For institutions</span>
                 <span className="text-[15.5px] leading-[1.6] text-band-muted">
-                  Tracking illustrations across a department. Not a forecast, and not draft access.
+                  Tracking across a department. Not a forecast, and not access to a researcher's drafts.
                 </span>
                 <span className="mt-auto pt-4 text-[15px] text-gold-on-band">Go to institutions →</span>
               </Link>
@@ -207,27 +209,33 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section id="contact" className={`scroll-mt-24 ${WRAP} ${SECTION} grid items-start gap-12 lg:grid-cols-2 lg:gap-16`}>
+        <section id="independence" className={`scroll-mt-24 ${WRAP} ${SECTION}`}>
           <SectionHead
-            eyebrow="Contact"
-            title="Talk to us."
-            lede="We will not invent an address or a named inbox. Buying for a department? The demo form reaches a person."
+            eyebrow="Independence"
+            title="An independent company."
+            lede="EQUITAS Intelligence Inc. is not owned, sponsored, or endorsed by a university. Calibration by an active reviewer is not a data-sharing arrangement with any institution."
           />
-          <address className="rounded-2xl bg-surface p-7 not-italic shadow-card sm:p-9">
-            <p className="text-[clamp(22px,2.4vw,30px)] font-light tracking-[-0.03em]">EQUITAS Intelligence Inc.</p>
-            <p className="mt-4 max-w-[46ch] text-[16px] leading-[1.55] text-muted">
-              An independent company. Not owned, sponsored, or endorsed by a university. Founder
-              affiliations are background, not a data-sharing arrangement.
-            </p>
-            <div className="mt-8">
-              <Button href="/institutions#demo" variant="primary">
-                Request a demo
-              </Button>
-            </div>
-          </address>
         </section>
 
-        <CtaBand />
+        <section id="contact" className={`scroll-mt-24 bg-bg-2`}>
+          <div className={`${WRAP} ${SECTION} grid items-start gap-12 lg:grid-cols-2 lg:gap-16`}>
+            <SectionHead
+              eyebrow="Contact"
+              title="Talk to us."
+              lede="Send a message. For a department partnership, the institutional demo form reaches a named contact."
+            />
+            <div className="rounded-2xl bg-surface p-7 shadow-card sm:p-9">
+              <ContactForm />
+            </div>
+          </div>
+        </section>
+
+        <CtaBand
+          title="Join early access."
+          primary={{ href: "/#early-access", label: "Join early access" }}
+          secondary={{ href: "/institutions#demo", label: "Institutional demo" }}
+          note="The sample review is illustrative. Other modules are labelled for what they are."
+        />
       </main>
       <SiteFooter />
     </>

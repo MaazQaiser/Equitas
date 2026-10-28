@@ -224,7 +224,7 @@ export default async function StagePage({ params }: { params: Promise<{ slug: st
 
         <CtaBand
           title={isComing ? "Start where it is built today." : `Start in ${stage.name}.`}
-          primary={{ href: onboardingQuery(isComing ? "compete" : stage.slug), label: "Create a free account" }}
+          primary={{ href: "/#early-access", label: "Join early access" }}
         />
       </main>
       <SiteFooter />
