@@ -39,6 +39,7 @@ function AnalysisToolInner({
   const { workspaces, selectedWorkspaceId, analyses } = useSession();
   const [text, setText] = useState("");
   const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
   const navigate = useNavigate();
   const latest = analyses.find((a) => a.module === module && a.workspaceId === selectedWorkspaceId);
 
@@ -101,7 +102,11 @@ function AnalysisToolInner({
                 ))}
               </select>
             </Field>
-            <Field label="Paste draft text" hint={`${text.trim().length} characters. Remove names and identifiers before you paste.`} error={error}>
+            <Field
+              label="Paste draft text"
+              hint={`${text.trim().length} characters (need ${MIN_CHARS}+). Remove names and identifiers before you paste.`}
+              error={error}
+            >
               <textarea
                 className={`${inputClass} min-h-[220px] leading-[1.5]`}
                 value={text}
@@ -149,15 +154,55 @@ function AnalysisToolInner({
                   <li key={a}>{a}</li>
                 ))}
               </ol>
-              <div className="mt-6 border-t border-line pt-5">
-                <p className="mb-3 text-[14px] text-muted">Want to talk it through? A reviewer perspective will see this result.</p>
+              <div className="mt-6 flex flex-wrap gap-2 border-t border-line pt-5">
+                <Button
+                  variant="ghost"
+                  onClick={async () => {
+                    const body = [
+                      title,
+                      latest.overall != null ? `Overall: ${latest.overall}` : "",
+                      ...(latest.scores ?? []).map((s) => `${s.name}: ${s.value}`),
+                      "Priorities:",
+                      ...latest.priorityActions.map((a, i) => `${i + 1}. ${a}`),
+                      "(Sample output)",
+                    ]
+                      .filter(Boolean)
+                      .join("\n");
+                    try {
+                      await navigator.clipboard.writeText(body);
+                      setToast("Copied sample result.");
+                    } catch {
+                      setToast("Copy is not available in this browser.");
+                    }
+                  }}
+                >
+                  Copy result
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    window.print();
+                    setToast("Print dialog opened (sample result).");
+                  }}
+                >
+                  Print
+                </Button>
                 <Button onClick={followUp}>Follow Up in Perspectives</Button>
               </div>
+              {toast ? (
+                <p role="status" className="mt-3 text-[14px] text-muted">
+                  {toast}
+                </p>
+              ) : null}
+              <p className="mt-3 text-[14px] text-muted">Want to talk it through? A reviewer perspective will see this result.</p>
             </Card>
           </section>
         ) : (
-          <Card tone="placeholder" className="hidden lg:block">
-            <p className="text-[15px] text-muted">Your result will appear here: scores, how confident we are, and what to strengthen first.</p>
+          <Card className="border-dashed">
+            <h2 className="text-[20px]">No result yet</h2>
+            <p className="mt-2 text-[15px] text-muted">
+              Paste at least {MIN_CHARS} characters, then run the review. Scores, confidence and priority actions will appear here as sample output.
+            </p>
           </Card>
         )}
       </div>

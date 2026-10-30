@@ -41,7 +41,9 @@ export function CeoPage() {
           <h2 className="font-display text-[22px]">LMIC Equity Access review</h2>
           <ul className="mt-3 space-y-3">
             {equityRequests.length === 0 ? (
-              <li className="text-[14px] text-muted">No pending requests.</li>
+              <li className="text-[14px] text-muted">
+                No equity requests yet. When researchers submit Equity Access from Plans, they appear here for approve or reject.
+              </li>
             ) : (
               equityRequests.map((e) => (
                 <li key={e.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-2 text-[14px]">
@@ -64,14 +66,28 @@ export function CeoPage() {
         <Card>
           <h2 className="font-display text-[22px]">Perspectives editor</h2>
           <p className="mt-2 text-[14px] text-muted">Edit how each of the ten reviewer perspectives responds. Not connected yet.</p>
+          <div className="mt-3">
+            <Button variant="ghost" disabled>
+              Open editor (coming soon)
+            </Button>
+          </div>
         </Card>
         <Card>
           <h2 className="font-display text-[22px]">Calibration records</h2>
           <p className="mt-2 text-[14px] text-muted">The library of reviewer-calibrated examples. Not connected yet.</p>
+          <div className="mt-3">
+            <Button variant="ghost" disabled>
+              Browse library (coming soon)
+            </Button>
+          </div>
         </Card>
         <Card>
           <h2 className="font-display text-[22px]">Mentor Chat / voice / usage</h2>
           <p className="mt-2 text-[14px] text-muted">Example: 812 conversations · 14 voice sessions · 3 people near their monthly limit</p>
+          <label className="mt-3 flex items-center gap-2 text-[14px]">
+            <input type="checkbox" defaultChecked />
+            Alert when someone nears their monthly chat cap
+          </label>
         </Card>
         <Card>
           <h2 className="font-display text-[22px]">Calibration KV / Waitlist</h2>

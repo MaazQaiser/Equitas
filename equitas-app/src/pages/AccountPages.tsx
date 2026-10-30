@@ -105,6 +105,9 @@ export function PlansPage() {
         </div>
       }
     >
+      <p className="mb-5 rounded-[10px] border border-line bg-bg-2 px-4 py-3 text-[14px] text-muted">
+        Prototype prices. Confirming payment here unlocks tools in this browser only. No card is charged.
+      </p>
       {justPaid ? (
         <p role="status" className="mb-6 rounded-[10px] bg-gold/15 px-4 py-3 text-[15px]">
           You are now on the {justPaid} plan. New tools are unlocked.

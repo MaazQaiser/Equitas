@@ -348,12 +348,15 @@ function SiteFooter() {
       <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-3 px-4 py-6 text-[13px] text-muted md:px-8">
         <p>Every Researcher Deserves the Infrastructure</p>
         <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
-          <a className="hover:text-ink" href={marketingUrl("/legal/privacy")}>
+          <Link className="hover:text-ink" to="/privacy-policy">
             Privacy
-          </a>
-          <a className="hover:text-ink" href={marketingUrl("/legal/terms")}>
+          </Link>
+          <Link className="hover:text-ink" to="/terms-of-service">
             Terms
-          </a>
+          </Link>
+          <Link className="hover:text-ink" to="/contact">
+            Contact
+          </Link>
           <a className="hover:text-ink" href={marketingUrl("/legal/accessibility")}>
             Accessibility
           </a>

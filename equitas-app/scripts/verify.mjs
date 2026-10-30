@@ -314,8 +314,7 @@ async function main() {
   liveBanner && noLiveNav ? pass("E16") : fail("E16");
 
   await page.goto(`${BASE}/dashboard/mentor-matching`);
-  await page.waitForURL(/\/dashboard\/mentor$/, { timeout: 5000 }).catch(() => {});
-  page.url().endsWith("/dashboard/mentor") ? pass("E17") : fail("E17", page.url());
+  (await visible(page.getByRole("heading", { name: "Mentor Matching" }))) ? pass("E17", "matching page") : fail("E17", page.url());
 
   await clear();
   await signInPreset("Researcher on a free trial");
@@ -357,6 +356,43 @@ async function main() {
   await page.waitForTimeout(400);
   hasNextLink && page.url().endsWith("/dashboard/budget") ? pass("E21", "returned to Budget Builder") : fail("E21", page.url());
 
+  // Prototype-complete flows (P1–P6)
+  await clear();
+  await page.goto(`${BASE}/forgot-password`);
+  await page.getByLabel("Email").fill("reset@equitas.demo");
+  await page.getByRole("button", { name: "Send reset link" }).click();
+  (await visible(page.getByRole("heading", { name: "Check your email" }))) ? pass("P1", "forgot confirmation") : fail("P1");
+
+  await clear();
+  await signInPreset("Investigator plan");
+  await page.goto(`${BASE}/search`);
+  await page.getByLabel("Search").fill("study section");
+  (await visible(page.getByRole("link", { name: /Study Section Simulator/i }))) ? pass("P2", "search finds module") : fail("P2");
+
+  await page.goto(`${BASE}/dashboard/mentor-matching`);
+  await page.getByRole("button", { name: "Select" }).first().click();
+  await page.getByRole("button", { name: "Continue to session" }).click();
+  await page.waitForURL(/mentor-session/);
+  (await visible(page.getByRole("heading", { name: "Mentor session" }))) ? pass("P3", "matching → session") : fail("P3", page.url());
+
+  await page.goto(`${BASE}/dashboard/budget`);
+  const beforeTotal = await page.locator("[data-testid=budget-total]").innerText();
+  await page.getByLabel("Personnel amount").fill("200000");
+  const afterTotal = await page.locator("[data-testid=budget-total]").innerText();
+  beforeTotal !== afterTotal ? pass("P4", `budget ${beforeTotal} → ${afterTotal}`) : fail("P4", afterTotal);
+
+  await page.goto(`${BASE}/learning-center`);
+  await page.getByRole("button", { name: "Open lesson" }).first().click();
+  await page.getByRole("button", { name: "Mark complete" }).click();
+  (await visible(page.getByText("Completed", { exact: true }))) ? pass("P5", "lesson complete") : fail("P5");
+
+  await page.goto(`${BASE}/contact`);
+  await page.getByLabel("Name").fill("Verify Contact");
+  await page.getByLabel("Email").fill("contact@equitas.demo");
+  await page.getByLabel("Message").fill("This is a prototype contact message for verification.");
+  await page.getByRole("button", { name: "Send message" }).click();
+  (await visible(page.getByText(/Thank you/i))) ? pass("P6", "contact confirmation") : fail("P6");
+
   await browser.close();
 
   const failed = results.filter((r) => !r.ok);
@@ -388,6 +424,14 @@ async function main() {
     "|---|---|---|",
     ...results
       .filter((r) => r.id.startsWith("E"))
+      .map((r) => `| ${r.id} | ${r.ok ? "PASS" : "FAIL"} | ${r.note} |`),
+    "",
+    "## Prototype-complete checks",
+    "",
+    "| ID | Result | Notes |",
+    "|---|---|---|",
+    ...results
+      .filter((r) => r.id.startsWith("P"))
       .map((r) => `| ${r.id} | ${r.ok ? "PASS" : "FAIL"} | ${r.note} |`),
     "",
   ];

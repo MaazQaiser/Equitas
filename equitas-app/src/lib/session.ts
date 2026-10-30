@@ -88,6 +88,9 @@ export type User = {
   onboarded: boolean;
 };
 
+export type BudgetLine = { id: string; label: string; amount: number };
+export type ChecklistMap = Record<string, Record<string, boolean>>;
+
 export type Session = {
   user: User | null;
   workspaces: Workspace[];
@@ -100,6 +103,12 @@ export type Session = {
   theme: "light" | "dark";
   language: string;
   billingAnnual: boolean;
+  /** Prototype-only UI state for incomplete modules */
+  checklists: ChecklistMap;
+  budgetLines: BudgetLine[];
+  lessonsDone: string[];
+  mentorMatchId: string | null;
+  searchRecent: string[];
 };
 
 const KEY = "equitas-app-session-v1";
@@ -126,6 +135,13 @@ function daysFromNow(days: number) {
   return d.toISOString();
 }
 
+const DEFAULT_BUDGET: BudgetLine[] = [
+  { id: "b1", label: "Personnel", amount: 180000 },
+  { id: "b2", label: "Supplies", amount: 24000 },
+  { id: "b3", label: "Travel", amount: 6000 },
+  { id: "b4", label: "Indirect costs at 56%", amount: 117600 },
+];
+
 function emptySession(): Session {
   return {
     user: null,
@@ -139,6 +155,11 @@ function emptySession(): Session {
     theme: "light",
     language: "English",
     billingAnnual: false,
+    checklists: {},
+    budgetLines: DEFAULT_BUDGET,
+    lessonsDone: [],
+    mentorMatchId: null,
+    searchRecent: [],
   };
 }
 
@@ -550,6 +571,59 @@ export function setLanguage(language: string) {
 
 export function setBillingAnnual(billingAnnual: boolean) {
   set({ billingAnnual });
+}
+
+export function toggleChecklist(group: string, id: string) {
+  const g = state.checklists[group] ?? {};
+  set({
+    checklists: {
+      ...state.checklists,
+      [group]: { ...g, [id]: !g[id] },
+    },
+  });
+}
+
+export function setChecklistItem(group: string, id: string, value: boolean) {
+  const g = state.checklists[group] ?? {};
+  set({
+    checklists: {
+      ...state.checklists,
+      [group]: { ...g, [id]: value },
+    },
+  });
+}
+
+export function checklistDone(group: string, id: string) {
+  return Boolean(state.checklists[group]?.[id]);
+}
+
+export function setBudgetLine(id: string, patch: Partial<BudgetLine>) {
+  set({
+    budgetLines: state.budgetLines.map((l) => (l.id === id ? { ...l, ...patch } : l)),
+  });
+}
+
+export function addBudgetLine(label: string, amount: number) {
+  set({ budgetLines: [...state.budgetLines, { id: uid("bl"), label, amount }] });
+}
+
+export function removeBudgetLine(id: string) {
+  set({ budgetLines: state.budgetLines.filter((l) => l.id !== id) });
+}
+
+export function markLessonDone(id: string) {
+  if (state.lessonsDone.includes(id)) return;
+  set({ lessonsDone: [...state.lessonsDone, id] });
+}
+
+export function setMentorMatch(id: string | null) {
+  set({ mentorMatchId: id });
+}
+
+export function pushSearchRecent(q: string) {
+  const t = q.trim();
+  if (!t) return;
+  set({ searchRecent: [t, ...state.searchRecent.filter((x) => x !== t)].slice(0, 8) });
 }
 
 export function trialDaysLeft(user: User | null) {

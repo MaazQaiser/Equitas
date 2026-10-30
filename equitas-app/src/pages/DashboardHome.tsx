@@ -34,7 +34,14 @@ export function DashboardHome() {
           </Link>
         </>
       }
-      actions={<Button to="/dashboard/gsn/new">{empty ? "Add your first grant" : "New grant workspace"}</Button>}
+      actions={
+        <div className="flex flex-wrap gap-2">
+          <Button to="/search" variant="ghost">
+            Search tools
+          </Button>
+          <Button to="/dashboard/gsn/new">{empty ? "Add your first grant" : "New grant workspace"}</Button>
+        </div>
+      }
     >
       {empty ? (
         <Card className="max-w-[720px]">

@@ -1,8 +1,8 @@
 # WAVE_FULL_VERIFY
 
-Date: 2026-10-26
-App: http://localhost:5173
-Result: 36/36 passed
+Date: 2026-10-30
+App: http://localhost:5173/product
+Result: 42/42 passed
 
 ## Happy paths
 
@@ -44,8 +44,21 @@ Result: 36/36 passed
 | E14 | PASS | mobile menu opens, no horizontal scroll |
 | E15 | PASS |  |
 | E16 | PASS |  |
-| E17 | PASS |  |
+| E17 | PASS | matching page |
 | E18 | PASS |  |
 | E19 | PASS |  |
 | E20 | PASS |  |
 | E21 | PASS | returned to Budget Builder |
+
+## Prototype-complete checks
+
+| ID | Result | Notes |
+|---|---|---|
+| P1 | PASS | forgot confirmation |
+| P2 | PASS | search finds module |
+| P3 | PASS | matching → session |
+| P4 | PASS | budget Total
+$327,600 → Total
+$347,600 |
+| P5 | PASS | lesson complete |
+| P6 | PASS | contact confirmation |

@@ -202,7 +202,16 @@ function PerspectivesInner() {
           ) : (
             <div className="py-6 text-center">
               <p className="text-[16px]">No conversation open</p>
-              <p className="mt-1 text-[14px] text-muted">Choose a perspective from the list to start.</p>
+              <p className="mt-1 text-[14px] text-muted">
+                {workspaces.length === 0
+                  ? "Add a grant workspace first, then choose a perspective."
+                  : "Choose a perspective from the list to start. Locked cards need a higher plan."}
+              </p>
+              {workspaces.length === 0 ? (
+                <div className="mt-4">
+                  <Button to="/dashboard/gsn/new">Add a grant</Button>
+                </div>
+              ) : null}
             </div>
           )}
 

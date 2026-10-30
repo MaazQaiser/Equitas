@@ -1,9 +1,9 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { MODULE_META, PLANS, hasModule, type ModuleId } from "../lib/plans";
-import { requestEquity, setBillingAnnual, signInPreset, signUp, useSession } from "../lib/session";
+import { pushSearchRecent, requestEquity, setBillingAnnual, signInPreset, signUp, useSession } from "../lib/session";
 import { marketingUrl } from "../lib/sites";
-import { Badge, Button, Card, Field, Page, inputClass } from "../components/ui";
+import { Badge, Button, Card, Field, Honesty, Page, inputClass } from "../components/ui";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NEXT_KEY = "equitas-next";
@@ -253,18 +253,107 @@ export function SignUpPage() {
 }
 
 export function ForgotPasswordPage() {
+  const [params] = useSearchParams();
+  const demoReset = params.get("demo") === "reset";
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [sent, setSent] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [pwErrors, setPwErrors] = useState<{ password?: string; confirm?: string }>({});
+  const [resetDone, setResetDone] = useState(false);
+
+  if (demoReset || resetDone) {
+    return (
+      <Page narrow title={resetDone ? "Password updated" : "Set a new password"} lede={resetDone ? "You can sign in with your new password." : "This is a demo reset. No email was sent."}>
+        <AuthCard>
+          {resetDone ? (
+            <div className="flex flex-wrap gap-2">
+              <Button to="/sign-in">Sign in</Button>
+            </div>
+          ) : (
+            <form
+              noValidate
+              className="space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const next: typeof pwErrors = {};
+                if (password.length < 8) next.password = "Use at least 8 characters.";
+                if (confirm !== password) next.confirm = "Passwords must match.";
+                setPwErrors(next);
+                if (Object.keys(next).length) return;
+                setResetDone(true);
+              }}
+            >
+              <Field label="New password" error={pwErrors.password}>
+                <PasswordInput value={password} onChange={setPassword} autoComplete="new-password" />
+              </Field>
+              <Field label="Confirm password" error={pwErrors.confirm}>
+                <PasswordInput value={confirm} onChange={setConfirm} autoComplete="new-password" />
+              </Field>
+              <Button type="submit">Save new password</Button>
+            </form>
+          )}
+        </AuthCard>
+      </Page>
+    );
+  }
+
+  if (sent) {
+    return (
+      <Page narrow title="Check your email" lede="In this prototype, reset email is not sent yet.">
+        <AuthCard>
+          <p role="status" className="text-[15px] text-muted">
+            If an account exists for <strong className="font-medium text-ink">{email}</strong>, a reset link would arrive there. Email delivery is not connected in this early version.
+          </p>
+          <p className="mt-4 text-[14px] text-muted">
+            To try the reset form now, use the demo link below. It only updates this browser session.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <Button to="/forgot-password?demo=reset">Set a new password (demo)</Button>
+            <Button to="/sign-in" variant="ghost">
+              Back to sign in
+            </Button>
+          </div>
+        </AuthCard>
+      </Page>
+    );
+  }
+
   return (
-    <Page narrow title="Reset your password" lede="Password reset is not built yet in this early version.">
+    <Page narrow title="Reset your password" lede="Enter the email on your account. We will show what happens next.">
       <AuthCard>
-        <p className="text-[15px] text-muted">
-          Sign in with the password you chose, or create a new account with the same email. We are adding email reset before launch.
+        <form
+          noValidate
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!EMAIL_RE.test(email.trim())) {
+              setError("Enter a valid email address.");
+              return;
+            }
+            setError("");
+            setSent(true);
+          }}
+        >
+          <Field label="Email" error={error}>
+            <input
+              type="email"
+              autoComplete="email"
+              className={inputClass}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@university.edu"
+            />
+          </Field>
+          <Button type="submit">Send reset link</Button>
+        </form>
+        <p className="mt-6 border-t border-line pt-5 text-center text-[14px] text-muted">
+          Remembered it?{" "}
+          <Link to="/sign-in" className="font-medium text-ink underline underline-offset-2">
+            Sign in
+          </Link>
         </p>
-        <div className="mt-5 flex flex-wrap gap-2">
-          <Button to="/sign-in">Back to sign in</Button>
-          <Button to="/sign-up" variant="ghost">
-            Create an account
-          </Button>
-        </div>
       </AuthCard>
     </Page>
   );
@@ -409,6 +498,9 @@ export function PricingPage() {
         </div>
       }
     >
+      <p className="mb-5 rounded-[10px] border border-line bg-bg-2 px-4 py-3 text-[14px] text-muted">
+        Prototype prices. Checkout here does not charge a card. Stripe billing is not connected yet.
+      </p>
       <PlanGrid annual={billingAnnual} cta={<Button to="/dashboard/plans">Manage my plan</Button>} />
       <EquityAccessCard />
     </Page>
@@ -485,9 +577,197 @@ export function EquityAccessCard() {
 }
 
 export function LegalPage({ title }: { title: string }) {
-  const path = title.toLowerCase().includes("privacy") ? "/legal/privacy" : "/legal/terms";
-  useEffect(() => window.location.replace(marketingUrl(path)), [path]);
-  return null;
+  const isPrivacy = title.toLowerCase().includes("privacy");
+  const fullPath = isPrivacy ? "/legal/privacy" : "/legal/terms";
+  return (
+    <Page
+      narrow
+      eyebrow="Legal summary"
+      title={title}
+      lede={
+        isPrivacy
+          ? "Short summary of how EQUITAS handles account and draft data in this early version."
+          : "Short summary of the rules for using this early EQUITAS build."
+      }
+    >
+      <Card className="space-y-4 text-[15px] text-muted">
+        {isPrivacy ? (
+          <>
+            <p>We store what you type in this browser session so tools can work. We do not sell personal data.</p>
+            <p>Draft text you paste into analysis tools stays on this device unless you explicitly share a review link.</p>
+            <p>Email reset and payment processors are not connected yet, so those flows do not send or store real credentials off-device.</p>
+          </>
+        ) : (
+          <>
+            <p>EQUITAS teaches how applications are reviewed. It does not write grants for submission and does not guarantee funding.</p>
+            <p>Do not upload information you are not allowed to share. De-identification is available before paste when you need it.</p>
+            <p>This build is a prototype. Features marked Coming soon or Sample output are not live services.</p>
+          </>
+        )}
+        <p>
+          <a className="font-medium text-ink underline underline-offset-2" href={marketingUrl(fullPath)}>
+            Read the full {title.toLowerCase()} on the EQUITAS website
+          </a>
+        </p>
+      </Card>
+      <div className="mt-6">
+        <Button variant="ghost" onClick={() => history.back()}>
+          Back
+        </Button>
+      </div>
+    </Page>
+  );
+}
+
+export function ContactPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+  const [done, setDone] = useState(false);
+
+  return (
+    <Page narrow eyebrow="Support" title="Contact us" lede="Ask a question about EQUITAS. In this prototype, messages stay in your browser session.">
+      <Card>
+        {done ? (
+          <p role="status" className="text-[15px]">
+            Thank you. Your message was recorded in this prototype. Email delivery is not connected yet.
+          </p>
+        ) : (
+          <form
+            noValidate
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const next: typeof errors = {};
+              if (!name.trim()) next.name = "Enter your name.";
+              if (!EMAIL_RE.test(email.trim())) next.email = "Enter a valid email address.";
+              if (message.trim().length < 10) next.message = "Write at least a short message.";
+              setErrors(next);
+              if (Object.keys(next).length) return;
+              setDone(true);
+            }}
+          >
+            <Field label="Name" error={errors.name}>
+              <input className={inputClass} autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} />
+            </Field>
+            <Field label="Email" error={errors.email}>
+              <input type="email" className={inputClass} autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </Field>
+            <Field label="Message" error={errors.message}>
+              <textarea className={inputClass} rows={5} value={message} onChange={(e) => setMessage(e.target.value)} />
+            </Field>
+            <Button type="submit">Send message</Button>
+          </form>
+        )}
+      </Card>
+    </Page>
+  );
+}
+
+const MODULE_STAGE: Partial<Record<ModuleId, string>> = Object.fromEntries(
+  TOOL_GROUPS.flatMap((g) => g.modules.map((m) => [m, g.stage])),
+) as Partial<Record<ModuleId, string>>;
+
+export function SearchPage() {
+  const { workspaces, searchRecent } = useSession();
+  const [q, setQ] = useState("");
+  const query = q.trim().toLowerCase();
+
+  const modules = (Object.keys(MODULE_META) as ModuleId[])
+    .map((id) => ({
+      id,
+      ...MODULE_META[id],
+      stage: MODULE_STAGE[id] ?? "",
+      blurb: TOOL_BLURBS[id] ?? "",
+    }))
+    .filter((m) => !query || `${m.name} ${m.blurb} ${m.stage}`.toLowerCase().includes(query));
+
+  const grants = workspaces.filter((w) => !query || `${w.title} ${w.funder} ${w.mechanism}`.toLowerCase().includes(query));
+
+  function commitSearch() {
+    if (q.trim()) pushSearchRecent(q);
+  }
+
+  return (
+    <Page
+      eyebrow="Catalogue"
+      title="Universal Search"
+      lede="Search tools and your grant workspaces in this app. This is local catalogue search, not the open web."
+      actions={<Honesty>Local catalogue only</Honesty>}
+    >
+      <Card>
+        <Field label="Search" hint="Try a tool name, stage, or grant title.">
+          <input
+            type="search"
+            className={inputClass}
+            placeholder="e.g. study section, budget, hypertension"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onBlur={commitSearch}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") commitSearch();
+            }}
+          />
+        </Field>
+        {searchRecent.length ? (
+          <p className="mt-3 flex flex-wrap gap-2 text-[13px] text-muted">
+            Recent:
+            {searchRecent.map((r) => (
+              <button key={r} type="button" className="underline underline-offset-2" onClick={() => setQ(r)}>
+                {r}
+              </button>
+            ))}
+          </p>
+        ) : null}
+      </Card>
+
+      <section className="mt-8" aria-labelledby="search-tools">
+        <h2 id="search-tools" className="text-[22px]">
+          Tools {query ? `(${modules.length})` : ""}
+        </h2>
+        {modules.length === 0 ? (
+          <p className="mt-3 text-[14px] text-muted">No tools match “{q}”.</p>
+        ) : (
+          <ul className="mt-4 divide-y divide-line">
+            {modules.map((m) => (
+              <li key={m.id} className="py-3">
+                <Link to={m.path} className="text-[16px] font-medium underline-offset-4 hover:underline">
+                  {m.name}
+                </Link>
+                <p className="mt-1 text-[14px] text-muted">
+                  {m.stage ? `${m.stage} · ` : ""}
+                  {m.blurb || "Open this tool from your plan."}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="mt-10" aria-labelledby="search-grants">
+        <h2 id="search-grants" className="text-[22px]">
+          Your grants {query ? `(${grants.length})` : ""}
+        </h2>
+        {grants.length === 0 ? (
+          <p className="mt-3 text-[14px] text-muted">{workspaces.length === 0 ? "No grant workspaces yet." : `No grants match “${q}”.`}</p>
+        ) : (
+          <ul className="mt-4 divide-y divide-line">
+            {grants.map((w) => (
+              <li key={w.id} className="py-3">
+                <Link to="/dashboard/gsn" className="text-[16px] font-medium underline-offset-4 hover:underline">
+                  {w.title}
+                </Link>
+                <p className="mt-1 text-[14px] text-muted">
+                  {w.funder} {w.mechanism}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </Page>
+  );
 }
 
 export function ParkedPage({ name }: { name: string }) {

@@ -1,5 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AccessRequiredPage, FounderOnly, RequireAuth } from "./components/AccessGate";
 import { AppShell, PublicShell } from "./components/Shell";
 import { MyProfilePage, PlansPage, SettingsPage } from "./pages/AccountPages";
@@ -14,11 +13,13 @@ import {
 } from "./pages/OnboardPages";
 import { PerspectivesPage } from "./pages/PerspectivesPage";
 import {
+  ContactPage,
   ForgotPasswordPage,
   LegalPage,
   ParkedPage,
   PricingPage,
   RootRedirect,
+  SearchPage,
   SignInPage,
   SignUpPage,
   ToolsPage,
@@ -40,7 +41,13 @@ import {
   SummaryStatementPage,
   TraineeHubPage,
 } from "./pages/Wave2Pages";
-import { KAwardPage, MentorHubPage, MentorQualityPage, MentorSessionPage } from "./pages/Wave3Pages";
+import {
+  KAwardPage,
+  MentorHubPage,
+  MentorMatchingPage,
+  MentorQualityPage,
+  MentorSessionPage,
+} from "./pages/Wave3Pages";
 import {
   CompliancePage,
   NcePage,
@@ -58,14 +65,6 @@ import {
   T32PdNewPage,
   T32PdPage,
 } from "./pages/Wave5Pages";
-
-function Redirect({ to }: { to: string }) {
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate(to, { replace: true });
-  }, [navigate, to]);
-  return null;
-}
 
 function AutoShell() {
   const { user } = useSession();
@@ -85,6 +84,7 @@ export default function App() {
           <Route path="/access-required" element={<AccessRequiredPage />} />
           <Route path="/privacy-policy" element={<LegalPage title="Privacy Policy" />} />
           <Route path="/terms-of-service" element={<LegalPage title="Terms of Service" />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/pilot" element={<PilotPage />} />
           <Route path="/live" element={<ParkedPage name="Live" />} />
           <Route path="/global" element={<ParkedPage name="Global" />} />
@@ -94,6 +94,7 @@ export default function App() {
         <Route element={<AutoShell />}>
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/review/:token" element={<ReviewPage />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Route>
 
         <Route element={<RequireAuth />}>
@@ -103,6 +104,10 @@ export default function App() {
             <Route path="/onboard/plan" element={<OnboardPlanPage />} />
             <Route path="/onboard/preferences" element={<OnboardPreferencesPage />} />
             <Route path="/dashboard" element={<DashboardHome />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/privacy-policy" element={<LegalPage title="Privacy Policy" />} />
+            <Route path="/terms-of-service" element={<LegalPage title="Terms of Service" />} />
             <Route path="/tools" element={<ToolsPage />} />
             <Route path="/dashboard/gsn/new" element={<GsnNewPage />} />
             <Route path="/dashboard/gsn" element={<GsnPage />} />
@@ -124,7 +129,7 @@ export default function App() {
             <Route path="/dashboard/resubmission" element={<ResubmissionPage />} />
             <Route path="/dashboard/international" element={<InternationalPage />} />
             <Route path="/dashboard/mentor" element={<MentorHubPage />} />
-            <Route path="/dashboard/mentor-matching" element={<Redirect to="/dashboard/mentor" />} />
+            <Route path="/dashboard/mentor-matching" element={<MentorMatchingPage />} />
             <Route path="/dashboard/mentor-session" element={<MentorSessionPage />} />
             <Route path="/dashboard/mentor-quality" element={<MentorQualityPage />} />
             <Route path="/dashboard/k-award" element={<KAwardPage />} />
